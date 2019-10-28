@@ -95,6 +95,7 @@
         <Border Canvas.ZIndex="0" Grid.Row="1" Padding="16,32,16,16" Grid.Column="1" Background="{ThemeResource ApplicationBackground}">
             <Grid ColumnSpacing="16">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="1.5*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
@@ -102,7 +103,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <ListView Grid.Row="1" x:Name="StationData">
+                <ListView Grid.Row="2" x:Name="StationData">
                     <ListView.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
@@ -129,7 +130,7 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Grid Grid.Row="1" Grid.Column="1" ColumnSpacing="16" RowSpacing="16">
+                <Grid Grid.Row="2" Grid.Column="1" ColumnSpacing="16" RowSpacing="16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -151,16 +152,39 @@
                     <TextBlock x:Name="Max" Grid.Row="3" Grid.Column="1"></TextBlock>
                     <TextBlock x:Name="Average" Grid.Row="4" Grid.Column="1"></TextBlock>
                 </Grid>
-                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">กราฟ</TextBlock>
-                <chart:RadCartesianChart x:Name="Chart" Grid.Row="0" Grid.ColumnSpan="2">
+                <TextBlock Grid.Row="0" Style="{StaticResource SubtitleTextBlockStyle}">กราฟ</TextBlock>
+                <chart:RadCartesianChart x:Name="Chart" Grid.Row="1" Grid.ColumnSpan="2">
                     <chart:RadCartesianChart.Grid>
-                        <chart:CartesianChartGrid MajorLinesVisibility="XY"/>
+                        <chart:CartesianChartGrid MajorLinesVisibility="XY">
+                            <chart:CartesianChartGrid.MajorYLineStyle>
+                                <Style TargetType="Line">
+                                    <Setter Property="Stroke" Value="#46FFFFFF"/>
+                                </Style>
+                            </chart:CartesianChartGrid.MajorYLineStyle>
+                            <chart:CartesianChartGrid.MajorXLineStyle>
+                                <Style TargetType="Line">
+                                    <Setter Property="Stroke" Value="#46FFFFFF"/>
+                                </Style>
+                            </chart:CartesianChartGrid.MajorXLineStyle>
+                        </chart:CartesianChartGrid>
                     </chart:RadCartesianChart.Grid>
                     <chart:RadCartesianChart.HorizontalAxis>
-                        <chart:DateTimeContinuousAxis x:Name="Axis"  PlotMode="OnTicks" LabelFitMode="Rotate"/>
+                        <chart:DateTimeContinuousAxis x:Name="Axis"  PlotMode="OnTicks" LabelFitMode="Rotate">
+                            <chart:DateTimeContinuousAxis.LineStyle>
+                                <Style TargetType="Line">
+                                    <Setter Property="Stroke" Value="#46FFFFFF"/>
+                                </Style>
+                            </chart:DateTimeContinuousAxis.LineStyle>
+                        </chart:DateTimeContinuousAxis>
                     </chart:RadCartesianChart.HorizontalAxis>
                     <chart:RadCartesianChart.VerticalAxis>
-                        <chart:LinearAxis TickThickness="1"/>
+                        <chart:LinearAxis TickThickness="1">
+                            <chart:LinearAxis.LineStyle>
+                                <Style TargetType="Line">
+                                    <Setter Property="Stroke" Value="#46FFFFFF"/>
+                                </Style>
+                            </chart:LinearAxis.LineStyle>
+                        </chart:LinearAxis>
                     </chart:RadCartesianChart.VerticalAxis>
                     <chart:AreaSeries ItemsSource="{Binding}">
                         <chart:AreaSeries.CategoryBinding>
