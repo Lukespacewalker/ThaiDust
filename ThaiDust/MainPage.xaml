@@ -86,13 +86,14 @@
                         </DataTemplate>
                     </GridView.ItemTemplate>
                 </GridView>
-                <StackPanel Grid.Row="4">
-                    <Button x:Name="LoadDataButton">Download and Convert</Button>
-                </StackPanel>
+                <CommandBar Grid.Row="4" DefaultLabelPosition="Right" Margin="-16">
+                    <AppBarButton x:Name="LoadDataButton" Icon="Find" Label="ค้นหาข้อมูล"/>
+                    <AppBarButton x:Name="ExportButton" Icon="Save" Label="ส่งออกเป็น Excel"/>
+                </CommandBar>
             </Grid>
         </Border>
         <Border Canvas.ZIndex="0" Grid.Row="1" Padding="16,32,16,16" Grid.Column="1" Background="{ThemeResource ApplicationBackground}">
-            <Grid>
+            <Grid ColumnSpacing="16">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1.5*"/>
                     <RowDefinition Height="*"/>
@@ -128,12 +129,13 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Grid Grid.Row="1" Grid.Column="1" ColumnSpacing="16">
+                <Grid Grid.Row="1" Grid.Column="1" ColumnSpacing="16" RowSpacing="16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -149,6 +151,7 @@
                     <TextBlock x:Name="Max" Grid.Row="3" Grid.Column="1"></TextBlock>
                     <TextBlock x:Name="Average" Grid.Row="4" Grid.Column="1"></TextBlock>
                 </Grid>
+                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">กราฟ</TextBlock>
                 <chart:RadCartesianChart x:Name="Chart" Grid.Row="0" Grid.ColumnSpan="2">
                     <chart:RadCartesianChart.Grid>
                         <chart:CartesianChartGrid MajorLinesVisibility="XY"/>

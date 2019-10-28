@@ -21,11 +21,13 @@
       An Assembly element with Name="*Application*" applies to all assemblies in
       the application package. The asterisks are not wildcards.
     -->
-    <Assembly Name="*Application*" Dynamic="Required All" />
-    
-    
+    <Assembly Name="*Application*" Dynamic="Required All" MarshalObject="Required All"/>
+    <Namespace Name="Windows.Web.Http"  Dynamic="Required All" MarshalObject="Required All"/>
+    <Namespace Name="Windows.Foundation"  Dynamic="Required All" MarshalObject="Required All"/>
+    <!--<Type Name="Windows.Web.Http.HttpRequestResult" MarshalObject="Required All"/>
+    <Type Name="Windows.Foundation.AsyncOperationProgressHandler{}" MarshalObject="Required All"/>-->
+    <TypeInstantiation Name="Windows.Foundation.AsyncOperationProgressHandler" Arguments="Windows.Web.Http.HttpRequestResult" Dynamic="Required All" MarshalObject="Required All"/>
     <!-- Add your application specific runtime directives here. -->
-
-
   </Application>
 </Directives>
+

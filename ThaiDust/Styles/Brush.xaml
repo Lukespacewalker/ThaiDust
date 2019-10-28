@@ -7,11 +7,11 @@
 
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
-            <Color x:Key="ChromeColor">#f5f5f5</Color>
+            <Color x:Key="ChromeColor">#E1E1E1</Color>
             <SolidColorBrush x:Key="ApplicationBackground" Color="{StaticResource ChromeColor}"/>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
-            <Color x:Key="ChromeColor">#0f0f0f</Color>
+            <Color x:Key="ChromeColor">#1E1E1E</Color>
             <SolidColorBrush x:Key="ApplicationBackground" Color="{StaticResource ChromeColor}"/>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>

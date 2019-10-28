@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -83,25 +81,5 @@ namespace ThaiDust.Models
             new Station {Id = "81t", Name = "ต.นครปฐม อ.เมือง จ.นครปฐม"},
             new Station {Id = "m8", Name = "หน่วยตรวจวัดเคลื่อนที่ 8 ค่ายมหาสุรสิงหนาท จ.ระยอง"}
         };
-    }
-    public class StationValue : ReactiveObject
-    {
-        [Reactive] public DateTime DateTime { get; set; }
-        [Reactive] public double? Value { get; set; }
-
-        public static string DateTimeBinding(DateTime v)
-        {
-            return v.ToString("dddd, dd MMMM yyyy hh:mm",CultureInfo.GetCultureInfo("th-TH"));
-        }
-
-        public static string DateBinding(DateTime v)
-        {
-            return v.ToString("dddd, dd MMMM yyyy", CultureInfo.GetCultureInfo("th-TH"));
-        }
-
-        public static string TimeBinding(DateTime v)
-        {
-            return v.ToString("hh:mm", CultureInfo.GetCultureInfo("th-TH"));
-        }
     }
 }

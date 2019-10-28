@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 using Splat;
+using ThaiDust.Helper;
 
 namespace ThaiDust
 {
@@ -13,6 +14,7 @@ namespace ThaiDust
         public static void RegisterDependencies()
         {
             Locator.CurrentMutable.RegisterLazySingleton(()=>new HttpClient());
+            Locator.CurrentMutable.RegisterLazySingleton(()=>new ExcelGenerator());
         }
     }
 }
