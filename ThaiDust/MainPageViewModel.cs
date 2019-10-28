@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Cache;
 using System.Reactive;
@@ -24,7 +25,7 @@ namespace ThaiDust
 {
     public class MainPageViewModel : ReactiveObject, IActivatableViewModel
     {
-        private HttpClient _client;
+        private readonly HttpClient _client;
 
         public IList<Station> Stations = new List<Station>
         {
@@ -98,8 +99,15 @@ namespace ThaiDust
 
         [Reactive] public Station SelectedStation { get; set; }
         [Reactive] public StationParam SelectedParameter { get; set; }
+        [Reactive] public DateTimeOffset? StartDate { get; set; } = DateTimeOffset.Now.AddMonths(-1);
+        [Reactive] public TimeSpan? StartTime { get; set; } = TimeSpan.Zero;
+        [Reactive] public DateTimeOffset? EndDate { get; set; } = DateTimeOffset.Now;
+        [Reactive] public TimeSpan? EndTime { get; set; } = DateTimeOffset.Now.TimeOfDay;
+
         private SourceList<StationParam> _paramsList = new SourceList<StationParam>();
+        private SourceList<StationValue> _values = new SourceList<StationValue>();
         public ObservableCollectionExtended<StationParam> StationParams = new ObservableCollectionExtended<StationParam>();
+        public ObservableCollectionExtended<StationValue> StationData = new ObservableCollectionExtended<StationValue>();
 
         public MainPageViewModel(HttpClient httpClient = null)
         {
@@ -108,6 +116,7 @@ namespace ThaiDust
             this.WhenActivated(cleanup =>
             {
                 _paramsList.Connect().Bind(StationParams).Subscribe().DisposeWith(cleanup);
+                _values.Connect().Bind(StationData).Subscribe().DisposeWith(cleanup);
 
                 var LoadParameterCommand = ReactiveCommand.CreateFromObservable<Station, IEnumerable<StationParam>>(
                     station =>
@@ -131,8 +140,38 @@ namespace ThaiDust
                     _paramsList.AddRange(r);
                 });
                 this.WhenAnyValue(p => p.SelectedStation).Where(p => p != null).InvokeCommand(LoadParameterCommand);
+
+                var canLoadDataCommand = this.WhenAnyValue(p => p.SelectedStation, p => p.SelectedParameter)
+                    .Select(p => p.Item1 != null && p.Item2 != null);
+
+                LoadDataCommand = ReactiveCommand.CreateFromObservable<IEnumerable<StationValue>>(() =>
+                {
+                    var startDate = new DateTime(StartDate.Value.Year,StartDate.Value.Month,StartDate.Value.Day, StartTime.Value.Hours, StartTime.Value.Minutes, StartTime.Value.Seconds);
+                    var endDate = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day, EndTime.Value.Hours, EndTime.Value.Minutes, EndTime.Value.Seconds);
+                    var dto = new GetDataDto { StationId = SelectedStation.Id, ParamValue = SelectedParameter.Param, StartDate = startDate, EndDate = endDate };
+                    return _client.TryPostAsync(new Uri("http://aqmthai.com/includes/getMultiManReport.php"),
+                            dto.GenerateFormUrlEncodedContent())
+                        .ToObservable()
+                        .Where(r => r.Succeeded)
+                        .Select(async r => await r.ResponseMessage.Content.ReadAsStringAsync())
+                        .Switch().Select(ParseData);
+                }, canLoadDataCommand).DisposeWith(cleanup);
+
+                LoadDataCommand.ThrownExceptions.Subscribe(ex =>
+                {
+                    var dialog = new MessageDialog(ex.Message, "Error");
+                    dialog.ShowAsync();
+                });
+
+                LoadDataCommand.Subscribe(r =>
+                {
+                    _values.Clear();
+                    _values.AddRange(r);
+                });
             });
         }
+
+        public ReactiveCommand<Unit, IEnumerable<StationValue>> LoadDataCommand { get; set; }
 
         private IEnumerable<StationParam> ParseParameter(string xml)
         {
@@ -143,14 +182,19 @@ namespace ThaiDust
                 { Param = (string)a.NodeValue, Name = (string)a.NodeValue }));
         }
 
-        private IEnumerable<StationParam> ParseData(string xml)
+        private IEnumerable<StationValue> ParseData(string xml)
         {
             var x = new XmlDocument();
             x.LoadXml(xml);
-            return x.GetElementsByTagName("tr").SkipLast(5).Select(e =>
+            var gregorianCalendar = new GregorianCalendar();
+            return x.GetElementsByTagName("tr").SkipLast(5).Skip(1).Select(e =>
             {
-                e.FirstChild.NodeValue;
-                e.LastChild.NodeValue;
+                var dateNodeValue = (string)e.FirstChild.InnerText;
+                int[] dateSplit = dateNodeValue.Split(',').Select(int.Parse).ToArray();
+                var date = new DateTime(dateSplit[0], dateSplit[1], dateSplit[2], dateSplit[3], dateSplit[4], dateSplit[5], gregorianCalendar);
+                return double.TryParse(e.LastChild?.InnerText as string, out double value) ?
+                    new StationValue { DateTime = date, Value = value }
+                    : new StationValue { DateTime = date, Value = null };
             });
         }
         public ViewModelActivator Activator { get; } = new ViewModelActivator();

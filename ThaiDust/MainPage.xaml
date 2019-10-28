@@ -8,42 +8,81 @@
     xmlns:models="using:ThaiDust.Models"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <AcrylicBrush x:Key="LeftPaneBackgrounBrush" BackgroundSource="HostBackdrop" Opacity="0.1"/>
+    </Page.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">Thai Dust Monitoring</TextBlock>
-        <ListView Grid.Row="1" x:Name="Stations">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="models:Station">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Bind Id}"/>
-                        <TextBlock Text="{x:Bind Name}" Margin="16,0,0,0"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <StackPanel Grid.Row="2">
-            <DatePicker x:Name="StartDate"/>
-            <TimePicker x:Name="StartTime"/>
-            <DatePicker x:Name="EndDate"/>
-            <TimePicker x:Name="EndTime"/>
-        </StackPanel>
-        <TextBlock Grid.Row="3" Style="{StaticResource SubtitleTextBlockStyle}">Parameters</TextBlock>
-        <ListView Grid.Row="4" x:Name="Parameters">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="models:StationParam">
-                    <TextBlock Text="{x:Bind Name}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <StackPanel Grid.Row="5">
-            <Button>Download and Convert</Button>
-        </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MaxWidth="350"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Border 
+                Padding="16"
+                Background="{StaticResource SystemControlChromeHighAcrylicWindowMediumBrush}">
+            <Grid RowSpacing="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Style="{StaticResource TitleTextBlockStyle}">Thai Dust Monitoring</TextBlock>
+                <ListView Grid.Row="1" x:Name="Stations">
+                    <ListView.Header>
+                        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">สถานี</TextBlock>
+                    </ListView.Header>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Station">
+                            <TextBlock Text="{x:Bind Name}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <StackPanel Grid.Row="2">
+                    <CalendarDatePicker x:Name="StartDate" Header="ตั้งแต่ วันที่"/>
+                    <TimePicker x:Name="StartTime" Header="เวลา"/>
+                    <CalendarDatePicker x:Name="EndDate" Header="ถึง วันที่"/>
+                    <TimePicker x:Name="EndTime"  Header="เวลา"/>
+                </StackPanel>
+                <GridView Grid.Row="3" x:Name="Parameters">
+                    <GridView.Header>
+                        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">ตัวแปรที่ต้องการดู</TextBlock>
+                    </GridView.Header>
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="models:StationParam">
+                            <TextBlock Text="{x:Bind Name}"/>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+                <StackPanel Grid.Row="4">
+                    <Button x:Name="LoadDataButton">Download and Convert</Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border Padding="16" Grid.Column="1">
+            <ListView Grid.Row="1" x:Name="Datas">
+                <ListView.Header>
+                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">ข้อมูล</TextBlock>
+                </ListView.Header>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:StationValue">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Bind models:StationValue.DateTimeBinding(DateTime)}"/>
+                            <TextBlock Text="{x:Bind Value}" Margin="16,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Border>
     </Grid>
 </Page>
