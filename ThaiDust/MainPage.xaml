@@ -32,13 +32,13 @@
                 <ColumnDefinition/>
                 <ColumnDefinition x:Name="RightPaddingColumn" Width="0"/>
             </Grid.ColumnDefinitions>
-            <Image Source="Assets/Square44x44Logo.png" 
+            <!--<Image Source="Assets/Square44x44Logo.png" 
                    Grid.Column="1" HorizontalAlignment="Left" 
                    Width="20" Height="20" Margin="12,0"/>
             <TextBlock Text="Thailand Dust Monitor" 
                        Grid.Column="1" 
                        Style="{StaticResource CaptionTextBlockStyle}" 
-                       Margin="44,8,0,0"/>
+                       Margin="44,8,0,0"/>-->
         </Grid>
         <Border Grid.Row="1" Grid.Column="0" Canvas.ZIndex="0"
                 Padding="16,32,16,16"
@@ -51,7 +51,11 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Style="{StaticResource TitleTextBlockStyle}">Thailand Dust Monitoring</TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Assets/Square44x44Logo.png" HorizontalAlignment="Left" 
+                           Width="44" Height="44" Margin="0,0,12,0"/>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}">Thailand Dust Monitoring</TextBlock>
+                </StackPanel>
                 <ListView Grid.Row="1" x:Name="Stations">
                     <ListView.Header>
                         <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">สถานี</TextBlock>
