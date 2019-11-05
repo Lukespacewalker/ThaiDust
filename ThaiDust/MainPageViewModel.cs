@@ -106,7 +106,7 @@ namespace ThaiDust
                     Days = stationValues.DistinctBy(p => p.DateTime.Date).Count();
                     Min = stationValues.Where(p => p.Value != null).Min(p => p.Value).Value;
                     Max = stationValues.Where(p => p.Value != null).Max(p => p.Value).Value;
-                    Average = Math.Round(stationValues.Where(p => p.Value != null).Average(p => p.Value).Value,2);
+                    Average = Math.Round(stationValues.Where(p => p.Value != null).Average(p => p.Value).Value, 2);
 
                     SetAxisAction?.Invoke(stationValues.First().DateTime, stationValues.Last().DateTime);
                     _values.AddRange(stationValues);
@@ -134,9 +134,13 @@ namespace ThaiDust
         {
             var x = new XmlDocument();
             x.LoadXml(xml);
-            return x.GetElementsByTagName("option").SelectMany(e =>
+            var @params = x.GetElementsByTagName("option").SelectMany(e =>
                 e.Attributes.Where(a => a.NodeName == "value").Select(a => new StationParam
                 { Param = (string)a.NodeValue, Name = (string)a.NodeValue }));
+            if (!@params.Any(p => p.Param == "O3"))
+                @params = @params.Append(new StationParam
+                { Param = "O3", Name = "O3" });
+            return @params;
         }
 
         private IEnumerable<StationValue> ParseData(string xml)
