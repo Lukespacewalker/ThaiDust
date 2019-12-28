@@ -88,8 +88,9 @@ namespace ThaiDust
                     var startDate = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day, StartTime.Value.Hours, StartTime.Value.Minutes, StartTime.Value.Seconds);
                     var endDate = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day, EndTime.Value.Hours, EndTime.Value.Minutes, EndTime.Value.Seconds);
                     var dto = new GetDataDto { StationId = SelectedStation.Id, ParamValue = SelectedParameter.Param, StartDate = startDate, EndDate = endDate };
+                    var payload = dto.GenerateFormUrlEncodedContent();
                     return _client.TryPostAsync(new Uri("http://aqmthai.com/includes/getMultiManReport.php"),
-                            dto.GenerateFormUrlEncodedContent())
+                            payload)
                         .ToObservable()
                         .Where(r => r.Succeeded)
                         .Select(async r => await r.ResponseMessage.Content.ReadAsStringAsync())
