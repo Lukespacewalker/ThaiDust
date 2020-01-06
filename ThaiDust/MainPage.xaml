@@ -11,7 +11,6 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationBackground}">
     <Page.Resources>
-        <AcrylicBrush x:Key="LeftPaneBackgrounBrush" BackgroundSource="HostBackdrop" Opacity="0.1"/>
         <converters:DateTimeConverter x:Key="DateTimeConverter"/>
     </Page.Resources>
     <Grid>
@@ -55,12 +54,13 @@
                            Width="28" Height="28" Margin="0,0,12,0"/>
                         <TextBlock VerticalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}">Thailand Dust Monitoring</TextBlock>
                     </StackPanel>
-                    <Button Grid.Column="1" Background="Transparent">
+                    <!--<Button Grid.Column="1" Background="Transparent">
                         <FontIcon Glyph="&#xE700;"/>
-                    </Button>
+                    </Button>-->
+                    
                     <ListView Grid.Row="1" x:Name="Stations" Grid.ColumnSpan="2">
                         <ListView.Header>
-                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">สถานีตรวจวัด</TextBlock>
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">1. เลือกสถานีตรวจวัด</TextBlock>
                         </ListView.Header>
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
@@ -158,8 +158,8 @@
                         </Grid.RowDefinitions>
                         <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">สถิติ</TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0">จำนวนวัน</TextBlock>
-                        <TextBlock Grid.Row="2" Grid.Column="0">ข้อมูลสูงสุด</TextBlock>
-                        <TextBlock Grid.Row="3" Grid.Column="0">ข้อมูลต่ำสุด</TextBlock>
+                        <TextBlock Grid.Row="2" Grid.Column="0">ข้อมูลต่ำสุด</TextBlock>
+                        <TextBlock Grid.Row="3" Grid.Column="0">ข้อมูลสูงสุด</TextBlock>
                         <TextBlock Grid.Row="4" Grid.Column="0">เฉลี่ย</TextBlock>
                         <TextBlock x:Name="Days" Grid.Row="1" Grid.Column="1"></TextBlock>
                         <TextBlock x:Name="Min" Grid.Row="2" Grid.Column="1"></TextBlock>
