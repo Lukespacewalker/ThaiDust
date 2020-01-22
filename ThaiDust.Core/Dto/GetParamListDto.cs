@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
-using Windows.Web.Http;
+using System.Net.Http;
 
-namespace ThaiDust.Dto
+namespace ThaiDust.Core.Dto
 {
     public class GetParamListDto
     {
         public string StationId { get; set; }
         public string Action { get; set; } = "getParamList";
 
-        public HttpFormUrlEncodedContent GenerateFormUrlEncodedContent()
+        public FormUrlEncodedContent GenerateFormUrlEncodedContent()
         {
-            return new HttpFormUrlEncodedContent(
+            return new FormUrlEncodedContent(
                 new[]
                 {
                     new KeyValuePair<string, string>("stationId",StationId),

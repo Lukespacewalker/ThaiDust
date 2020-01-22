@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29411.138
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThaiDust", "ThaiDust\ThaiDust.csproj", "{0C7C659A-22FF-4276-AE32-27F34457D933}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThaiDust.Core", "ThaiDust.Core\ThaiDust.Core.csproj", "{63670F0E-B925-423C-BD18-F0F8400F4846}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThaiDust.Core", "ThaiDust.Core\ThaiDust.Core.csproj", "{63670F0E-B925-423C-BD18-F0F8400F4846}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThaiDust.Migration", "ThaiDust.Migration\ThaiDust.Migration.csproj", "{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,26 @@ Global
 		{63670F0E-B925-423C-BD18-F0F8400F4846}.Release|x64.Build.0 = Release|Any CPU
 		{63670F0E-B925-423C-BD18-F0F8400F4846}.Release|x86.ActiveCfg = Release|Any CPU
 		{63670F0E-B925-423C-BD18-F0F8400F4846}.Release|x86.Build.0 = Release|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Debug|ARM.Build.0 = Debug|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Debug|x64.Build.0 = Debug|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Debug|x86.Build.0 = Debug|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Release|ARM.Build.0 = Release|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Release|ARM64.Build.0 = Release|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Release|x64.ActiveCfg = Release|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Release|x64.Build.0 = Release|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Release|x86.ActiveCfg = Release|Any CPU
+		{E0B3E5C9-67B2-46EA-9416-E385F0F745CE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

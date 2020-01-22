@@ -18,22 +18,24 @@ using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using ThaiDust.Dto;
+using ThaiDust.Core.Dto;
+using ThaiDust.Core.Model;
+using ThaiDust.Core.Model.Persistent;
+using ThaiDust.Core.Service;
 using ThaiDust.Helper;
-using ThaiDust.Models;
 
 namespace ThaiDust
 {
     public class MainPageViewModel : ReactiveObject, IActivatableViewModel
     {
         #region Private
-        private readonly HttpClient _client;
         private readonly ExcelGenerator _excelGenerator;
+        private readonly DustService _dustService;
         private SourceList<StationParam> _paramsList = new SourceList<StationParam>();
-        private SourceList<StationValue> _values = new SourceList<StationValue>();
+        private SourceList<Record> _values = new SourceList<Record>();
         #endregion
 
-        public IList<Station> Stations = Models.Stations.All;
+        public IList<Station> Stations = Core.Model.Stations.All;
 
         [Reactive] public Station SelectedStation { get; set; }
         [Reactive] public StationParam SelectedParameter { get; set; }
@@ -44,57 +46,41 @@ namespace ThaiDust
 
         public Action<DateTime, DateTime> SetAxisAction { get; set; }
         public ObservableCollectionExtended<StationParam> StationParams = new ObservableCollectionExtended<StationParam>();
-        public ObservableCollectionExtended<StationValue> StationData = new ObservableCollectionExtended<StationValue>();
+        public ObservableCollectionExtended<Record> StationData = new ObservableCollectionExtended<Record>();
 
         [Reactive] public int Days { get; private set; }
         [Reactive] public double Min { get; private set; }
         [Reactive] public double Max { get; private set; }
         [Reactive] public double Average { get; private set; }
 
-        public MainPageViewModel(HttpClient httpClient = null, ExcelGenerator excelGenerator = null)
+        public MainPageViewModel(DustService dustService = null, ExcelGenerator excelGenerator = null)
         {
-            _client = httpClient ?? Locator.Current.GetService<HttpClient>();
             _excelGenerator = excelGenerator ?? Locator.Current.GetService<ExcelGenerator>();
+            _dustService = dustService ?? Locator.Current.GetService<DustService>();
 
             this.WhenActivated(cleanup =>
             {
                 _paramsList.Connect().Bind(StationParams).Subscribe().DisposeWith(cleanup);
                 _values.Connect().Bind(StationData).Subscribe().DisposeWith(cleanup);
 
-                var LoadParameterCommand = ReactiveCommand.CreateFromObservable<Station, IEnumerable<StationParam>>(
-                    station =>
-                    {
-                        var dto = new GetParamListDto { StationId = station.Id };
-                        return _client.TryPostAsync(new Uri("http://aqmthai.com/includes/getManReport.php"),
-                                dto.GenerateFormUrlEncodedContent())
-                            .ToObservable()
-                            .Where(r => r.Succeeded)
-                            .Select(async r => await r.ResponseMessage.Content.ReadAsStringAsync())
-                            .Switch().Select(ParseParameter);
-                    }).DisposeWith(cleanup);
-                LoadParameterCommand.ThrownExceptions.Subscribe(ShowError);
-                LoadParameterCommand.Subscribe(r =>
+                var loadParameterCommand = ReactiveCommand.CreateFromObservable<Station, IEnumerable<StationParam>>(_dustService.GetAvailableParameters)
+                    .DisposeWith(cleanup);
+                loadParameterCommand.ThrownExceptions.Subscribe(ShowError);
+                loadParameterCommand.Subscribe(r =>
                 {
                     _paramsList.Clear();
                     _paramsList.AddRange(r);
                 });
-                this.WhenAnyValue(p => p.SelectedStation).Where(p => p != null).InvokeCommand(LoadParameterCommand);
+                this.WhenAnyValue(p => p.SelectedStation).Where(p => p != null).InvokeCommand(loadParameterCommand);
 
                 var canLoadDataCommand = this.WhenAnyValue(p => p.SelectedStation, p => p.SelectedParameter)
                     .Select(p => p.Item1 != null && p.Item2 != null);
 
-                LoadDataCommand = ReactiveCommand.CreateFromObservable<IEnumerable<StationValue>>(() =>
+                LoadDataCommand = ReactiveCommand.CreateFromObservable<IEnumerable<Record>>(() =>
                 {
-                    var startDate = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day, StartTime.Value.Hours, StartTime.Value.Minutes, StartTime.Value.Seconds);
-                    var endDate = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day, EndTime.Value.Hours, EndTime.Value.Minutes, EndTime.Value.Seconds);
-                    var dto = new GetDataDto { StationId = SelectedStation.Id, ParamValue = SelectedParameter.Param, StartDate = startDate, EndDate = endDate };
-                    var payload = dto.GenerateFormUrlEncodedContent();
-                    return _client.TryPostAsync(new Uri("http://aqmthai.com/includes/getMultiManReport.php"),
-                            payload)
-                        .ToObservable()
-                        .Where(r => r.Succeeded)
-                        .Select(async r => await r.ResponseMessage.Content.ReadAsStringAsync())
-                        .Switch().Select(ParseData);
+                   // var startDate = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day, StartTime.Value.Hours, StartTime.Value.Minutes, StartTime.Value.Seconds);
+                    //var endDate = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day, EndTime.Value.Hours, EndTime.Value.Minutes, EndTime.Value.Seconds);
+                    return _dustService.GetStationData(SelectedStation.Code, SelectedParameter.Param);
                 }, canLoadDataCommand).DisposeWith(cleanup);
 
                 LoadDataCommand.ThrownExceptions.Subscribe(ShowError);
@@ -102,20 +88,20 @@ namespace ThaiDust
                 LoadDataCommand.Subscribe(r =>
                 {
                     _values.Clear();
-                    IEnumerable<StationValue> stationValues = r as StationValue[] ?? r.ToArray();
+                    IEnumerable<Record> records = r as Record[] ?? r.ToArray();
                     // Summarize
-                    Days = stationValues.DistinctBy(p => p.DateTime.Date).Count();
-                    Min = stationValues.Where(p => p.Value != null).Min(p => p.Value).Value;
-                    Max = stationValues.Where(p => p.Value != null).Max(p => p.Value).Value;
-                    Average = Math.Round(stationValues.Where(p => p.Value != null).Average(p => p.Value).Value, 2);
+                    Days = records.DistinctBy(p => p.DateTime.Date).Count();
+                    Min = records.Where(p => p.Value != null).Min(p => p.Value).Value;
+                    Max = records.Where(p => p.Value != null).Max(p => p.Value).Value;
+                    Average = Math.Round(records.Where(p => p.Value != null).Average(p => p.Value).Value, 2);
 
-                    SetAxisAction?.Invoke(stationValues.First().DateTime, stationValues.Last().DateTime);
-                    _values.AddRange(stationValues);
+                    SetAxisAction?.Invoke(records.First().DateTime, records.Last().DateTime);
+                    _values.AddRange(records);
                 });
 
                 var canSaveToExcelCommand = StationData.ObserveCollectionChanges().Select(_ => StationData.Count > 0);
 
-                SaveToExcelCommand = ReactiveCommand.CreateFromTask<IEnumerable<StationValue>>(data => _excelGenerator.CreateExcel(SelectedStation.Id, data), canSaveToExcelCommand);
+                SaveToExcelCommand = ReactiveCommand.CreateFromTask<IEnumerable<Record>>(data => _excelGenerator.CreateExcel(SelectedStation.Code, data), canSaveToExcelCommand);
 
                 SaveToExcelCommand.ThrownExceptions.Subscribe(ShowError);
             });
@@ -127,38 +113,10 @@ namespace ThaiDust
             dialog.ShowAsync();
         }
 
-        public ReactiveCommand<IEnumerable<StationValue>, Unit> SaveToExcelCommand { get; set; }
+        public ReactiveCommand<IEnumerable<Record>, Unit> SaveToExcelCommand { get; set; }
 
-        public ReactiveCommand<Unit, IEnumerable<StationValue>> LoadDataCommand { get; set; }
+        public ReactiveCommand<Unit, IEnumerable<Record>> LoadDataCommand { get; set; }
 
-        private IEnumerable<StationParam> ParseParameter(string xml)
-        {
-            var x = new XmlDocument();
-            x.LoadXml(xml);
-            var @params = x.GetElementsByTagName("option").SelectMany(e =>
-                e.Attributes.Where(a => a.NodeName == "value").Select(a => new StationParam
-                { Param = (string)a.NodeValue, Name = (string)a.NodeValue }));
-            if (!@params.Any(p => p.Param == "O3"))
-                @params = @params.Append(new StationParam
-                { Param = "O3", Name = "O3" });
-            return @params;
-        }
-
-        private IEnumerable<StationValue> ParseData(string xml)
-        {
-            var x = new XmlDocument();
-            x.LoadXml(xml);
-            var gregorianCalendar = new GregorianCalendar();
-            return x.GetElementsByTagName("tr").SkipLast(5).Skip(1).Select(e =>
-            {
-                var dateNodeValue = (string)e.FirstChild.InnerText;
-                int[] dateSplit = dateNodeValue.Split(',').Select(int.Parse).ToArray();
-                var date = new DateTime(dateSplit[0], dateSplit[1], dateSplit[2], dateSplit[3], dateSplit[4], dateSplit[5], gregorianCalendar);
-                return double.TryParse(e.LastChild?.InnerText, out double value) ?
-                    new StationValue { DateTime = date, Value = value }
-                    : new StationValue { DateTime = date, Value = null };
-            });
-        }
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
     }
 }

@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using ThaiDust.Core;
 
 namespace ThaiDust
 {
@@ -29,8 +30,7 @@ namespace ThaiDust
         public App()
         {
             this.InitializeComponent();
-            Ioc.RegisterDependencies();
-
+            Bootstrapper.RegisterDependencies();
             this.Suspending += OnSuspending;
         }
 

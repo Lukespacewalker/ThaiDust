@@ -1,7 +1,7 @@
 ﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace ThaiDust.Models
+namespace ThaiDust.Core.Model
 {
     public class StationParam : ReactiveObject
     {

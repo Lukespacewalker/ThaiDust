@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using ThaiDust.Models;
+using ThaiDust.Core.Model.Persistent;
 using X16 = DocumentFormat.OpenXml.Office2016.Excel;
 
 namespace ThaiDust.Helper
 {
     public class ExcelGenerator
     {
-        public async Task CreateExcel(string stationName, IEnumerable<StationValue> data)
+        public async Task CreateExcel(string stationName, IEnumerable<Record> data)
         {
             var file = await FileSystemHelper.CreateFile(stationName);
             if (file == null) return;
@@ -58,9 +58,9 @@ namespace ThaiDust.Helper
             sheetData.AppendChild(header);
         }
 
-        private void AddData(SheetData sheetData, IEnumerable<StationValue> data)
+        private void AddData(SheetData sheetData, IEnumerable<Record> data)
         {
-            foreach (StationValue stationValue in data)
+            foreach (Record stationValue in data)
             {
                 var row = new Row();
                 row.AppendChild(new Cell { CellValue = new CellValue(stationValue.DateTime.ToOADate().ToString(CultureInfo.InvariantCulture)), DataType = new EnumValue<CellValues>(CellValues.Number) });

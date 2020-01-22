@@ -6,8 +6,9 @@
     xmlns:chart="using:Telerik.UI.Xaml.Controls.Chart"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="using:ThaiDust.Models"
     xmlns:converters="using:ThaiDust.Converters"
+    xmlns:model="using:ThaiDust.Core.Model"
+    xmlns:persistent="using:ThaiDust.Core.Model.Persistent"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationBackground}">
     <Page.Resources>
@@ -68,9 +69,9 @@
                             </Style>
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="models:Station">
+                            <DataTemplate x:DataType="persistent:Station">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{x:Bind Id}"/>
+                                    <TextBlock Text="{x:Bind Code}"/>
                                     <TextBlock Text="{x:Bind Name}" Margin="16,0,0,0"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -95,7 +96,7 @@
                             <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">พารามิเตอร์</TextBlock>
                         </GridView.Header>
                         <GridView.ItemTemplate>
-                            <DataTemplate x:DataType="models:StationParam">
+                            <DataTemplate x:DataType="model:StationParam">
                                 <TextBlock Text="{x:Bind Name}"/>
                             </DataTemplate>
                         </GridView.ItemTemplate>
@@ -107,9 +108,9 @@
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>
-                <ScrollViewer>
-                    <Grid>
-                        <Grid.RowDefinitions>
+                <!--<ScrollViewer>
+                    <Grid>-->
+                        <!--<Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
@@ -135,7 +136,7 @@
                                 </ListView>
                             </Grid>
 
-                        </ListView>
+                        </ListView>-->
                         <Grid Grid.Row="1" ColumnSpacing="16" Padding="16,32,16,16">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -165,7 +166,7 @@
                                     </Style>
                                 </ListView.ItemContainerStyle>
                                 <ListView.ItemTemplate>
-                                    <DataTemplate x:DataType="models:StationValue">
+                                    <DataTemplate x:DataType="persistent:Record">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{x:Bind DateTime, Converter={StaticResource DateTimeConverter},ConverterParameter=Time}"/>
                                             <TextBlock Text="{x:Bind Value}" Margin="16,0,0,0"/>
@@ -239,8 +240,8 @@
                                 </chart:AreaSeries>
                             </chart:RadCartesianChart>
                         </Grid>
-                    </Grid>
-                </ScrollViewer>
+                    <!--</Grid>
+                </ScrollViewer>-->
             </SplitView.Content>
         </SplitView>
     </Grid>

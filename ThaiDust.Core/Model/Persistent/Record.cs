@@ -7,6 +7,7 @@ namespace ThaiDust.Core.Model.Persistent
     public class Record : Entity
     {
         [Reactive] public DateTime DateTime { get; set; }
+        [Reactive] public string Param { get; set; }
         [Reactive] public double? Value { get; set; }
 
         public static string DateTimeBinding(DateTime v)
