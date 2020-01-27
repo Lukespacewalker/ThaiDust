@@ -9,11 +9,11 @@ using ThaiDust.Core.Model.Persistent;
 
 namespace ThaiDust.Core.Service
 {
-    internal class DustDataService
+    public class DustDataService
     {
         private readonly DustContext _dustContext;
 
-        public DustDataService(DustContext dustContext)
+        public DustDataService(DustContext dustContext = null)
         {
             _dustContext = dustContext ?? Locator.Current.GetService<DustContext>();
         }
@@ -33,13 +33,13 @@ namespace ThaiDust.Core.Service
                 var knownStationName = Stations.All.SingleOrDefault(s =>
                     s.Code.ToLower() == stationCode.ToLower())?.Name;
                 station = new Station{Code = stationCode, Name = knownStationName ?? customStationName , Records = new List<Record>(records)};
-                _dustContext.Stations.Add(station);
+                _dustContext.Stations.Update(station);
                 _dustContext.SaveChanges();
             }
             else
             {
                 // Add data to existing station
-                station.Records.AddRange(records);
+                _dustContext.Records.UpdateRange(records);
                 _dustContext.SaveChanges();
             }
         }

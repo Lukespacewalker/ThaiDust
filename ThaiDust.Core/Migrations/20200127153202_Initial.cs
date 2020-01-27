@@ -26,7 +26,7 @@ namespace ThaiDust.Core.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     DateTime = table.Column<DateTime>(nullable: false),
-                    Param = table.Column<string>(nullable: true),
+                    Type = table.Column<int>(nullable: false),
                     Value = table.Column<double>(nullable: true),
                     StationCode = table.Column<string>(nullable: true)
                 },

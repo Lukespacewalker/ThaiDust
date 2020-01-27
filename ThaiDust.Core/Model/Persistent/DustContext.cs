@@ -11,7 +11,7 @@ namespace ThaiDust.Core.Model.Persistent
         public DbSet<Station> Stations { get; set; }
         public DbSet<Record> Records { get; set; }
 
-        // public DustContext() { }
+         public DustContext() { }
 
         public DustContext(string databasePath)
         {

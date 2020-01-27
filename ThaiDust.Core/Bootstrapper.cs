@@ -16,6 +16,7 @@ namespace ThaiDust.Core
             Locator.CurrentMutable.RegisterLazySingleton<DustContext>(() =>
             {
                 var dustContext = new DustContext(databasePath);
+                dustContext.Database.EnsureDeleted();
                 dustContext.Database.Migrate();
                 return dustContext;
             });
@@ -23,7 +24,11 @@ namespace ThaiDust.Core
 
         public static void RegisterCoreDependencies()
         {
+            // Enable Support of TIS-620 codepage
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            // Application Instance
+            Locator.CurrentMutable.RegisterConstant(new Instance());
+            // Service
             Locator.CurrentMutable.RegisterLazySingleton<DustApiService>(()=>new DustApiService(new HttpClient()));
             Locator.CurrentMutable.RegisterLazySingleton<DustDataService>(()=>new DustDataService(Locator.Current.GetService<DustContext>()));
             Locator.CurrentMutable.RegisterLazySingleton<DustService>(()=>new DustService());

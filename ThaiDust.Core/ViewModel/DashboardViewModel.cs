@@ -1,32 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Net.Cache;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Windows.Foundation;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Data.Xml.Dom;
-using Windows.Graphics.Printing.OptionDetails;
-using Windows.UI.Popups;
-using Windows.Web.Http;
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using ThaiDust.Core.Dto;
+using ThaiDust.Core.Helper;
 using ThaiDust.Core.Model;
 using ThaiDust.Core.Model.Persistent;
 using ThaiDust.Core.Service;
-using ThaiDust.Helper;
 
-namespace ThaiDust
+namespace ThaiDust.Core.ViewModel
 {
-    public class MainPageViewModel : ReactiveObject, IActivatableViewModel
+    public class DashboardViewModel : ReactiveObject, IRoutableViewModel, IActivatableViewModel
     {
         #region Private
         private readonly ExcelGenerator _excelGenerator;
@@ -53,10 +43,11 @@ namespace ThaiDust
         [Reactive] public double Max { get; private set; }
         [Reactive] public double Average { get; private set; }
 
-        public MainPageViewModel(DustService dustService = null, ExcelGenerator excelGenerator = null)
+        public DashboardViewModel(DustService dustService = null, ExcelGenerator excelGenerator = null, IScreen screen = null)
         {
             _excelGenerator = excelGenerator ?? Locator.Current.GetService<ExcelGenerator>();
             _dustService = dustService ?? Locator.Current.GetService<DustService>();
+            HostScreen = screen ?? Locator.Current.GetService<IScreen>();
 
             this.WhenActivated(cleanup =>
             {
@@ -80,7 +71,7 @@ namespace ThaiDust
                 {
                    // var startDate = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day, StartTime.Value.Hours, StartTime.Value.Minutes, StartTime.Value.Seconds);
                     //var endDate = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day, EndTime.Value.Hours, EndTime.Value.Minutes, EndTime.Value.Seconds);
-                    return _dustService.GetStationData(SelectedStation.Code, SelectedParameter.Param);
+                    return _dustService.GetStationData(SelectedStation.Code, RecordType.PM25);
                 }, canLoadDataCommand).DisposeWith(cleanup);
 
                 LoadDataCommand.ThrownExceptions.Subscribe(ShowError);
@@ -90,7 +81,7 @@ namespace ThaiDust
                     _values.Clear();
                     IEnumerable<Record> records = r as Record[] ?? r.ToArray();
                     // Summarize
-                    Days = records.DistinctBy(p => p.DateTime.Date).Count();
+                    Days = records.GroupBy(p => p.DateTime.Date).Count();
                     Min = records.Where(p => p.Value != null).Min(p => p.Value).Value;
                     Max = records.Where(p => p.Value != null).Max(p => p.Value).Value;
                     Average = Math.Round(records.Where(p => p.Value != null).Average(p => p.Value).Value, 2);
@@ -109,8 +100,8 @@ namespace ThaiDust
 
         private void ShowError(Exception ex)
         {
-            var dialog = new MessageDialog(ex.Message, "Error");
-            dialog.ShowAsync();
+            //var dialog = new MessageDialog(ex.Message, "Error");
+            //dialog.ShowAsync();
         }
 
         public ReactiveCommand<IEnumerable<Record>, Unit> SaveToExcelCommand { get; set; }
@@ -118,5 +109,7 @@ namespace ThaiDust
         public ReactiveCommand<Unit, IEnumerable<Record>> LoadDataCommand { get; set; }
 
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
+        public string UrlPathSegment { get; } = "dashboard";
+        public IScreen HostScreen { get; }
     }
 }

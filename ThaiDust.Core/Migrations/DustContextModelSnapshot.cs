@@ -25,11 +25,11 @@ namespace ThaiDust.Core.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Param")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("StationCode")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
 
                     b.Property<double?>("Value")
                         .HasColumnType("REAL");
@@ -56,7 +56,7 @@ namespace ThaiDust.Core.Migrations
 
             modelBuilder.Entity("ThaiDust.Core.Model.Persistent.Record", b =>
                 {
-                    b.HasOne("ThaiDust.Core.Model.Persistent.Station", null)
+                    b.HasOne("ThaiDust.Core.Model.Persistent.Station", "Station")
                         .WithMany("Records")
                         .HasForeignKey("StationCode");
                 });

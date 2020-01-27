@@ -1,0 +1,60 @@
+﻿<Page
+    x:Class="ThaiDust.StationManagerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ThaiDust"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:persistent="using:ThaiDust.Core.Model.Persistent"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <DataTemplate x:Key="StationListViewTemplate" x:DataType="persistent:Station">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{x:Bind Code}"/>
+                <TextBlock Grid.Column="1" Text="{x:Bind Name}"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="StationGridViewTemplate" x:DataType="persistent:Station">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{x:Bind Code}" HorizontalAlignment="Center" FontSize="20"/>
+                <TextBlock Grid.Row="1" Text="{x:Bind Name}" HorizontalAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <CommandBar Grid.Row="0" Grid.ColumnSpan="3" DefaultLabelPosition="Right">
+            <AppBarButton Icon="Save" Label="Save"/>
+        </CommandBar>
+        <ListView Grid.Row="1" Grid.Column="0" Header="Available Stations" x:Name="AvailableStations" SelectionMode="Multiple" ItemTemplate="{StaticResource StationListViewTemplate}"/>
+       
+        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+            <Button x:Name="AddButton">
+                <SymbolIcon Symbol="Next"></SymbolIcon>
+            </Button>
+            <Button x:Name="RemoveButton">
+                <SymbolIcon Symbol="Back"></SymbolIcon>
+            </Button>
+        </StackPanel>
+        <GridView Grid.Row="1" Grid.Column="2" x:Name="SelectedStations" ItemTemplate="{StaticResource StationGridViewTemplate}">
+
+        </GridView>
+    </Grid>
+</Page>

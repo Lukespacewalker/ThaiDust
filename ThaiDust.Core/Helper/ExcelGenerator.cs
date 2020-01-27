@@ -1,24 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Splat;
 using ThaiDust.Core.Model.Persistent;
-using X16 = DocumentFormat.OpenXml.Office2016.Excel;
 
-namespace ThaiDust.Helper
+namespace ThaiDust.Core.Helper
 {
     public class ExcelGenerator
     {
+        private IFilePicker _filePicker;
+
+        public ExcelGenerator(IFilePicker filePicker = null)
+        {
+            _filePicker = filePicker ?? Locator.Current.GetService<IFilePicker>();
+        }
+
+
         public async Task CreateExcel(string stationName, IEnumerable<Record> data)
         {
-            var file = await FileSystemHelper.CreateFile(stationName);
-            if (file == null) return;
-            using var fileStream = await file.OpenStreamForWriteAsync();
+            using var fileStream = await _filePicker?.CreateFile(stationName);
             // Create a spreadsheet document by supplying the filepath.
             // By default, AutoSave = true, Editable = true, and Type = xlsx.
             SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Create(fileStream, SpreadsheetDocumentType.Workbook);

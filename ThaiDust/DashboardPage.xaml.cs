@@ -22,7 +22,7 @@ using DynamicData.Binding;
 using ReactiveUI;
 using Telerik.Charting;
 using Telerik.UI.Xaml.Controls.Chart;
-using MainPage = ThaiDust.MainPage;
+using ThaiDust.Core.ViewModel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -31,31 +31,29 @@ namespace ThaiDust
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page, IViewFor<MainPageViewModel>
+    public sealed partial class DashboardPage : Page, IViewFor<DashboardViewModel>
     {
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(
-            "ViewModel", typeof(MainPageViewModel), typeof(MainPage), new PropertyMetadata(default(MainPageViewModel)));
+            "ViewModel", typeof(DashboardViewModel), typeof(DashboardPage), new PropertyMetadata(default(DashboardViewModel)));
 
-        public MainPageViewModel ViewModel {
-            get { return (MainPageViewModel)GetValue(ViewModelProperty); }
+        public DashboardViewModel ViewModel {
+            get { return (DashboardViewModel)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
         object IViewFor.ViewModel {
             get => ViewModel;
-            set => ViewModel = (MainPageViewModel)value;
+            set => ViewModel = (DashboardViewModel)value;
         }
 
-        private MainPageViewModel ViewModel2 => ViewModel;
-
-        public MainPage()
+        public DashboardPage()
         {
-            ViewModel = new MainPageViewModel();
-            ViewModel.SetAxisAction = SetAxis;
+            
             this.InitializeComponent();
-            CustomTitlebar();
 
             this.WhenActivated(cleanup =>
             {
+                ViewModel.SetAxisAction = SetAxis;
+
                 this.OneWayBind(ViewModel, vm => vm.Stations, v => v.Stations.ItemsSource).DisposeWith(cleanup);
                 this.Bind(ViewModel, vm => vm.SelectedStation, v => v.Stations.SelectedItem).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm => vm.StationParams, v => v.Parameters.ItemsSource).DisposeWith(cleanup);
@@ -97,26 +95,6 @@ namespace ThaiDust
             Axis.Maximum = maximum;
             Axis.LabelFormatter = new DateLabelFormatter();
         }
-
-        private void CustomTitlebar()
-        {
-            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.Transparent;
-            titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
-            titleBar.ButtonForegroundColor = Windows.UI.Colors.Transparent;
-            titleBar.ButtonBackgroundColor = Windows.UI.Colors.Transparent;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
-            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
-            // Set XAML element as a draggable region.
-            Window.Current.SetTitleBar(AppTitleBar);
-        }
-
-        private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
-        {
-            AppTitleBar.Height = sender.Height;
-        }
-
 
     }
 
