@@ -28,6 +28,8 @@ namespace ThaiDust.Core.ViewModel
 
         public ReactiveCommand<IEnumerable<Station>, Unit> AddStationsCommand;
 
+        public ReactiveCommand<IEnumerable<Station>, Unit> SaveStationsCommand;
+
         public StationManagerViewModel(Instance instance = null, IScreen screen = null)
         {
             _instance = instance ?? Locator.Current.GetService<Instance>();
