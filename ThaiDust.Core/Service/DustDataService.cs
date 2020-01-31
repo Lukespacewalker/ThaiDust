@@ -18,9 +18,9 @@ namespace ThaiDust.Core.Service
             _dustContext = dustContext ?? Locator.Current.GetService<DustContext>();
         }
 
-        public Station LoadDustData(string stationCode)
+        public Station LoadStation(string stationCode)
         {
-            var station = _dustContext.Stations.Include(s=>s.Records).SingleOrDefault(s=>s.Code.ToLower() == stationCode.ToLower());
+            var station = _dustContext.Stations.FirstOrDefault(s=>s.Code.ToLower() == stationCode.ToLower());
             return station;
         }
 
@@ -30,7 +30,7 @@ namespace ThaiDust.Core.Service
             if (station == null)
             {
                 // Add new station
-                var knownStationName = Stations.All.SingleOrDefault(s =>
+                var knownStationName = Stations.All.FirstOrDefault(s =>
                     s.Code.ToLower() == stationCode.ToLower())?.Name;
                 station = new Station{Code = stationCode, Name = knownStationName ?? customStationName , Records = new List<Record>(records)};
                 _dustContext.Stations.Update(station);

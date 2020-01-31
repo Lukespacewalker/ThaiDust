@@ -27,7 +27,7 @@ namespace ThaiDust.Core.Service
         public IObservable<IEnumerable<Record>> GetStationData(string stationCode, RecordType parameter)
         {
             // Get Data From Database first
-            var station = _dataService.LoadDustData(stationCode);
+            var station = _dataService.LoadStation(stationCode);
             var subject = new Subject<IEnumerable<Record>>();
             var startDate = new DateTime(2018,10,1,0,0,0);
             if (station != null)
