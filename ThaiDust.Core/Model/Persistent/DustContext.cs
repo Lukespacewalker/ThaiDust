@@ -11,7 +11,7 @@ namespace ThaiDust.Core.Model.Persistent
         public DbSet<Station> Stations { get; set; }
         public DbSet<Record> Records { get; set; }
 
-        //public DustContext() { }
+        public DustContext() { }
 
         public DustContext(string databasePath)
         {
@@ -20,6 +20,12 @@ namespace ThaiDust.Core.Model.Persistent
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             options.UseLazyLoadingProxies().UseSqlite($"Data Source={_databasePath}");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Record>()
+                .HasKey(o => new {o.DateTime, o.StationCode});
         }
     }
 }

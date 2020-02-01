@@ -18,15 +18,14 @@ namespace ThaiDust.Core.Migrations
 
             modelBuilder.Entity("ThaiDust.Core.Model.Persistent.Record", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("StationCode")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
@@ -34,7 +33,7 @@ namespace ThaiDust.Core.Migrations
                     b.Property<double?>("Value")
                         .HasColumnType("REAL");
 
-                    b.HasKey("Id");
+                    b.HasKey("DateTime", "StationCode");
 
                     b.HasIndex("StationCode");
 
@@ -58,7 +57,9 @@ namespace ThaiDust.Core.Migrations
                 {
                     b.HasOne("ThaiDust.Core.Model.Persistent.Station", "Station")
                         .WithMany("Records")
-                        .HasForeignKey("StationCode");
+                        .HasForeignKey("StationCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

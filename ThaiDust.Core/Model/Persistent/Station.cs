@@ -12,7 +12,7 @@ namespace ThaiDust.Core.Model.Persistent
         public string Code { get; set; }
         public string Name { get; set; }
         [ForeignKey("StationCode")]
-        public List<Record> Records { get; set; }
+        public virtual List<Record> Records { get; set; }
 
         public int Compare(Station x, Station y)
         {

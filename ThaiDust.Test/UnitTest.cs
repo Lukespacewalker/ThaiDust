@@ -23,7 +23,7 @@ namespace ThaiDust.Test
         {
             using var dustContext = SetUpDatabase();
             var dustService = new DustDataService(dustContext);
-            Station stationWithData = dustService.LoadStation("10E");
+            Station stationWithData = dustService.GetStation("10E");
             stationWithData.Should().BeNull();
         }
 

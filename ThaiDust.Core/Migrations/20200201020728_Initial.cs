@@ -23,22 +23,21 @@ namespace ThaiDust.Core.Migrations
                 name: "Records",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
                     DateTime = table.Column<DateTime>(nullable: false),
+                    StationCode = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     Type = table.Column<int>(nullable: false),
-                    Value = table.Column<double>(nullable: true),
-                    StationCode = table.Column<string>(nullable: true)
+                    Value = table.Column<double>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Records", x => x.Id);
+                    table.PrimaryKey("PK_Records", x => new { x.DateTime, x.StationCode });
                     table.ForeignKey(
                         name: "FK_Records_Stations_StationCode",
                         column: x => x.StationCode,
                         principalTable: "Stations",
                         principalColumn: "Code",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
