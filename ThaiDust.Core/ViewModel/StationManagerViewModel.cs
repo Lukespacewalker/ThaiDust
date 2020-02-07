@@ -10,47 +10,65 @@ using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using ThaiDust.Core.Extensions;
 using ThaiDust.Core.Model.Persistent;
+using ThaiDust.Core.Service;
 
 namespace ThaiDust.Core.ViewModel
 {
-    public class StationManagerViewModel : ReactiveObject, IRoutableViewModel, IActivatableViewModel
+    public class StationManagerViewModel : ReactiveObject, IRoutableViewModel, IActivatableViewModel, IViewModelInfo
     {
-        private readonly Instance _instance;
+        private DustService _dustService;
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
 
-        private readonly SourceList<Station> _availableStations = new SourceList<Station>();
+        private readonly SourceList<Station> _stationsSource = new SourceList<Station>();
 
-        [Reactive] public IEnumerable<Station> SelectedStations2 { get; set; }
+        public string Title { get; }= "Manage stations";
+
+        [Reactive] public IEnumerable<Station> SelectedAvailableStation { get; set; }
+        [Reactive] public IEnumerable<Station> SelectedManagedStation { get; set; }
 
         public ObservableCollectionExtended<Station> AvailableStations = new ObservableCollectionExtended<Station>();
-        public ObservableCollectionExtended<Station> SelectedStations => _instance.SelectedStations;
+        public ObservableCollectionExtended<Station> ManagedStations => _dustService.ManagedStations2;
 
         public ReactiveCommand<IEnumerable<Station>, Unit> AddStationsCommand;
+        public ReactiveCommand<IEnumerable<Station>, Unit> RemoveStationsCommand;
 
-        public ReactiveCommand<IEnumerable<Station>, Unit> SaveStationsCommand;
+        public ReactiveCommand<Unit, Unit> SaveStationsCommand;
 
-        public StationManagerViewModel(Instance instance = null, IScreen screen = null)
+        public StationManagerViewModel(DustService dustService = null, IScreen screen = null)
         {
-            _instance = instance ?? Locator.Current.GetService<Instance>();
+            _dustService = dustService ?? Locator.Current.GetService<DustService>();
+
             HostScreen = screen ?? Locator.Current.GetService<IScreen>();
 
-            _availableStations.AddRange(Core.Model.Stations.All);
-            _availableStations.Connect()
-                .Filter(s => !SelectedStations.Any(p => p.Code.Equals(s.Code, StringComparison.InvariantCultureIgnoreCase)))
+            _stationsSource.AddRange(Core.Model.Stations.All);
+            _stationsSource.Connect()
+                .AutoRefreshOnObservable(_=>ManagedStations.GetCollectionChangedObservable())
+                .Filter(s => !ManagedStations.Any(p => p.Code.Equals(s.Code, StringComparison.InvariantCultureIgnoreCase)))
+                .Sort(SortExpressionComparer<Station>.Ascending(s=>s.Code))
                 .Bind(AvailableStations)
                 .Subscribe();
 
             AddStationsCommand = ReactiveCommand.Create<IEnumerable<Station>>(stations =>
             {
-                
                 foreach (var station in stations)
                 {
-                    if(SelectedStations.Contains(station)) continue;
-                    SelectedStations.Add(station);
-                    _availableStations.Remove(station);
+                    if (ManagedStations.Contains(station)) continue;
+                    ManagedStations.Add(station);
                 }
-            }, this.WhenAnyValue(p => p.SelectedStations2).Where(p=>p!=null).Select(s => s.Count() > 0));
+            }, this.WhenAnyValue(p => p.SelectedAvailableStation).Where(p => p != null).Select(s => s.Any()));
+
+
+            RemoveStationsCommand = ReactiveCommand.Create<IEnumerable<Station>>(stations =>
+            {
+                foreach (var station in stations)
+                {
+                    ManagedStations.Remove(station);
+                }
+            }, this.WhenAnyValue(p => p.SelectedManagedStation).Where(p => p != null).Select(s => s.Any()));
+
+            SaveStationsCommand = ReactiveCommand.Create(_dustService.SaveManagedStationsToDatabase);
         }
 
         public string UrlPathSegment { get; } = "stationManager";

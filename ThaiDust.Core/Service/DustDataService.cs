@@ -31,12 +31,45 @@ namespace ThaiDust.Core.Service
 
         public void AddOrUpdateStations(params Station[] stations)
         {
-            _dustContext.Stations.UpdateRange(stations);
+            // Because "Station" entity already has a "Primary" key such as "26T"
+            // We need to check weather the entity is already existed first
+            foreach (Station station in stations)
+            {
+                var dbStation = _dustContext.Stations.Find(station.Code);
+                if (dbStation == null)
+                {
+                    _dustContext.Stations.Add(station);
+                }
+                else
+                {
+                    _dustContext.Stations.Update(station);
+                    //_dustContext.Entry(dbStation).CurrentValues.SetValues(station);
+                    //// The database records should be populated by EF Core proxy
+                    //foreach (Record dbRecord in dbStation.Records)
+                    //{
+                    //    foreach (Record stationRecord in station.Records)
+                    //    {
+                    //        dbRecord.
+                    //    }
+                    //}
+                    ////IEnumerable<Record> diff = dbStation.Records.Except(station.Records);
+                    //// Add only different records
+                    //dbStation.Records.AddRange(diff);
+                    //// Update exiting records
+                    //foreach (Record dbRecord in dbStation.Records)
+                    //{
+                    //    .Records.Exists()
+                    //}
+                }
+            }
         }
 
-        public void RemoveStation(Station station)
+        public void RemoveStations(params Station[] stations)
         {
-            _dustContext.Stations.Remove(station);
+            foreach (var station in stations)
+            {
+                RemoveStation(station.Code);
+            }
         }
 
         public void RemoveStation(string stationCode)

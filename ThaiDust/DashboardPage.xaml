@@ -14,86 +14,79 @@
     <Page.Resources>
         <converters:DateTimeConverter x:Key="DateTimeConverter"/>
     </Page.Resources>
-
-    <SplitView OpenPaneLength="402" IsPaneOpen="True"
-                   Canvas.ZIndex="0" DisplayMode="Inline"
-                   CompactPaneLength="30"
-                   Background="{ThemeResource ApplicationBackground}"
-                   PaneBackground="{ThemeResource SystemControlChromeHighAcrylicWindowMediumBrush}">
-        <SplitView.Pane>
-            <Grid Padding="16,32,16,16" RowSpacing="16">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="Assets/Square44x44Logo.png" HorizontalAlignment="Left" 
-                           Width="28" Height="28" Margin="0,0,12,0"/>
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}">Dustboard</TextBlock>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <CommandBar  DefaultLabelPosition="Right" Background="{ThemeResource NavigationViewTopPaneBackground}">
+            <CommandBar.Content>
+                <StackPanel Margin="12,6,0,0" Orientation="Horizontal">
+                    <SymbolIcon Symbol="PreviewLink" />
+                    <TextBlock VerticalAlignment="Center" Margin="12,0,0,0" Style="{StaticResource SubtitleTextBlockStyle}">Dashboard</TextBlock>
                 </StackPanel>
-                <!--<Button Grid.Column="1" Background="Transparent">
-                        <FontIcon Glyph="&#xE700;"/>
-                    </Button>-->
-
-                <ListView Grid.Row="1" x:Name="Stations" Grid.ColumnSpan="2">
-                    <ListView.Header>
-                        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">1. เลือกสถานีตรวจวัด</TextBlock>
-                    </ListView.Header>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="persistent:Station">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{x:Bind Code}"/>
-                                <TextBlock Text="{x:Bind Name}" Margin="16,0,0,0"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <Grid Grid.Row="2" Grid.ColumnSpan="2" ColumnSpacing="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+            </CommandBar.Content>
+            <AppBarButton x:Name="ExportButton" Icon="Save" Label="Export to Excel"/>
+        </CommandBar>
+        <SplitView Grid.Row="1" OpenPaneLength="300" IsPaneOpen="True"
+                   Canvas.ZIndex="0" DisplayMode="Inline"
+                   CompactPaneLength="30">
+            <SplitView.Pane>
+                <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <CalendarDatePicker x:Name="StartDate" Header="ตั้งแต่ วันที่" HorizontalAlignment="Stretch"/>
-                    <TimePicker Grid.Column="1" Grid.Row="0"  x:Name="StartTime" Header="เวลา" ClockIdentifier="24HourClock" />
-                    <CalendarDatePicker Grid.Column="0" Grid.Row="1" x:Name="EndDate" Header="ถึง วันที่" HorizontalAlignment="Stretch"/>
-                    <TimePicker Grid.Column="1" Grid.Row="1" x:Name="EndTime"  Header="เวลา" ClockIdentifier="24HourClock" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="12" Grid.Row="0" FontWeight="Bold" Style="{StaticResource SubtitleTextBlockStyle}">Stations</TextBlock>
+                    <ListView Grid.Row="1" x:Name="Stations" Grid.ColumnSpan="2" ItemTemplate="{StaticResource StationListViewTemplate}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                    <!--<Grid Visibility="Collapsed" Grid.Row="2" Grid.ColumnSpan="2" ColumnSpacing="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <CalendarDatePicker x:Name="StartDate" Header="ตั้งแต่ วันที่" HorizontalAlignment="Stretch"/>
+                        <TimePicker Grid.Column="1" Grid.Row="0"  x:Name="StartTime" Header="เวลา" ClockIdentifier="24HourClock" />
+                        <CalendarDatePicker Grid.Column="0" Grid.Row="1" x:Name="EndDate" Header="ถึง วันที่" HorizontalAlignment="Stretch"/>
+                        <TimePicker Grid.Column="1" Grid.Row="1" x:Name="EndTime"  Header="เวลา" ClockIdentifier="24HourClock" />
+                    </Grid>
+                    <GridView Visibility="Collapsed" Grid.Row="3" x:Name="Parameters">
+                        <GridView.Header>
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">พารามิเตอร์</TextBlock>
+                        </GridView.Header>
+                        <GridView.ItemTemplate>
+                            <DataTemplate x:DataType="model:StationParam">
+                                <TextBlock Text="{x:Bind Name}"/>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView-->
+
+                    <CommandBar Grid.Row="4" DefaultLabelPosition="Right" Margin="-16" Grid.ColumnSpan="2">
+                        <AppBarButton x:Name="LoadDataButton" Icon="Find" Label="ค้นหาข้อมูล"/>
+        
+                    </CommandBar>
                 </Grid>
-                <GridView Grid.Row="3" x:Name="Parameters">
-                    <GridView.Header>
-                        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">พารามิเตอร์</TextBlock>
-                    </GridView.Header>
-                    <GridView.ItemTemplate>
-                        <DataTemplate x:DataType="model:StationParam">
-                            <TextBlock Text="{x:Bind Name}"/>
-                        </DataTemplate>
-                    </GridView.ItemTemplate>
-                </GridView>
-                <CommandBar Grid.Row="4" DefaultLabelPosition="Right" Margin="-16" Grid.ColumnSpan="2">
-                    <AppBarButton x:Name="LoadDataButton" Icon="Find" Label="ค้นหาข้อมูล"/>
-                    <AppBarButton x:Name="ExportButton" Icon="Save" Label="ส่งออกเป็น Excel"/>
-                </CommandBar>
-            </Grid>
-        </SplitView.Pane>
-        <SplitView.Content>
-            <!--<ScrollViewer>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <!--<ScrollViewer>
                     <Grid>-->
-            <!--<Grid.RowDefinitions>
+                <!--<Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
@@ -120,111 +113,165 @@
                             </Grid>
 
                         </ListView>-->
-            <Grid Grid.Row="1" ColumnSpacing="16" Padding="16,32,16,16">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="1.5*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <ListView Grid.Row="2" x:Name="StationData">
-                    <ListView.GroupStyle>
-                        <GroupStyle>
-                            <GroupStyle.HeaderTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Key,Converter={StaticResource DateTimeConverter}, ConverterParameter=Date}" Margin="10,0" FontWeight="Bold" />
-                                </DataTemplate>
-                            </GroupStyle.HeaderTemplate>
-                        </GroupStyle>
-                    </ListView.GroupStyle>
-                    <ListView.Header>
-                        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">ข้อมูล</TextBlock>
-                    </ListView.Header>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="persistent:Record">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{x:Bind DateTime, Converter={StaticResource DateTimeConverter},ConverterParameter=Time}"/>
-                                <TextBlock Text="{x:Bind Value}" Margin="16,0,0,0"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <Grid Grid.Row="2" Grid.Column="1" ColumnSpacing="16" RowSpacing="16">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                <Grid Grid.Row="1" ColumnSpacing="16" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">สถิติ</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="0">จำนวนวัน</TextBlock>
-                    <TextBlock Grid.Row="2" Grid.Column="0">ข้อมูลต่ำสุด</TextBlock>
-                    <TextBlock Grid.Row="3" Grid.Column="0">ข้อมูลสูงสุด</TextBlock>
-                    <TextBlock Grid.Row="4" Grid.Column="0">เฉลี่ย</TextBlock>
-                    <TextBlock x:Name="Days" Grid.Row="1" Grid.Column="1"></TextBlock>
-                    <TextBlock x:Name="Min" Grid.Row="2" Grid.Column="1"></TextBlock>
-                    <TextBlock x:Name="Max" Grid.Row="3" Grid.Column="1"></TextBlock>
-                    <TextBlock x:Name="Average" Grid.Row="4" Grid.Column="1"></TextBlock>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">StationCode StationName Date</TextBlock>
+                    <VariableSizedWrapGrid Grid.Row="1" Orientation="Horizontal">
+                        <VariableSizedWrapGrid.Resources>
+                            <Style TargetType="Grid">
+                                <Setter Property="BorderBrush" Value="#40FFFFFF"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="Padding" Value="12"/>
+                                <Setter Property="Margin" Value="12"/>
+                            </Style>
+                        </VariableSizedWrapGrid.Resources>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">PM2.5</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="PM25" FontSize="35">10</TextBlock>
+                        </Grid>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">PM10</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="PM10" FontSize="35">10</TextBlock>
+                        </Grid>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">O3</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="O3" FontSize="35">10</TextBlock>
+                        </Grid>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">SO2</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="SO2" FontSize="35">10</TextBlock>
+                        </Grid>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">NO2</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="NO2" FontSize="35">10</TextBlock>
+                        </Grid>
+                    </VariableSizedWrapGrid>
+                    <ListView Grid.Row="3" x:Name="StationData">
+                        <ListView.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Key,Converter={StaticResource DateTimeConverter}, ConverterParameter=Date}" Margin="10,0" FontWeight="Bold" />
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </ListView.GroupStyle>
+                        <ListView.Header>
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">ข้อมูล</TextBlock>
+                        </ListView.Header>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="persistent:Record">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{x:Bind DateTime, Converter={StaticResource DateTimeConverter},ConverterParameter=Time}"/>
+                                    <TextBlock Text="{x:Bind Value}" Margin="16,0,0,0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Grid Grid.Row="4" Grid.Column="1" ColumnSpacing="16" RowSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">สถิติ</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="0">จำนวนวัน</TextBlock>
+                        <TextBlock Grid.Row="2" Grid.Column="0">ข้อมูลต่ำสุด</TextBlock>
+                        <TextBlock Grid.Row="3" Grid.Column="0">ข้อมูลสูงสุด</TextBlock>
+                        <TextBlock Grid.Row="4" Grid.Column="0">เฉลี่ย</TextBlock>
+                        <TextBlock x:Name="Days" Grid.Row="1" Grid.Column="1"></TextBlock>
+                        <TextBlock x:Name="Min" Grid.Row="2" Grid.Column="1"></TextBlock>
+                        <TextBlock x:Name="Max" Grid.Row="3" Grid.Column="1"></TextBlock>
+                        <TextBlock x:Name="Average" Grid.Row="4" Grid.Column="1"></TextBlock>
+                    </Grid>
+                    <chart:RadCartesianChart x:Name="Chart" Grid.Row="2" Grid.ColumnSpan="2">
+                        <chart:RadCartesianChart.Grid>
+                            <chart:CartesianChartGrid MajorLinesVisibility="XY">
+                                <chart:CartesianChartGrid.MajorYLineStyle>
+                                    <Style TargetType="Line">
+                                        <Setter Property="Stroke" Value="#46FFFFFF"/>
+                                    </Style>
+                                </chart:CartesianChartGrid.MajorYLineStyle>
+                                <chart:CartesianChartGrid.MajorXLineStyle>
+                                    <Style TargetType="Line">
+                                        <Setter Property="Stroke" Value="#46FFFFFF"/>
+                                    </Style>
+                                </chart:CartesianChartGrid.MajorXLineStyle>
+                            </chart:CartesianChartGrid>
+                        </chart:RadCartesianChart.Grid>
+                        <chart:RadCartesianChart.HorizontalAxis>
+                            <chart:DateTimeContinuousAxis x:Name="Axis"  PlotMode="OnTicks" LabelFitMode="Rotate">
+                                <chart:DateTimeContinuousAxis.LineStyle>
+                                    <Style TargetType="Line">
+                                        <Setter Property="Stroke" Value="#46FFFFFF"/>
+                                    </Style>
+                                </chart:DateTimeContinuousAxis.LineStyle>
+                            </chart:DateTimeContinuousAxis>
+                        </chart:RadCartesianChart.HorizontalAxis>
+                        <chart:RadCartesianChart.VerticalAxis>
+                            <chart:LinearAxis TickThickness="1">
+                                <chart:LinearAxis.LineStyle>
+                                    <Style TargetType="Line">
+                                        <Setter Property="Stroke" Value="#46FFFFFF"/>
+                                    </Style>
+                                </chart:LinearAxis.LineStyle>
+                            </chart:LinearAxis>
+                        </chart:RadCartesianChart.VerticalAxis>
+                        <chart:AreaSeries ItemsSource="{Binding}">
+                            <chart:AreaSeries.CategoryBinding>
+                                <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
+                            </chart:AreaSeries.CategoryBinding>
+                            <chart:AreaSeries.ValueBinding>
+                                <chart:PropertyNameDataPointBinding PropertyName="Value"/>
+                            </chart:AreaSeries.ValueBinding>
+                        </chart:AreaSeries>
+                    </chart:RadCartesianChart>
                 </Grid>
-                <TextBlock Grid.Row="0" Style="{StaticResource SubtitleTextBlockStyle}">กราฟ</TextBlock>
-                <chart:RadCartesianChart x:Name="Chart" Grid.Row="1" Grid.ColumnSpan="2">
-                    <chart:RadCartesianChart.Grid>
-                        <chart:CartesianChartGrid MajorLinesVisibility="XY">
-                            <chart:CartesianChartGrid.MajorYLineStyle>
-                                <Style TargetType="Line">
-                                    <Setter Property="Stroke" Value="#46FFFFFF"/>
-                                </Style>
-                            </chart:CartesianChartGrid.MajorYLineStyle>
-                            <chart:CartesianChartGrid.MajorXLineStyle>
-                                <Style TargetType="Line">
-                                    <Setter Property="Stroke" Value="#46FFFFFF"/>
-                                </Style>
-                            </chart:CartesianChartGrid.MajorXLineStyle>
-                        </chart:CartesianChartGrid>
-                    </chart:RadCartesianChart.Grid>
-                    <chart:RadCartesianChart.HorizontalAxis>
-                        <chart:DateTimeContinuousAxis x:Name="Axis"  PlotMode="OnTicks" LabelFitMode="Rotate">
-                            <chart:DateTimeContinuousAxis.LineStyle>
-                                <Style TargetType="Line">
-                                    <Setter Property="Stroke" Value="#46FFFFFF"/>
-                                </Style>
-                            </chart:DateTimeContinuousAxis.LineStyle>
-                        </chart:DateTimeContinuousAxis>
-                    </chart:RadCartesianChart.HorizontalAxis>
-                    <chart:RadCartesianChart.VerticalAxis>
-                        <chart:LinearAxis TickThickness="1">
-                            <chart:LinearAxis.LineStyle>
-                                <Style TargetType="Line">
-                                    <Setter Property="Stroke" Value="#46FFFFFF"/>
-                                </Style>
-                            </chart:LinearAxis.LineStyle>
-                        </chart:LinearAxis>
-                    </chart:RadCartesianChart.VerticalAxis>
-                    <chart:AreaSeries ItemsSource="{Binding}">
-                        <chart:AreaSeries.CategoryBinding>
-                            <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
-                        </chart:AreaSeries.CategoryBinding>
-                        <chart:AreaSeries.ValueBinding>
-                            <chart:PropertyNameDataPointBinding PropertyName="Value"/>
-                        </chart:AreaSeries.ValueBinding>
-                    </chart:AreaSeries>
-                </chart:RadCartesianChart>
-            </Grid>
-            <!--</Grid>
+                <!--</Grid>
                 </ScrollViewer>-->
-        </SplitView.Content>
-    </SplitView>
+            </SplitView.Content>
+        </SplitView>
+    </Grid>
+
 </Page>

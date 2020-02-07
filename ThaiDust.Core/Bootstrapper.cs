@@ -16,7 +16,7 @@ namespace ThaiDust.Core
             Locator.CurrentMutable.RegisterLazySingleton<DustContext>(() =>
             {
                 var dustContext = new DustContext(databasePath);
-                dustContext.Database.EnsureDeleted();
+                //dustContext.Database.EnsureDeleted();
                 dustContext.Database.Migrate();
                 return dustContext;
             });

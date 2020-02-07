@@ -8,7 +8,19 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/Brush.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Styles/NavigationViewNoHeader.xaml"></ResourceDictionary>
+                <local:DataTemplate/>
             </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="XamlAutoFontFamily"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="TextTrimming" Value="None"/>
+                <Setter Property="TextWrapping" Value="Wrap"/>
+                <Setter Property="LineStackingStrategy" Value="MaxHeight"/>
+                <Setter Property="TextLineBounds" Value="Full"/>
+            </Style>
+            <Style TargetType="Rectangle"></Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

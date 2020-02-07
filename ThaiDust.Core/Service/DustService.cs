@@ -21,7 +21,7 @@ namespace ThaiDust.Core.Service
         private readonly ReadOnlyObservableCollection<Station> _managedStations;
         public ReadOnlyObservableCollection<Station> ManagedStations => _managedStations;
 
-        public ObservableCollectionExtended<Station> ManangedStations2 { get; } = new ObservableCollectionExtended<Station>();
+        public ObservableCollectionExtended<Station> ManagedStations2 { get; } = new ObservableCollectionExtended<Station>();
 
         public DustService(DustDataService dustDataService = null, DustApiService dustApiService = null)
         {
@@ -30,26 +30,29 @@ namespace ThaiDust.Core.Service
 
             // Setup source output
             _managedStationsSource.Connect().Bind(out _managedStations).Subscribe();
-            _managedStationsSource.Connect().Bind(ManangedStations2).Subscribe();
+            _managedStationsSource.Connect().Bind(ManagedStations2).Subscribe();
             // Load all station from local database
             _managedStationsSource.AddRange(_dataService.GetAllStations());
         }
 
         public void SaveManagedStationsToDatabase()
         {
-            Station[] temp = _dataService.GetAllStations().Intersect(ManangedStations2).ToArray();
-            _dataService.AddOrUpdateStations();
+            Station[] managed = ManagedStations2.ToArray();
+            Station[] diff = _dataService.GetAllStations().Except(managed).ToArray();
+            _dataService.RemoveStations(diff);
+            _dataService.AddOrUpdateStations(managed);
+            _dataService.Commit();
         }
 
-        public void AddStations(params Station[] stations)
-        {
-            _managedStationsSource.AddRange(stations);
-        }
+        //public void AddStations(params Station[] stations)
+        //{
+        //    _managedStationsSource.AddRange(stations);
+        //}
 
-        public void RemoveStations(params Station[] stations)
-        {
-            _managedStationsSource.RemoveMany(stations);
-        }
+        //public void RemoveStations(params Station[] stations)
+        //{
+        //    _managedStationsSource.RemoveMany(stations);
+        //}
 
         public IObservable<IEnumerable<StationParam>> GetAvailableParameters(Station station)
         {
@@ -65,7 +68,7 @@ namespace ThaiDust.Core.Service
             if (databaseStation != null)
             {
                 var data = databaseStation.Records.Where(r => r.Type == parameter).OrderBy(r => r.DateTime);
-                startDate = data.Last().DateTime;
+                if(data.Any()) startDate = data.Last().DateTime;
                 // Sent the old data first
                 subject.OnNext(data);
             }

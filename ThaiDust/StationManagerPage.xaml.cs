@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Navigation;
 using ReactiveUI;
 using ThaiDust.Core.Model.Persistent;
 using ThaiDust.Core.ViewModel;
+using ThaiDust.Extensions;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -49,15 +50,20 @@ namespace ThaiDust
             this.WhenActivated(cleanup =>
                 {
                     this.OneWayBind(ViewModel, vm => vm.AvailableStations, v => v.AvailableStations.ItemsSource).DisposeWith(cleanup);
-                    this.OneWayBind(ViewModel, vm => vm.SelectedStations, v => v.SelectedStations.ItemsSource).DisposeWith(cleanup);
-                    this.BindCommand(ViewModel, vm => vm.AddStationsCommand, v => v.AddButton,
-                        vm => vm.SelectedStations2)
+                    this.OneWayBind(ViewModel, vm => vm.ManagedStations, v => v.ManageStations.ItemsSource).DisposeWith(cleanup);
+
+                    this.BindCommand(ViewModel, vm => vm.AddStationsCommand, v => v.AddButton, vm => vm.SelectedAvailableStation)
                         .DisposeWith(cleanup);
-                    Observable.FromEvent<SelectionChangedEventHandler, (object,SelectionChangedEventArgs)>(
-                            rxHandler => (sender, selectionChangedEventArgs) => rxHandler((sender, selectionChangedEventArgs)),
-                            handler => AvailableStations.SelectionChanged += handler,
-                            handler => AvailableStations.SelectionChanged -= handler)
-                        .Select(_ => AvailableStations.SelectedItems.Cast<Station>().ToArray()).Subscribe(s => ViewModel.SelectedStations2 = s)
+                    this.BindCommand(ViewModel, vm => vm.RemoveStationsCommand, v => v.RemoveButton, vm => vm.SelectedManagedStation)
+                        .DisposeWith(cleanup);
+                    this.BindCommand(ViewModel, vm => vm.SaveStationsCommand, v => v.SaveButton)
+                        .DisposeWith(cleanup);
+
+                    AvailableStations.GetSelectedChangedObservable<Station>()
+                        .BindTo(ViewModel,vm => vm.SelectedAvailableStation)
+                        .DisposeWith(cleanup);
+                    ManageStations.GetSelectedChangedObservable<Station>()
+                        .BindTo(ViewModel, vm => vm.SelectedManagedStation)
                         .DisposeWith(cleanup);
                 });
 

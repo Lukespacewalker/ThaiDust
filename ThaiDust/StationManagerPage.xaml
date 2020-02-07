@@ -9,28 +9,27 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
-        <DataTemplate x:Key="StationListViewTemplate" x:DataType="persistent:Station">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{x:Bind Code}"/>
-                <TextBlock Grid.Column="1" Text="{x:Bind Name}"/>
-            </Grid>
-        </DataTemplate>
         <DataTemplate x:Key="StationGridViewTemplate" x:DataType="persistent:Station">
-            <Grid>
+            <Grid Padding="12,8">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="2"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="{x:Bind Code}" HorizontalAlignment="Center" FontSize="20"/>
-                <TextBlock Grid.Row="1" Text="{x:Bind Name}" HorizontalAlignment="Center"/>
+                <Border Grid.Row="1" MinHeight="40">
+                    <TextBlock Text="{x:Bind Name}" TextWrapping="WrapWholeWords" VerticalAlignment="Center" TextAlignment="Center"/>
+                </Border>
+                <Rectangle Fill="#30FFFFFF" Grid.Row="2"/>
+                <StackPanel  Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Margin="0,0,8,0" Text="จำนวนข้อมูล" Foreground="#C8FFFFFF" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{x:Bind Records.Count}" HorizontalAlignment="Center"/>
+                </StackPanel>
             </Grid>
         </DataTemplate>
     </Page.Resources>
-    <Grid>
+    <Grid ColumnSpacing="12">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="Auto"/>
@@ -38,23 +37,35 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <CommandBar Grid.Row="0" Grid.ColumnSpan="3" DefaultLabelPosition="Right">
-            <AppBarButton Icon="Save" Label="Save"/>
+        <CommandBar Grid.Row="0" Grid.ColumnSpan="3" DefaultLabelPosition="Right" Background="{ThemeResource NavigationViewTopPaneBackground}">
+            <CommandBar.Content>
+                <StackPanel Margin="12,6,0,0" Orientation="Horizontal">
+                    <SymbolIcon Symbol="World" />
+                    <TextBlock VerticalAlignment="Center" Margin="12,0,0,0" Style="{StaticResource SubtitleTextBlockStyle}">Stations</TextBlock>
+                </StackPanel>
+            </CommandBar.Content>
+            <AppBarButton x:Name="SaveButton" Icon="Save" Label="Save"/>
         </CommandBar>
-        <ListView Grid.Row="1" Grid.Column="0" Header="Available Stations" x:Name="AvailableStations" SelectionMode="Multiple" ItemTemplate="{StaticResource StationListViewTemplate}"/>
-       
-        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
-            <Button x:Name="AddButton">
-                <SymbolIcon Symbol="Next"></SymbolIcon>
+        <ListView Grid.Row="2" Grid.Column="0" x:Name="AvailableStations" SelectionMode="Multiple" ItemTemplate="{StaticResource StationListViewTemplate}"/>
+        <TextBlock Margin="12" Grid.Row="1" FontWeight="Bold" Style="{StaticResource SubtitleTextBlockStyle}">Available stations</TextBlock>
+        <TextBlock Margin="0,12,12,12" Grid.Row="1" Grid.Column="2" FontWeight="Bold" Style="{StaticResource SubtitleTextBlockStyle}">Managed stations</TextBlock>
+        <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
+            <Button x:Name="AddButton" Background="Transparent">
+                <FontIcon Glyph="&#xE76C;" FontSize="36"/>
             </Button>
-            <Button x:Name="RemoveButton">
-                <SymbolIcon Symbol="Back"></SymbolIcon>
+            <Button x:Name="RemoveButton" Background="Transparent">
+                <FontIcon Glyph="&#xE76B;" FontSize="36"/>
             </Button>
         </StackPanel>
-        <GridView Grid.Row="1" Grid.Column="2" x:Name="SelectedStations" ItemTemplate="{StaticResource StationGridViewTemplate}">
-
+        <GridView SelectionMode="Multiple" Grid.Row="2" Grid.Column="2" x:Name="ManageStations" ItemTemplate="{StaticResource StationGridViewTemplate}">
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VariableSizedWrapGrid Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
         </GridView>
     </Grid>
 </Page>

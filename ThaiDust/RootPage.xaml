@@ -21,13 +21,12 @@
             <Image Source="Assets/Square44x44Logo.png" 
                    Grid.Column="1" HorizontalAlignment="Left" 
                    Width="20" Height="20" Margin="10,8"/>
-            <!--
             <TextBlock Text="Thailand Dust Monitor" 
                        Grid.Column="1" 
                        Style="{StaticResource CaptionTextBlockStyle}" 
-                       Margin="44,8,0,0"/>-->
+                       Margin="44,8,0,0"/>
         </Grid>
-        <NavigationView x:Name="RootNavigationView" Header="Test" IsBackButtonVisible="Collapsed">
+        <NavigationView Style="{StaticResource NavigationViewNoHeaderStyle}" PaneDisplayMode="Top" x:Name="RootNavigationView" PaneTitle="Dust Monitor" IsBackButtonVisible="Collapsed" IsSettingsVisible="False">
             <NavigationView.MenuItems>
                 <NavigationViewItem Tag="Dashboard" Icon="PreviewLink" Content="Dashboard"/>
                 <NavigationViewItem Tag="Stations" Icon="World" Content="Stations"/>

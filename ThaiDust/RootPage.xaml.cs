@@ -10,6 +10,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Automation.Peers;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
@@ -49,22 +50,27 @@ namespace ThaiDust
             this.InitializeComponent();
             CustomTitlebar();
 
-            this.WhenActivated(cleanup =>
+
+            this.OneWayBind(ViewModel, vm => vm.Router, v => v.RoutedViewHost.Router);
+            ViewModel.Router.CurrentViewModel.Where(vm => vm is IViewModelInfo).Select(vm => (vm as IViewModelInfo).Title)
+                .BindTo(this, v => v.RootNavigationView.Header);
+
+            var navViewItemInvokedObservable = Observable
+                .FromEvent<TypedEventHandler<NavigationView, NavigationViewItemInvokedEventArgs>,
+                    (NavigationView, NavigationViewItemInvokedEventArgs)>(
+                    rxHandler => (navigationView, navigationViewItemInvokedEventArgs) => rxHandler((navigationView, navigationViewItemInvokedEventArgs)),
+                    handler => RootNavigationView.ItemInvoked += handler,
+                    handler => RootNavigationView.ItemInvoked -= handler);
+            navViewItemInvokedObservable.Select(e =>
             {
-                this.OneWayBind(ViewModel, vm => vm.Router, v => v.RoutedViewHost.Router)
-                    .DisposeWith(cleanup);
-                var navViewItemInvokedObservable = Observable
-                    .FromEvent<TypedEventHandler<NavigationView, NavigationViewItemInvokedEventArgs>,
-                        (NavigationView,NavigationViewItemInvokedEventArgs)>(
-                        rxHandler => (navigationView, navigationViewItemInvokedEventArgs) => rxHandler((navigationView, navigationViewItemInvokedEventArgs)),
-                        handler => RootNavigationView.ItemInvoked += handler,
-                        handler => RootNavigationView.ItemInvoked -= handler);
-                navViewItemInvokedObservable.Select(e =>
-                {
-                    var (_, navigationViewItemInvokedEventArgs) = e;
-                    return navigationViewItemInvokedEventArgs.IsSettingsInvoked ? "Setting" : (navigationViewItemInvokedEventArgs.InvokedItem as string);
-                }).InvokeCommand(ViewModel.NavigateCommand).DisposeWith(cleanup);
-            });
+                var (_, navigationViewItemInvokedEventArgs) = e;
+                return navigationViewItemInvokedEventArgs.IsSettingsInvoked
+                    ? "Setting"
+                    : (navigationViewItemInvokedEventArgs.InvokedItem as string);
+            }).InvokeCommand(ViewModel.NavigateCommand);
+
+            RootNavigationView.SelectedItem = RootNavigationView.MenuItems.First();
+            ViewModel.NavigateCommand.Execute("Dashboard").Take(1).Subscribe();
         }
 
         private void CustomTitlebar()
@@ -86,9 +92,5 @@ namespace ThaiDust
             AppTitleBar.Height = sender.Height;
         }
 
-        private void NavigationView_OnItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

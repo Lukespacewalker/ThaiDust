@@ -16,7 +16,7 @@ using ThaiDust.Core.Service;
 
 namespace ThaiDust.Core.ViewModel
 {
-    public class DashboardViewModel : ReactiveObject, IRoutableViewModel, IActivatableViewModel
+    public class DashboardViewModel : ReactiveObject, IRoutableViewModel, IActivatableViewModel, IViewModelInfo
     {
         #region Private
         private readonly ExcelGenerator _excelGenerator;
@@ -25,7 +25,9 @@ namespace ThaiDust.Core.ViewModel
         private SourceList<Record> _values = new SourceList<Record>();
         #endregion
 
-        public IList<Station> Stations = Core.Model.Stations.All;
+        public string Title { get; } = "Dustboard";
+
+        public IList<Station> ManagedStations => _dustService.ManagedStations2;
 
         [Reactive] public Station SelectedStation { get; set; }
         [Reactive] public StationParam SelectedParameter { get; set; }
@@ -64,8 +66,8 @@ namespace ThaiDust.Core.ViewModel
                 });
                 this.WhenAnyValue(p => p.SelectedStation).Where(p => p != null).InvokeCommand(loadParameterCommand);
 
-                var canLoadDataCommand = this.WhenAnyValue(p => p.SelectedStation, p => p.SelectedParameter)
-                    .Select(p => p.Item1 != null && p.Item2 != null);
+                var canLoadDataCommand = this.WhenAnyValue(p => p.SelectedStation)
+                    .Select(p => p != null);
 
                 LoadDataCommand = ReactiveCommand.CreateFromObservable<IEnumerable<Record>>(() =>
                 {

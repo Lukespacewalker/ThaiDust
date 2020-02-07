@@ -54,9 +54,9 @@ namespace ThaiDust
             {
                 ViewModel.SetAxisAction = SetAxis;
 
-                this.OneWayBind(ViewModel, vm => vm.Stations, v => v.Stations.ItemsSource).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.ManagedStations, v => v.Stations.ItemsSource).DisposeWith(cleanup);
                 this.Bind(ViewModel, vm => vm.SelectedStation, v => v.Stations.SelectedItem).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm => vm.StationParams, v => v.Parameters.ItemsSource).DisposeWith(cleanup);
+                //this.OneWayBind(ViewModel, vm => vm.StationParams, v => v.Parameters.ItemsSource).DisposeWith(cleanup);
                 ViewModel.StationData.ObserveCollectionChanges().Select(_ =>
                 {
                     var result =
@@ -69,13 +69,13 @@ namespace ThaiDust
                     return cws.View;
                 }).BindTo(this, v => v.StationData.ItemsSource).DisposeWith(cleanup);
 
-                this.Bind(ViewModel, vm => vm.SelectedParameter, v => v.Parameters.SelectedItem).DisposeWith(cleanup);
+                //this.Bind(ViewModel, vm => vm.SelectedParameter, v => v.Parameters.SelectedItem).DisposeWith(cleanup);
 
-                this.Bind(ViewModel, vm => vm.StartDate, v => v.StartDate.Date).DisposeWith(cleanup);
-                this.Bind(ViewModel, vm => vm.EndDate, v => v.EndDate.Date).DisposeWith(cleanup);
+                //this.Bind(ViewModel, vm => vm.StartDate, v => v.StartDate.Date).DisposeWith(cleanup);
+                //this.Bind(ViewModel, vm => vm.EndDate, v => v.EndDate.Date).DisposeWith(cleanup);
 
-                this.Bind(ViewModel, vm => vm.StartTime, v => v.StartTime.Time).DisposeWith(cleanup);
-                this.Bind(ViewModel, vm => vm.EndTime, v => v.EndTime.Time).DisposeWith(cleanup);
+                //this.Bind(ViewModel, vm => vm.StartTime, v => v.StartTime.Time).DisposeWith(cleanup);
+                //this.Bind(ViewModel, vm => vm.EndTime, v => v.EndTime.Time).DisposeWith(cleanup);
 
                 this.BindCommand(ViewModel, vm => vm.LoadDataCommand, v => v.LoadDataButton).DisposeWith(cleanup);
                 this.BindCommand(ViewModel, vm => vm.SaveToExcelCommand, v => v.ExportButton, vm=>vm.StationData).DisposeWith(cleanup);
