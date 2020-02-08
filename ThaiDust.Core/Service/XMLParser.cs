@@ -12,16 +12,31 @@ namespace ThaiDust.Core.Service
 {
     public class XmlParser
     {
+        private static RecordType? ConvertParamStringToRecordType(string paramString)
+        {
+            string param = paramString == "PM2.5" ? "PM25" : paramString;
+            if (Enum.TryParse<RecordType>(param, out RecordType result))
+            {
+                return result;
+            }
+            return null;
+        }
+
         public static IList<StationParam> ParseParameter(string xml)
         {
             var x = new XmlDocument();
             x.LoadXml(xml);
-            List<StationParam> @params = x.GetElementsByTagName("option").OfType<XmlNode>().SelectMany(e =>
-                e.Attributes.OfType<XmlAttribute>().Where(a => a.Name == "value").Select(a => new StationParam
-                { Param = (string)a.Value, Name = (string)a.Value })).ToList();
-            if (@params.All(p => p.Param != "O3"))
-                @params.Add(new StationParam
-                { Param = "O3", Name = "O3" });
+            List<StationParam> @params = x.GetElementsByTagName("option").OfType<XmlNode>()
+                .SelectMany(e =>
+                    e.Attributes.OfType<XmlAttribute>()
+                        .Where(a => a.Name == "value")
+
+                        .Select(a => new StationParam { Param = a.Value, Name = a.Value })).ToList();
+            // Add Ozone to available parameters
+            if (@params.All(p => p.Param != "O3")) @params.Add(new StationParam { Param = "O3", Name = "O3" });
+            // Change PM2.5 to PM25
+            var pm25Param = @params.SingleOrDefault(p => p.Param == "PM2.5");
+            if (pm25Param != null) pm25Param.Param = "PM25";
             return @params;
         }
 

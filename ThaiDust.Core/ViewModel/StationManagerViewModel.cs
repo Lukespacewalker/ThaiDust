@@ -29,7 +29,7 @@ namespace ThaiDust.Core.ViewModel
         [Reactive] public IEnumerable<Station> SelectedManagedStation { get; set; }
 
         public ObservableCollectionExtended<Station> AvailableStations = new ObservableCollectionExtended<Station>();
-        public ObservableCollectionExtended<Station> ManagedStations => _dustService.ManagedStations2;
+        public ObservableCollectionExtended<Station> ManagedStations => _dustService.ManagedStations;
 
         public ReactiveCommand<IEnumerable<Station>, Unit> AddStationsCommand;
         public ReactiveCommand<IEnumerable<Station>, Unit> RemoveStationsCommand;
@@ -68,7 +68,7 @@ namespace ThaiDust.Core.ViewModel
                 }
             }, this.WhenAnyValue(p => p.SelectedManagedStation).Where(p => p != null).Select(s => s.Any()));
 
-            SaveStationsCommand = ReactiveCommand.Create(_dustService.SaveManagedStationsToDatabase);
+            SaveStationsCommand = ReactiveCommand.CreateFromTask(_dustService.SaveManagedStationsToDatabase);
         }
 
         public string UrlPathSegment { get; } = "stationManager";

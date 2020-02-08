@@ -1,12 +1,13 @@
 ﻿using System;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using ThaiDust.Core.Model.Persistent;
 
 namespace ThaiDust.Core.Model
 {
     public class StationParam : ReactiveObject
     {
-        [Reactive] public string Param { get; set; }
+        [Reactive] public RecordType Param { get; set; }
         [Reactive] public string Name { get; set; }
     }
 

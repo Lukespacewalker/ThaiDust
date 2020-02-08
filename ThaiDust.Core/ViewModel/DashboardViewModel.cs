@@ -27,7 +27,7 @@ namespace ThaiDust.Core.ViewModel
 
         public string Title { get; } = "Dustboard";
 
-        public IList<Station> ManagedStations => _dustService.ManagedStations2;
+        public IList<Station> ManagedStations => _dustService.ManagedStations;
 
         [Reactive] public Station SelectedStation { get; set; }
         [Reactive] public DashboardInfo Info { get; set; }
@@ -65,17 +65,16 @@ namespace ThaiDust.Core.ViewModel
                     Info = null;
                     _values.Clear();
 
-                    IObservable<Record[]> s = _dustService.GetAvailableParameters(station).Select(@params =>
+                    IObservable<Record[]> s = _dustService.GetAvailableParametersAsync(station).Select(@params =>
                     {
                         string[] enumNames = Enum.GetNames(typeof(RecordType));
                         var availableParams = new List<RecordType>();
                         foreach (StationParam stationParam in @params)
                         {
-                            var param = stationParam.Param == "PM2.5" ? "PM25" : stationParam.Param;
-                            if (enumNames.Contains(param)) availableParams.Add((RecordType)Enum.Parse(typeof(RecordType), param));
+                            if (enumNames.Contains(stationParam.Param)) availableParams.Add((RecordType)Enum.Parse(typeof(RecordType), stationParam.Param));
                         }
                         return availableParams.ToObservable();
-                    }).Switch().Select(param => _dustService.GetStationData(station.Code, param)).Merge(1);
+                    }).Switch().Select(param => Observable.Defer(()=>_dustService.GetStationRecordsAsync(station.Code, param))).Merge(1);
 
                     // var startDate = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day, StartTime.Value.Hours, StartTime.Value.Minutes, StartTime.Value.Seconds);
                     //var endDate = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day, EndTime.Value.Hours, EndTime.Value.Minutes, EndTime.Value.Seconds);

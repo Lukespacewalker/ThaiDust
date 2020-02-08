@@ -29,7 +29,7 @@ namespace ThaiDust.Core
             // Application Instance
             Locator.CurrentMutable.RegisterConstant(new Instance());
             // Service
-            Locator.CurrentMutable.RegisterLazySingleton<ThaiPollutionControlDataAPI>(()=>new ThaiPollutionControlDataAPI(new HttpClient()));
+            Locator.CurrentMutable.RegisterLazySingleton<ThaiPollutionControlDataApi>(()=>new ThaiPollutionControlDataApi(new HttpClient()));
             Locator.CurrentMutable.RegisterLazySingleton<DustDataService>(()=>new DustDataService(Locator.Current.GetService<DustContext>()));
             Locator.CurrentMutable.RegisterLazySingleton<DustService>(()=>new DustService());
         }

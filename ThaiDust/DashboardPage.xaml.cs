@@ -72,8 +72,6 @@ namespace ThaiDust
                     return cws.View;
                 }).BindTo(this, v => v.StationData.ItemsSource).DisposeWith(cleanup);
 
-                //this.Bind(ViewModel, vm => vm.SelectedParameter, v => v.Parameters.SelectedItem).DisposeWith(cleanup);
-
                 //this.Bind(ViewModel, vm => vm.StartDate, v => v.StartDate.Date).DisposeWith(cleanup);
                 //this.Bind(ViewModel, vm => vm.EndDate, v => v.EndDate.Date).DisposeWith(cleanup);
 
@@ -85,6 +83,12 @@ namespace ThaiDust
                 this.OneWayBind(ViewModel, vm=>vm.SelectedStation.Code,v=>v.StaionCode.Text).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm=>vm.SelectedStation.Name,v=>v.StaionCode.Text).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm=>vm.Info.CurrentDateTime,v=>v.Date.Text).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm=>vm.Info.PM25,v=>v.PM25.Text).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm=>vm.Info.PM10,v=>v.PM10.Text).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm=>vm.Info.SO2,v=>v.SO2.Text).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm=>vm.Info.O3,v=>v.O3.Text).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm=>vm.Info.NO2,v=>v.NO2.Text).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm=>vm.Info.CO,v=>v.CO.Text).DisposeWith(cleanup);
 
                 this.BindCommand(ViewModel, vm => vm.SaveToExcelCommand, v => v.ExportButton, vm=>vm.StationData).DisposeWith(cleanup);
 

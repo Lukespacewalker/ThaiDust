@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -14,30 +15,29 @@ namespace ThaiDust.Core.Service
     public class DustDataService
     {
         private readonly DustContext _dustContext;
-
         public DustDataService(DustContext dustContext = null)
         {
             _dustContext = dustContext ?? Locator.Current.GetService<DustContext>();
         }
-
         public IList<Station> GetAllStations()
         {
             return _dustContext.Stations.ToImmutableList();
         }
 
-        public Station GetStation(string stationCode)
+        public IObservable<Station> GetStationAsync(string stationCode)
         {
-            System.Diagnostics.Debug.WriteLine("SA");
-            return _dustContext.Stations.Include(s => s.Records).Where(s => s.Code == stationCode).FirstOrDefault();
+            return Observable.FromAsync(cts=>_dustContext.Stations.Include(s=>s.Records).FirstOrDefaultAsync(s => s.Code == stationCode,cts));
+            //if (station != null)
+            //    _dustContext.Entry(station).Collection(s => s.Records).Load();
         }
 
-        public void AddOrUpdateStations(params Station[] stations)
+        public async Task AddOrUpdateStations(params Station[] stations)
         {
             // Because "Station" entity already has a "Primary" key such as "26T"
             // We need to check weather the entity is already existed first
             foreach (Station station in stations)
             {
-                var dbStation = _dustContext.Stations.Include(s => s.Records).FirstOrDefault(s => s.Code.ToLower() == station.Code.ToLower());
+                var dbStation = await GetStationAsync(station.Code);
                 if (dbStation == null)
                 {
                     _dustContext.Stations.Add(station);
@@ -80,7 +80,7 @@ namespace ThaiDust.Core.Service
             if (exitingStation != null) _dustContext.Stations.Remove(exitingStation);
         }
 
-        public Task<int> Commit()
+        public Task<int> CommitAsync()
         {
             return _dustContext.SaveChangesAsync();
         }

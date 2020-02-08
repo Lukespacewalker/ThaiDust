@@ -29,7 +29,7 @@ namespace ThaiDust.Core.Model.Persistent
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseLoggerFactory(MyLoggerFactory).UseSqlite($"Data Source={_databasePath}").EnableSensitiveDataLogging().EnableDetailedErrors();
+            options.UseSqlite($"Data Source={_databasePath}");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
