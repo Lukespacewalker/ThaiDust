@@ -30,6 +30,8 @@ namespace ThaiDust.Core.ViewModel
         public IList<Station> ManagedStations => _dustService.ManagedStations2;
 
         [Reactive] public Station SelectedStation { get; set; }
+        [Reactive] public DashboardInfo Info { get; set; }
+
         [Reactive] public StationParam SelectedParameter { get; set; }
         [Reactive] public DateTimeOffset? StartDate { get; set; } = DateTimeOffset.Now.AddMonths(-1);
         [Reactive] public TimeSpan? StartTime { get; set; } = TimeSpan.Zero;
@@ -53,41 +55,54 @@ namespace ThaiDust.Core.ViewModel
 
             this.WhenActivated(cleanup =>
             {
-                _paramsList.Connect().Bind(StationParams).Subscribe().DisposeWith(cleanup);
                 _values.Connect().Bind(StationData).Subscribe().DisposeWith(cleanup);
-
-                var loadParameterCommand = ReactiveCommand.CreateFromObservable<Station, IEnumerable<StationParam>>(_dustService.GetAvailableParameters)
-                    .DisposeWith(cleanup);
-                loadParameterCommand.ThrownExceptions.Subscribe(ShowError);
-                loadParameterCommand.Subscribe(r =>
-                {
-                    _paramsList.Clear();
-                    _paramsList.AddRange(r);
-                });
-                this.WhenAnyValue(p => p.SelectedStation).Where(p => p != null).InvokeCommand(loadParameterCommand);
 
                 var canLoadDataCommand = this.WhenAnyValue(p => p.SelectedStation)
                     .Select(p => p != null);
 
-                LoadDataCommand = ReactiveCommand.CreateFromObservable<IEnumerable<Record>>(() =>
+                LoadDataCommand = ReactiveCommand.CreateFromObservable<Station, Record[]>(station =>
                 {
-                   // var startDate = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day, StartTime.Value.Hours, StartTime.Value.Minutes, StartTime.Value.Seconds);
+                    Info = null;
+                    _values.Clear();
+
+                    IObservable<Record[]> s = _dustService.GetAvailableParameters(station).Select(@params =>
+                    {
+                        string[] enumNames = Enum.GetNames(typeof(RecordType));
+                        var availableParams = new List<RecordType>();
+                        foreach (StationParam stationParam in @params)
+                        {
+                            var param = stationParam.Param == "PM2.5" ? "PM25" : stationParam.Param;
+                            if (enumNames.Contains(param)) availableParams.Add((RecordType)Enum.Parse(typeof(RecordType), param));
+                        }
+                        return availableParams.ToObservable();
+                    }).Switch().Select(param => _dustService.GetStationData(station.Code, param)).Merge(1);
+
+                    // var startDate = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day, StartTime.Value.Hours, StartTime.Value.Minutes, StartTime.Value.Seconds);
                     //var endDate = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day, EndTime.Value.Hours, EndTime.Value.Minutes, EndTime.Value.Seconds);
-                    return _dustService.GetStationData(SelectedStation.Code, RecordType.PM25);
+                    return s;
                 }, canLoadDataCommand).DisposeWith(cleanup);
 
                 LoadDataCommand.ThrownExceptions.Subscribe(ShowError);
 
-                LoadDataCommand.Subscribe(r =>
+                LoadDataCommand.Subscribe(records =>
                 {
-                    _values.Clear();
-                    IEnumerable<Record> records = r as Record[] ?? r.ToArray();
+                    var lastRecord = records.Last();
+                    Info ??= new DashboardInfo { CurrentDateTime = lastRecord.DateTime };
+                    Info.PM25 = lastRecord.Type switch
+                    {
+                        RecordType.PM25 => lastRecord.Value,
+                        RecordType.PM10 => lastRecord.Value,
+                        RecordType.NO2 => lastRecord.Value,
+                        RecordType.CO => lastRecord.Value,
+                        RecordType.O3 => lastRecord.Value,
+                        RecordType.SO2 => lastRecord.Value,
+                        _ => Info.PM25
+                    };
                     // Summarize
-                    Days = records.GroupBy(p => p.DateTime.Date).Count();
-                    Min = records.Where(p => p.Value != null).Min(p => p.Value).Value;
-                    Max = records.Where(p => p.Value != null).Max(p => p.Value).Value;
-                    Average = Math.Round(records.Where(p => p.Value != null).Average(p => p.Value).Value, 2);
-
+                    //Days = records.GroupBy(p => p.DateTime.Date).Count();
+                    //Min = records.Where(p => p.Value != null).Min(p => p.Value).Value;
+                    //Max = records.Where(p => p.Value != null).Max(p => p.Value).Value;
+                    //Average = Math.Round(records.Where(p => p.Value != null).Average(p => p.Value).Value, 2);
                     SetAxisAction?.Invoke(records.First().DateTime, records.Last().DateTime);
                     _values.AddRange(records);
                 });
@@ -97,6 +112,9 @@ namespace ThaiDust.Core.ViewModel
                 SaveToExcelCommand = ReactiveCommand.CreateFromTask<IEnumerable<Record>>(data => _excelGenerator.CreateExcel(SelectedStation.Code, data), canSaveToExcelCommand);
 
                 SaveToExcelCommand.ThrownExceptions.Subscribe(ShowError);
+
+
+                this.WhenAnyValue(p => p.SelectedStation).Where(p => p != null).InvokeCommand(LoadDataCommand);
             });
         }
 
@@ -108,7 +126,7 @@ namespace ThaiDust.Core.ViewModel
 
         public ReactiveCommand<IEnumerable<Record>, Unit> SaveToExcelCommand { get; set; }
 
-        public ReactiveCommand<Unit, IEnumerable<Record>> LoadDataCommand { get; set; }
+        public ReactiveCommand<Station, Record[]> LoadDataCommand { get; set; }
 
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
         public string UrlPathSegment { get; } = "dashboard";

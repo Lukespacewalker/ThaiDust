@@ -50,8 +50,8 @@
             <AppBarButton x:Name="SaveButton" Icon="Save" Label="Save"/>
         </CommandBar>
         <ListView Grid.Row="2" Grid.Column="0" x:Name="AvailableStations" SelectionMode="Multiple" ItemTemplate="{StaticResource StationListViewTemplate}"/>
-        <TextBlock Margin="12" Grid.Row="1" FontWeight="Bold" Style="{StaticResource SubtitleTextBlockStyle}">Available stations</TextBlock>
-        <TextBlock Margin="0,12,12,12" Grid.Row="1" Grid.Column="2" FontWeight="Bold" Style="{StaticResource SubtitleTextBlockStyle}">Managed stations</TextBlock>
+        <TextBlock Grid.Row="1" Style="{StaticResource SubtitleTextBlockStyle}">Available stations</TextBlock>
+        <TextBlock Margin="0,12,12,12" Grid.Row="1" Grid.Column="2" Style="{StaticResource SubtitleTextBlockStyle}">Managed stations</TextBlock>
         <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
             <Button x:Name="AddButton" Background="Transparent">
                 <FontIcon Glyph="&#xE76C;" FontSize="36"/>

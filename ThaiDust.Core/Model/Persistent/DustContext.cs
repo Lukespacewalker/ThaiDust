@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ThaiDust.Core.Model.Persistent
 {
@@ -17,15 +18,25 @@ namespace ThaiDust.Core.Model.Persistent
         {
             _databasePath = databasePath;
         }
+
+        public static readonly ILoggerFactory MyLoggerFactory
+            = LoggerFactory.Create(builder =>
+            {
+                builder.AddFilter((category, level) =>
+                    category == DbLoggerCategory.Database.Command.Name
+                    && level == LogLevel.Information).AddDebug();
+            });
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseLazyLoadingProxies().UseSqlite($"Data Source={_databasePath}");
+            options.UseLoggerFactory(MyLoggerFactory).UseSqlite($"Data Source={_databasePath}").EnableSensitiveDataLogging().EnableDetailedErrors();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Record>()
-                .HasKey(o => new {o.DateTime, o.StationCode});
+                .HasKey(o => new { o.DateTime, o.Type });
+            //modelBuilder.Entity<Station>().HasMany<Record>().WithOne().OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

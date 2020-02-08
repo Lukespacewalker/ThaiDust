@@ -14,7 +14,7 @@ namespace ThaiDust.Core.Service
     public class DustService
     {
         private readonly DustDataService _dataService;
-        private readonly DustApiService _apiService;
+        private readonly ThaiPollutionControlDataAPI _api;
 
         private readonly SourceList<Station> _managedStationsSource = new SourceList<Station>();
 
@@ -23,10 +23,10 @@ namespace ThaiDust.Core.Service
 
         public ObservableCollectionExtended<Station> ManagedStations2 { get; } = new ObservableCollectionExtended<Station>();
 
-        public DustService(DustDataService dustDataService = null, DustApiService dustApiService = null)
+        public DustService(DustDataService dustDataService = null, ThaiPollutionControlDataAPI thaiPollutionControlDataApi = null)
         {
             _dataService = dustDataService ?? Locator.Current.GetService<DustDataService>();
-            _apiService = dustApiService ?? Locator.Current.GetService<DustApiService>();
+            _api = thaiPollutionControlDataApi ?? Locator.Current.GetService<ThaiPollutionControlDataAPI>();
 
             // Setup source output
             _managedStationsSource.Connect().Bind(out _managedStations).Subscribe();
@@ -54,31 +54,34 @@ namespace ThaiDust.Core.Service
         //    _managedStationsSource.RemoveMany(stations);
         //}
 
-        public IObservable<IEnumerable<StationParam>> GetAvailableParameters(Station station)
+        public IObservable<IList<StationParam>> GetAvailableParameters(Station station)
         {
-            return _apiService.GetStationAvailableParameters(station);
+            return _api.GetStationAvailableParameters(station);
         }
 
-        public IObservable<IEnumerable<Record>> GetStationData(string stationCode, RecordType parameter)
-        { 
+        public IObservable<Record[]> GetStationData(string stationCode, RecordType parameter)
+        {
             // Get Data From Database first
-            var databaseStation = _dataService.GetStation(stationCode);
-            var subject = new Subject<IEnumerable<Record>>();
-            var startDate = new DateTime(2018, 10, 1, 0, 0, 0);
-            if (databaseStation != null)
+            Station databaseStation = _dataService.GetStation(stationCode);
+            Record[] data = databaseStation?.Records.Where(r => r.Type == parameter).OrderBy(r => r.DateTime).ToArray();
+            var subject = new Subject<Record[]>();
+            var startDate = new DateTime(2019, 10, 1, 0, 0, 0);
+            if (data != null)
             {
-                var data = databaseStation.Records.Where(r => r.Type == parameter).OrderBy(r => r.DateTime);
-                if(data.Any()) startDate = data.Last().DateTime;
+                if (data.Any()) startDate = data.Last().DateTime.AddHours(1);
                 // Sent the old data first
                 subject.OnNext(data);
             }
             // Get Data from API
-            _apiService.GetStationData(startDate, DateTime.Now, stationCode, parameter)
-                .Subscribe(records =>
+            _api.GetStationData(startDate, DateTime.Now, stationCode, parameter)
+                .Subscribe(async records =>
                 {
-                    subject.OnNext(records);
                     // Save data to database
-                    _dataService.InsertOrUpdateDustData(stationCode, records);
+                    databaseStation.Records.Add(records);
+                    await _dataService.Commit();
+                    // Sent Data
+                    subject.OnNext(data == null ? records : data.Union(records).ToArray());
+                    //_dataService.AddOrUpdateRecords(stationCode, records);
                     subject.OnCompleted();
                 });
             return subject;

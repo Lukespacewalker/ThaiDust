@@ -44,13 +44,18 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Margin="12" Grid.Row="0" FontWeight="Bold" Style="{StaticResource SubtitleTextBlockStyle}">Stations</TextBlock>
+                    <StackPanel Margin="0,12" Orientation="Horizontal" Grid.Row="0">
+                        <Button>
+                            <SymbolIcon Symbol="List"></SymbolIcon>
+                        </Button>
+                        <TextBlock Margin="12,0,0,0" Style="{StaticResource SubtitleTextBlockStyle}">Stations</TextBlock>
+                    </StackPanel>
                     <ListView Grid.Row="1" x:Name="Stations" Grid.ColumnSpan="2" ItemTemplate="{StaticResource StationListViewTemplate}">
-                        <ListView.ItemContainerStyle>
+                        <!--<ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             </Style>
-                        </ListView.ItemContainerStyle>
+                        </ListView.ItemContainerStyle>-->
                     </ListView>
                     <!--<Grid Visibility="Collapsed" Grid.Row="2" Grid.ColumnSpan="2" ColumnSpacing="12">
                         <Grid.RowDefinitions>
@@ -61,10 +66,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <CalendarDatePicker x:Name="StartDate" Header="ตั้งแต่ วันที่" HorizontalAlignment="Stretch"/>
-                        <TimePicker Grid.Column="1" Grid.Row="0"  x:Name="StartTime" Header="เวลา" ClockIdentifier="24HourClock" />
-                        <CalendarDatePicker Grid.Column="0" Grid.Row="1" x:Name="EndDate" Header="ถึง วันที่" HorizontalAlignment="Stretch"/>
-                        <TimePicker Grid.Column="1" Grid.Row="1" x:Name="EndTime"  Header="เวลา" ClockIdentifier="24HourClock" />
+
                     </Grid>
                     <GridView Visibility="Collapsed" Grid.Row="3" x:Name="Parameters">
                         <GridView.Header>
@@ -77,10 +79,9 @@
                         </GridView.ItemTemplate>
                     </GridView-->
 
-                    <CommandBar Grid.Row="4" DefaultLabelPosition="Right" Margin="-16" Grid.ColumnSpan="2">
+                    <!--<CommandBar Grid.Row="4" DefaultLabelPosition="Right" Margin="-16" Grid.ColumnSpan="2">
                         <AppBarButton x:Name="LoadDataButton" Icon="Find" Label="ค้นหาข้อมูล"/>
-        
-                    </CommandBar>
+                    </CommandBar>-->
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>
@@ -113,26 +114,30 @@
                             </Grid>
 
                         </ListView>-->
-                <Grid Grid.Row="1" ColumnSpacing="16" >
+                <Grid Grid.Row="1" Padding="12">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">StationCode StationName Date</TextBlock>
-                    <VariableSizedWrapGrid Grid.Row="1" Orientation="Horizontal">
+                    <TextBlock Margin="0,0,0,12" Style="{StaticResource SubtitleTextBlockStyle}">
+                        <Run x:Name="StaionCode"/>
+                        <Run x:Name="StaionName"/>
+                        <Run x:Name="Date"/>
+                    </TextBlock>
+                    <VariableSizedWrapGrid Grid.Row="1" Orientation="Horizontal" Margin="0,6">
                         <VariableSizedWrapGrid.Resources>
                             <Style TargetType="Grid">
                                 <Setter Property="BorderBrush" Value="#40FFFFFF"/>
                                 <Setter Property="BorderThickness" Value="2"/>
                                 <Setter Property="Padding" Value="12"/>
-                                <Setter Property="Margin" Value="12"/>
+                                <Setter Property="Margin" Value="0,0,12,0"/>
                             </Style>
                         </VariableSizedWrapGrid.Resources>
                         <Grid>
@@ -175,8 +180,42 @@
                             <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">NO2</TextBlock>
                             <TextBlock Grid.Row="1" x:Name="NO2" FontSize="35">10</TextBlock>
                         </Grid>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">CO</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="CO" FontSize="35">10</TextBlock>
+                        </Grid>
                     </VariableSizedWrapGrid>
-                    <ListView Grid.Row="3" x:Name="StationData">
+                    <Grid Grid.Row="2" Margin="0,6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Margin="0,0,0,12" Style="{StaticResource SubtitleTextBlockStyle}" Grid.ColumnSpan="4">Trend</TextBlock>
+                        <CalendarDatePicker Grid.Row="1" x:Name="StartDate" Header="From" HorizontalAlignment="Stretch"/>
+                        <TimePicker Grid.Column="1" Grid.Row="1"  x:Name="StartTime" Header=" " ClockIdentifier="24HourClock" />
+                        <CalendarDatePicker Grid.Column="2" Grid.Row="1" x:Name="EndDate" Header="To" HorizontalAlignment="Stretch"/>
+                        <TimePicker Grid.Column="3" Grid.Row="1" x:Name="EndTime"  Header=" " ClockIdentifier="24HourClock" />
+                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.RowSpan="4">
+                            <ToggleButton x:Name="TogglePM25">PM2.5</ToggleButton>
+                            <ToggleButton x:Name="TogglePM10">PM10</ToggleButton>
+                            <ToggleButton x:Name="ToggleO3">O3</ToggleButton>
+                            <ToggleButton x:Name="ToggleSO2">SO2</ToggleButton>
+                            <ToggleButton x:Name="ToggleNO2">NO2</ToggleButton>
+                            <ToggleButton x:Name="ToggleCO">CO</ToggleButton>
+                        </StackPanel>
+                    </Grid>
+                    <ListView Grid.Row="4" x:Name="StationData">
                         <ListView.GroupStyle>
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>
@@ -187,7 +226,7 @@
                             </GroupStyle>
                         </ListView.GroupStyle>
                         <ListView.Header>
-                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">ข้อมูล</TextBlock>
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">Data</TextBlock>
                         </ListView.Header>
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
@@ -225,7 +264,7 @@
                         <TextBlock x:Name="Max" Grid.Row="3" Grid.Column="1"></TextBlock>
                         <TextBlock x:Name="Average" Grid.Row="4" Grid.Column="1"></TextBlock>
                     </Grid>
-                    <chart:RadCartesianChart x:Name="Chart" Grid.Row="2" Grid.ColumnSpan="2">
+                    <chart:RadCartesianChart x:Name="Chart" Grid.Row="3" Grid.ColumnSpan="2">
                         <chart:RadCartesianChart.Grid>
                             <chart:CartesianChartGrid MajorLinesVisibility="XY">
                                 <chart:CartesianChartGrid.MajorYLineStyle>
@@ -258,7 +297,7 @@
                                 </chart:LinearAxis.LineStyle>
                             </chart:LinearAxis>
                         </chart:RadCartesianChart.VerticalAxis>
-                        <chart:AreaSeries ItemsSource="{Binding}">
+                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM25)}">
                             <chart:AreaSeries.CategoryBinding>
                                 <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
                             </chart:AreaSeries.CategoryBinding>

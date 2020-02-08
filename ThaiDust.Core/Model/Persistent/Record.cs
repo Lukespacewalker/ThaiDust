@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace ThaiDust.Core.Model.Persistent
@@ -16,7 +17,7 @@ namespace ThaiDust.Core.Model.Persistent
         NO2,
     }
 
-    public class Record : Entity
+    public class Record : ReactiveObject
     {
         [Reactive] public DateTime DateTime { get; set; }
         [Reactive] public RecordType Type { get; set; }
@@ -24,6 +25,7 @@ namespace ThaiDust.Core.Model.Persistent
 
         public virtual Station Station { get; set; }
         [ForeignKey(nameof(Station))]
+        [Required]
         public string StationCode { get; set; }
 
         public static string DateTimeBinding(DateTime v)

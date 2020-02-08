@@ -6,7 +6,7 @@ using ReactiveUI;
 
 namespace ThaiDust.Core.Model.Persistent
 {
-    public class Station : ReactiveObject, IComparer<Station>
+    public class Station : ReactiveObject, IComparable<Station>
     {
         [Key]
         public string Code { get; set; }
@@ -14,9 +14,9 @@ namespace ThaiDust.Core.Model.Persistent
         [ForeignKey("StationCode")]
         public virtual List<Record> Records { get; set;} = new List<Record>();
 
-        public int Compare(Station x, Station y)
+        public int CompareTo(Station other)
         {
-            return string.Compare(x?.Code, y?.Code, StringComparison.Ordinal);
+            return string.Compare(this.Code, other.Code, StringComparison.Ordinal);
         }
     }
 }

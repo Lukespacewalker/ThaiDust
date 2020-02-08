@@ -21,19 +21,17 @@ namespace ThaiDust.Core.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("StationCode")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("StationCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<double?>("Value")
                         .HasColumnType("REAL");
 
-                    b.HasKey("DateTime", "StationCode");
+                    b.HasKey("DateTime", "Type");
 
                     b.HasIndex("StationCode");
 

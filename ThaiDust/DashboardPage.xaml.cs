@@ -18,10 +18,13 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using DocumentFormat.OpenXml.Wordprocessing;
 using DynamicData.Binding;
 using ReactiveUI;
 using Telerik.Charting;
 using Telerik.UI.Xaml.Controls.Chart;
+using ThaiDust.Core.Dto;
+using ThaiDust.Core.Model.Persistent;
 using ThaiDust.Core.ViewModel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -77,10 +80,15 @@ namespace ThaiDust
                 //this.Bind(ViewModel, vm => vm.StartTime, v => v.StartTime.Time).DisposeWith(cleanup);
                 //this.Bind(ViewModel, vm => vm.EndTime, v => v.EndTime.Time).DisposeWith(cleanup);
 
-                this.BindCommand(ViewModel, vm => vm.LoadDataCommand, v => v.LoadDataButton).DisposeWith(cleanup);
+                //this.BindCommand(ViewModel, vm => vm.LoadDataCommand, v => v.LoadDataButton).DisposeWith(cleanup);
+
+                this.OneWayBind(ViewModel, vm=>vm.SelectedStation.Code,v=>v.StaionCode.Text).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm=>vm.SelectedStation.Name,v=>v.StaionCode.Text).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm=>vm.Info.CurrentDateTime,v=>v.Date.Text).DisposeWith(cleanup);
+
                 this.BindCommand(ViewModel, vm => vm.SaveToExcelCommand, v => v.ExportButton, vm=>vm.StationData).DisposeWith(cleanup);
 
-                this.OneWayBind(ViewModel, vm => vm.StationData, v => v.Chart.DataContext).DisposeWith(cleanup);
+               // this.OneWayBind(ViewModel, vm => vm.StationData, v => v.Chart.DataContext).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm => vm.Days, v => v.Days.Text).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm => vm.Min, v => v.Min.Text).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm => vm.Max, v => v.Max.Text).DisposeWith(cleanup);
@@ -88,6 +96,10 @@ namespace ThaiDust
             });
         }
 
+        public IEnumerable<Record> GetData(ObservableCollectionExtended<Record> source, RecordType recordType)
+        {
+            return source.Where(r => r.Type == recordType);
+        }
 
         private void SetAxis(DateTime minimum, DateTime maximum)
         {

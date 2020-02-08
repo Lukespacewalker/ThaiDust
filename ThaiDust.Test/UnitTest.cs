@@ -53,7 +53,7 @@ namespace ThaiDust.Test
                     Value = 20
                 }
             };
-            dustService.InsertOrUpdateDustData("25t",records);
+            //dustService.AddOrUpdateRecords("25t",records);
         }
 
         [TestMethod]

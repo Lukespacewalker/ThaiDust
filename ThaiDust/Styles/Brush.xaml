@@ -14,4 +14,9 @@
     </ResourceDictionary.ThemeDictionaries>
     <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}"/>
     <StaticResource x:Key="ApplicationBackground" ResourceKey="RegionBrush"/>
+
+    <Style x:Key="SubtitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Margin" Value="12"/>
+    </Style>
 </ResourceDictionary>

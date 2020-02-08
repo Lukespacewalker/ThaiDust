@@ -6,20 +6,21 @@ using Splat;
 using ThaiDust.Core.Dto;
 using ThaiDust.Core.Model.Persistent;
 using System.Collections.Generic;
+using System.Linq;
 using ThaiDust.Core.Model;
 
 namespace ThaiDust.Core.Service
 {
-    public class DustApiService
+    public class ThaiPollutionControlDataAPI
     {
         private readonly HttpClient _client;
 
-        public DustApiService(HttpClient httpClient = null)
+        public ThaiPollutionControlDataAPI(HttpClient httpClient = null)
         {
             this._client = httpClient ?? Locator.Current.GetService<HttpClient>();
         }
 
-        public IObservable<IEnumerable<StationParam>> GetStationAvailableParameters(Station station)
+        public IObservable<IList<StationParam>> GetStationAvailableParameters(Station station)
         {
             var dto = new GetParamListDto { StationId = station.Code };
             return _client.PostAsync(new Uri("http://aqmthai.com/includes/getManReport.php"),
@@ -29,8 +30,9 @@ namespace ThaiDust.Core.Service
                 .Switch().Select(XmlParser.ParseParameter);
         }
 
-        public IObservable<IEnumerable<Record>> GetStationData(DateTime startDate, DateTime endDate, string stationCode, RecordType parameter)
+        public IObservable<Record[]> GetStationData(DateTime startDate, DateTime endDate, string stationCode, RecordType parameter)
         {
+            // Convert Enum to Text
             string param = parameter switch
             {
                 RecordType.PM25 => "PM2.5",
