@@ -30,13 +30,11 @@ namespace ThaiDust.Core.Service
                 .SelectMany(e =>
                     e.Attributes.OfType<XmlAttribute>()
                         .Where(a => a.Name == "value")
-
-                        .Select(a => new StationParam { Param = a.Value, Name = a.Value })).ToList();
+                        .Select(a=>ConvertParamStringToRecordType(a.Value))
+                        .Where(param=>param!=null)
+                        .Select(param => new StationParam { Param = param.Value, Name = param.Value.ToString() })).ToList();
             // Add Ozone to available parameters
-            if (@params.All(p => p.Param != "O3")) @params.Add(new StationParam { Param = "O3", Name = "O3" });
-            // Change PM2.5 to PM25
-            var pm25Param = @params.SingleOrDefault(p => p.Param == "PM2.5");
-            if (pm25Param != null) pm25Param.Param = "PM25";
+            if (@params.All(p => p.Param != RecordType.O3)) @params.Add(new StationParam { Param = RecordType.O3, Name = RecordType.O3.ToString() });
             return @params;
         }
 

@@ -65,16 +65,9 @@ namespace ThaiDust.Core.ViewModel
                     Info = null;
                     _values.Clear();
 
-                    IObservable<Record[]> s = _dustService.GetAvailableParametersAsync(station).Select(@params =>
-                    {
-                        string[] enumNames = Enum.GetNames(typeof(RecordType));
-                        var availableParams = new List<RecordType>();
-                        foreach (StationParam stationParam in @params)
-                        {
-                            if (enumNames.Contains(stationParam.Param)) availableParams.Add((RecordType)Enum.Parse(typeof(RecordType), stationParam.Param));
-                        }
-                        return availableParams.ToObservable();
-                    }).Switch().Select(param => Observable.Defer(()=>_dustService.GetStationRecordsAsync(station.Code, param))).Merge(1);
+                    IObservable<Record[]> s = _dustService.GetAvailableParametersAsync(station)
+                        .Select(@params => @params.Select(p => p.Param).ToArray())
+                        .Select(@params => _dustService.GetStationRecordsAsync(station.Code, @params)).Switch();
 
                     // var startDate = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day, StartTime.Value.Hours, StartTime.Value.Minutes, StartTime.Value.Seconds);
                     //var endDate = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day, EndTime.Value.Hours, EndTime.Value.Minutes, EndTime.Value.Seconds);
@@ -85,24 +78,28 @@ namespace ThaiDust.Core.ViewModel
 
                 LoadDataCommand.Subscribe(records =>
                 {
-                    var lastRecord = records.Last();
-                    Info ??= new DashboardInfo { CurrentDateTime = lastRecord.DateTime };
-                    Info.PM25 = lastRecord.Type switch
+                    if (records.Length > 0)
                     {
-                        RecordType.PM25 => lastRecord.Value,
-                        RecordType.PM10 => lastRecord.Value,
-                        RecordType.NO2 => lastRecord.Value,
-                        RecordType.CO => lastRecord.Value,
-                        RecordType.O3 => lastRecord.Value,
-                        RecordType.SO2 => lastRecord.Value,
-                        _ => Info.PM25
-                    };
+                        var lastRecord = records.Last();
+                        Info ??= new DashboardInfo { CurrentDateTime = lastRecord.DateTime };
+                        Info.PM25 = lastRecord.Type switch
+                        {
+                            RecordType.PM25 => lastRecord.Value,
+                            RecordType.PM10 => lastRecord.Value,
+                            RecordType.NO2 => lastRecord.Value,
+                            RecordType.CO => lastRecord.Value,
+                            RecordType.O3 => lastRecord.Value,
+                            RecordType.SO2 => lastRecord.Value,
+                            _ => Info.PM25
+                        };
+                        SetAxisAction?.Invoke(records.First().DateTime, records.Last().DateTime);
+                    }
                     // Summarize
                     //Days = records.GroupBy(p => p.DateTime.Date).Count();
                     //Min = records.Where(p => p.Value != null).Min(p => p.Value).Value;
                     //Max = records.Where(p => p.Value != null).Max(p => p.Value).Value;
                     //Average = Math.Round(records.Where(p => p.Value != null).Average(p => p.Value).Value, 2);
-                    SetAxisAction?.Invoke(records.First().DateTime, records.Last().DateTime);
+
                     _values.AddRange(records);
                 });
 

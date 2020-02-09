@@ -52,7 +52,10 @@ namespace ThaiDust.Core.Service
         {
             // Initial data
             IObservable<Record[]> initialDataObservable = _dataService.GetStationAsync(stationCode)
-                .Select(station => station.Records.OrderBy(r => r.DateTime).ToArray()).Publish().RefCount();
+                .Select(station =>
+                {
+                    return station.Records.OrderBy(r => r.DateTime).ToArray();
+                }).Publish().RefCount();
             IObservable<Record[]> subsequentDataObservable = initialDataObservable.Select(initialRecords =>
             {
                 var initialDate = new DateTime(2019, 10, 1, 0, 0, 0);
@@ -74,32 +77,32 @@ namespace ThaiDust.Core.Service
                 await _dataService.CommitAsync();
             });
 
-            return initialDataObservable.Merge(subsequentDataObservable);
+            return subsequentDataObservable;
 
             // Get Data From Database first
-            return _dataService.GetStationAsync(stationCode)
-                .Select(databaseStation =>
-            {
-                // BehaviorSubject for emitting results
-                var subject = new Subject<Record[]>();
-                // Emit all exiting records
-                Record[] stationRecords = databaseStation.Records.OrderBy(r => r.DateTime).ToArray();
-                subject.OnNext(stationRecords);
+            //return _dataService.GetStationAsync(stationCode)
+            //    .Select(databaseStation =>
+            //{
+            //    // BehaviorSubject for emitting results
+            //    var subject = new Subject<Record[]>();
+            //    // Emit all exiting records
+            //    Record[] stationRecords = databaseStation.Records.OrderBy(r => r.DateTime).ToArray();
+            //    subject.OnNext(stationRecords);
 
-                var initialDate = new DateTime(2019, 10, 1, 0, 0, 0);
-                IObservable<Record[]> b = parameters.Select(parameter =>
-                {
-                    var lastRecord = stationRecords.LastOrDefault(s => s.Type == parameter);
-                    if (lastRecord != null) return (parameter, lastRecord.DateTime.AddHours(1));
-                    return (parameter, initialDate);
-                }).ToObservable().Select(p =>
-                {
-                    var (parameter, startDate) = p;
-                    return _api.GetStationData(startDate, DateTime.Now, stationCode, parameter);
-                }).Merge(2);
+            //    var initialDate = new DateTime(2019, 10, 1, 0, 0, 0);
+            //    IObservable<Record[]> b = parameters.Select(parameter =>
+            //    {
+            //        var lastRecord = stationRecords.LastOrDefault(s => s.Type == parameter);
+            //        if (lastRecord != null) return (parameter, lastRecord.DateTime.AddHours(1));
+            //        return (parameter, initialDate);
+            //    }).ToObservable().Select(p =>
+            //    {
+            //        var (parameter, startDate) = p;
+            //        return _api.GetStationData(startDate, DateTime.Now, stationCode, parameter);
+            //    }).Merge(2);
 
-                return subject;
-            }).Switch();
+            //    return subject;
+            //}).Switch();
 
             /*
                       // Get Data from API
