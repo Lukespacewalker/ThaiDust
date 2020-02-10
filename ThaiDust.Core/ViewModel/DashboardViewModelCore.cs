@@ -16,7 +16,7 @@ using ThaiDust.Core.Service;
 
 namespace ThaiDust.Core.ViewModel
 {
-    public class DashboardViewModel : ReactiveObject, IRoutableViewModel, IActivatableViewModel, IViewModelInfo
+    public abstract class DashboardViewModelCore : ReactiveObject, IActivatableViewModel, IViewModelInfo
     {
         #region Private
         private readonly ExcelGenerator _excelGenerator;
@@ -31,7 +31,6 @@ namespace ThaiDust.Core.ViewModel
 
         [Reactive] public Station SelectedStation { get; set; }
         [Reactive] public DashboardInfo Info { get; set; }
-
         [Reactive] public StationParam SelectedParameter { get; set; }
         [Reactive] public DateTimeOffset? StartDate { get; set; } = DateTimeOffset.Now.AddMonths(-1);
         [Reactive] public TimeSpan? StartTime { get; set; } = TimeSpan.Zero;
@@ -47,7 +46,7 @@ namespace ThaiDust.Core.ViewModel
         [Reactive] public double Max { get; private set; }
         [Reactive] public double Average { get; private set; }
 
-        public DashboardViewModel(DustService dustService = null, ExcelGenerator excelGenerator = null, IScreen screen = null)
+        public DashboardViewModelCore(DustService dustService = null, ExcelGenerator excelGenerator = null, IScreen screen = null)
         {
             _excelGenerator = excelGenerator ?? Locator.Current.GetService<ExcelGenerator>();
             _dustService = dustService ?? Locator.Current.GetService<DustService>();
@@ -82,17 +81,29 @@ namespace ThaiDust.Core.ViewModel
                     {
                         var lastRecord = records.Last();
                         Info ??= new DashboardInfo { CurrentDateTime = lastRecord.DateTime };
-                        Info.PM25 = lastRecord.Type switch
+                        switch (lastRecord.Type)
                         {
-                            RecordType.PM25 => lastRecord.Value,
-                            RecordType.PM10 => lastRecord.Value,
-                            RecordType.NO2 => lastRecord.Value,
-                            RecordType.CO => lastRecord.Value,
-                            RecordType.O3 => lastRecord.Value,
-                            RecordType.SO2 => lastRecord.Value,
-                            _ => Info.PM25
-                        };
-                        SetAxisAction?.Invoke(records.First().DateTime, records.Last().DateTime);
+                            case RecordType.PM25:
+                                Info.PM25 = lastRecord.Value.ToString();
+                                break;
+                            case RecordType.PM10:
+                                Info.PM10 = lastRecord.Value.ToString();
+                                break;
+                            case RecordType.NO2:
+                                Info.NO2 = lastRecord.Value.ToString();
+                                break;
+                            case RecordType.CO:
+                                Info.CO = lastRecord.Value.ToString();
+                                break;
+                            case RecordType.O3:
+                                Info.O3 = lastRecord.Value.ToString();
+                                break;
+                            case RecordType.SO2:
+                                Info.SO2 = lastRecord.Value.ToString();
+                                break;
+                        }
+
+                        //SetAxisAction?.Invoke(records.First().DateTime, records.Last().DateTime);
                     }
                     // Summarize
                     //Days = records.GroupBy(p => p.DateTime.Date).Count();
@@ -114,11 +125,7 @@ namespace ThaiDust.Core.ViewModel
             });
         }
 
-        private void ShowError(Exception ex)
-        {
-            //var dialog = new MessageDialog(ex.Message, "Error");
-            //dialog.ShowAsync();
-        }
+        protected abstract void ShowError(Exception ex);
 
         public ReactiveCommand<IEnumerable<Record>, Unit> SaveToExcelCommand { get; set; }
 

@@ -55,7 +55,8 @@ namespace ThaiDust.Core.Service
                 .Select(station =>
                 {
                     return station.Records.OrderBy(r => r.DateTime).ToArray();
-                }).Publish().RefCount();
+                }).Replay().RefCount();
+
             IObservable<Record[]> subsequentDataObservable = initialDataObservable.Select(initialRecords =>
             {
                 var initialDate = new DateTime(2019, 10, 1, 0, 0, 0);
@@ -68,16 +69,18 @@ namespace ThaiDust.Core.Service
                 {
                     var (parameter, startDate) = p;
                     return _api.GetStationData(startDate, DateTime.Now, stationCode, parameter);
-                }).Merge(2);
-            }).Switch().Do(async records =>
+                }).Merge(1);
+            }).Switch();
+                /*.Select(async records =>
             {
                 // Save data to database
                 var databaseStation = await _dataService.GetStationAsync(stationCode);
                 databaseStation?.Records.Add(records);
                 await _dataService.CommitAsync();
-            });
+                return records;
+            });*/
 
-            return subsequentDataObservable;
+            return initialDataObservable.Merge(subsequentDataObservable);
 
             // Get Data From Database first
             //return _dataService.GetStationAsync(stationCode)

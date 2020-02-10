@@ -13,12 +13,12 @@ namespace ThaiDust.Core.Model
 
     public class DashboardInfo : ReactiveObject
     {
-        [Reactive] public double? PM25 { get; set; }
-        [Reactive] public double? PM10 { get; set; }
-        [Reactive] public double? O3 { get; set; }
-        [Reactive] public double? NO2 { get; set; }
-        [Reactive] public double? CO { get; set; }
-        [Reactive] public double? SO2 { get; set; }
+        [Reactive] public string PM25 { get; set; } = "--";
+        [Reactive] public string PM10 { get; set; } = "--";
+        [Reactive] public string O3 { get; set; } = "--";
+        [Reactive] public string NO2 { get; set; } = "--";
+        [Reactive] public string CO { get; set; } = "--";
+        [Reactive] public string SO2 { get; set; } = "--";
         [Reactive] public DateTime CurrentDateTime { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Text;
 using ReactiveUI;
 using Splat;
+using ThaiDust.ViewModels;
 
 namespace ThaiDust.Core.ViewModel
 {

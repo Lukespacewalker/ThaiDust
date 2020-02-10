@@ -12,6 +12,7 @@ using Splat;
 using ThaiDust.Core.Helper;
 using ThaiDust.Core.ViewModel;
 using ThaiDust.Helper;
+using ThaiDust.ViewModels;
 
 namespace ThaiDust
 {

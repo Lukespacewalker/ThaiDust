@@ -26,6 +26,7 @@ using Telerik.UI.Xaml.Controls.Chart;
 using ThaiDust.Core.Dto;
 using ThaiDust.Core.Model.Persistent;
 using ThaiDust.Core.ViewModel;
+using ThaiDust.ViewModels;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -97,6 +98,8 @@ namespace ThaiDust
                 this.OneWayBind(ViewModel, vm => vm.Min, v => v.Min.Text).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm => vm.Max, v => v.Max.Text).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm => vm.Average, v => v.Average.Text).DisposeWith(cleanup);
+
+                Axis.LabelFormatter = new DateLabelFormatter();
             });
         }
 
@@ -109,7 +112,7 @@ namespace ThaiDust
         {
             Axis.Minimum = minimum;
             Axis.Maximum = maximum;
-            Axis.LabelFormatter = new DateLabelFormatter();
+            
         }
 
     }

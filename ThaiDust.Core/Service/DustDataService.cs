@@ -26,13 +26,12 @@ namespace ThaiDust.Core.Service
 
         public IObservable<Station> GetStationAsync(string stationCode)
         {
-            return Observable.FromAsync(cts=>
+            return Observable.FromAsync(cts =>
             {
-                return _dustContext.Stations.Include(s => s.Records)
-                        .FirstOrDefaultAsync(s => s.Code == stationCode, cts);
-            }).Do(sata =>
+                return _dustContext.Stations.FirstOrDefaultAsync(s => s.Code == stationCode, cts);
+            }).Do(station =>
             {
-                var b = sata;
+                _dustContext.Entry(station).Collection(c=>c.Records).Load();
             });
             //if (station != null)
             //    _dustContext.Entry(station).Collection(s => s.Records).Load();

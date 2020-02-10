@@ -119,7 +119,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -139,54 +139,70 @@
                                 <Setter Property="Padding" Value="12"/>
                                 <Setter Property="Margin" Value="0,0,12,0"/>
                             </Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                            </Style>
                         </VariableSizedWrapGrid.Resources>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">PM2.5</TextBlock>
-                            <TextBlock Grid.Row="1" x:Name="PM25" FontSize="35">--</TextBlock>
+                            <TextBlock >PM2.5</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="PM25" FontSize="35"/>
+                            <TextBlock Grid.Row="2">ug/m3</TextBlock>
                         </Grid>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">PM10</TextBlock>
-                            <TextBlock Grid.Row="1" x:Name="PM10" FontSize="35">--</TextBlock>
+                            <TextBlock>PM10</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="PM10" FontSize="35"/>
+                            <TextBlock Grid.Row="2">ug/m3</TextBlock>
                         </Grid>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">O3</TextBlock>
-                            <TextBlock Grid.Row="1" x:Name="O3" FontSize="35">--</TextBlock>
+                            <TextBlock>O3</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="O3" FontSize="35"/>
+                            <TextBlock Grid.Row="2">ppm</TextBlock>
                         </Grid>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">SO2</TextBlock>
-                            <TextBlock Grid.Row="1" x:Name="SO2" FontSize="35">--</TextBlock>
+                            <TextBlock>SO2</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="SO2" FontSize="35"/>
+                            <TextBlock Grid.Row="2">ppm</TextBlock>
                         </Grid>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">NO2</TextBlock>
-                            <TextBlock Grid.Row="1" x:Name="NO2" FontSize="35">--</TextBlock>
+                            <TextBlock>NO2</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="NO2" FontSize="35"/>
+                            <TextBlock Grid.Row="2">ppm</TextBlock>
                         </Grid>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">CO</TextBlock>
-                            <TextBlock Grid.Row="1" x:Name="CO" FontSize="35">--</TextBlock>
+                            <TextBlock>CO</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="CO" FontSize="35"/>
+                            <TextBlock Grid.Row="2">ppm</TextBlock>
                         </Grid>
                     </VariableSizedWrapGrid>
                     <Grid Grid.Row="2" Margin="0,6">
@@ -297,7 +313,47 @@
                                 </chart:LinearAxis.LineStyle>
                             </chart:LinearAxis>
                         </chart:RadCartesianChart.VerticalAxis>
-                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM25)}">
+                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM25),Mode=OneWay}">
+                            <chart:AreaSeries.CategoryBinding>
+                                <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
+                            </chart:AreaSeries.CategoryBinding>
+                            <chart:AreaSeries.ValueBinding>
+                                <chart:PropertyNameDataPointBinding PropertyName="Value"/>
+                            </chart:AreaSeries.ValueBinding>
+                        </chart:AreaSeries>
+                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM10),Mode=OneWay}">
+                            <chart:AreaSeries.CategoryBinding>
+                                <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
+                            </chart:AreaSeries.CategoryBinding>
+                            <chart:AreaSeries.ValueBinding>
+                                <chart:PropertyNameDataPointBinding PropertyName="Value"/>
+                            </chart:AreaSeries.ValueBinding>
+                        </chart:AreaSeries>
+                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.O3),Mode=OneWay}">
+                            <chart:AreaSeries.CategoryBinding>
+                                <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
+                            </chart:AreaSeries.CategoryBinding>
+                            <chart:AreaSeries.ValueBinding>
+                                <chart:PropertyNameDataPointBinding PropertyName="Value"/>
+                            </chart:AreaSeries.ValueBinding>
+                        </chart:AreaSeries>
+                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.NO2),Mode=OneWay}">
+                            <chart:AreaSeries.CategoryBinding>
+                                <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
+                            </chart:AreaSeries.CategoryBinding>
+                            <chart:AreaSeries.ValueBinding>
+                                <chart:PropertyNameDataPointBinding PropertyName="Value"/>
+                            </chart:AreaSeries.ValueBinding>
+                        </chart:AreaSeries>
+                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.SO2),Mode=OneWay}">
+                            <chart:AreaSeries.CategoryBinding>
+                                <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
+                            </chart:AreaSeries.CategoryBinding>
+                            <chart:AreaSeries.ValueBinding>
+                                <chart:PropertyNameDataPointBinding PropertyName="Value"/>
+                            </chart:AreaSeries.ValueBinding>
+                        </chart:AreaSeries>
+                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.CO),Mode=OneWay}">
                             <chart:AreaSeries.CategoryBinding>
                                 <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
                             </chart:AreaSeries.CategoryBinding>
