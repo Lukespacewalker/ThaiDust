@@ -91,14 +91,7 @@ namespace ThaiDust
                 this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.CO.Text, Selector(RecordType.CO)).DisposeWith(cleanup);
 
                 this.BindCommand(ViewModel, vm => vm.SaveToExcelCommand, v => v.ExportButton, vm => vm.StationData).DisposeWith(cleanup);
-
-                // this.OneWayBind(ViewModel, vm => vm.StationData, v => v.Chart.DataContext).DisposeWith(cleanup);
-                //this.OneWayBind(ViewModel, vm => vm.Days, v => v.Days.Text).DisposeWith(cleanup);
-                //this.OneWayBind(ViewModel, vm => vm.Min, v => v.Min.Text).DisposeWith(cleanup);
-                //this.OneWayBind(ViewModel, vm => vm.Max, v => v.Max.Text).DisposeWith(cleanup);
-                //this.OneWayBind(ViewModel, vm => vm.Average, v => v.Average.Text).DisposeWith(cleanup);
-
-            });
+            }); 
         }
 
         private Func< IEnumerable<Record>,string> Selector(RecordType type)
