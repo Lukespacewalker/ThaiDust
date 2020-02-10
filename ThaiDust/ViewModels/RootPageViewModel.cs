@@ -28,11 +28,11 @@ namespace ThaiDust.Core.ViewModel
             switch (key)
             {
                 case "Dashboard":
-                    return Router.Navigate.Execute(new DashboardViewModel());
+                    return Router.Navigate.Execute(Locator.Current.GetService<DashboardViewModel>());
                 case "Stations":
-                    return Router.Navigate.Execute(new StationManagerViewModel());
+                    return Router.Navigate.Execute(Locator.Current.GetService<StationManagerViewModel>());
                 case "Setting":
-                    return Router.Navigate.Execute(new StationManagerViewModel());
+                    return Router.Navigate.Execute(Locator.Current.GetService<StationManagerViewModel>());
                 default:
                     throw new ArgumentException("Navigation key is not existed", nameof(key));
             }

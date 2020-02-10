@@ -20,6 +20,8 @@ namespace ThaiDust
     {
         public static void RegisterDependencies()
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjA4MjgzQDMxMzcyZTM0MmUzMFZkTWp3R29XbTdnV2Ztbk5XemhkdDhEdmF6NkZOV2VSUU0ybDdMN1Vvbkk9");
+
             var task = ApplicationData.Current.LocalFolder.CreateFileAsync("dust.db", CreationCollisionOption.OpenIfExists).AsTask();
             if (!task.IsCompleted)
             {
@@ -40,6 +42,8 @@ namespace ThaiDust
             // Register Database
             Core.Bootstrapper.RegisterDatabase(dbpath);
             Core.Bootstrapper.RegisterCoreDependencies();
+            // ViewMolde
+            Locator.CurrentMutable.RegisterLazySingleton<DashboardViewModel>(() => new DashboardViewModel());
         }
     }
 }

@@ -61,17 +61,18 @@ namespace ThaiDust
                 this.OneWayBind(ViewModel, vm => vm.ManagedStations, v => v.Stations.ItemsSource).DisposeWith(cleanup);
                 this.Bind(ViewModel, vm => vm.SelectedStation, v => v.Stations.SelectedItem).DisposeWith(cleanup);
                 //this.OneWayBind(ViewModel, vm => vm.StationParams, v => v.Parameters.ItemsSource).DisposeWith(cleanup);
-                ViewModel.StationData.ObserveCollectionChanges().Select(_ =>
-                {
-                    var result =
-                        from d in ViewModel.StationData
-                        group d by d.DateTime.Date
-                        into g
-                        orderby g.Key
-                        select g;
-                    var cws = new CollectionViewSource { Source = result, IsSourceGrouped = true };
-                    return cws.View;
-                }).BindTo(this, v => v.StationData.ItemsSource).DisposeWith(cleanup);
+
+                //ViewModel.StationData.ObserveCollectionChanges().Select(_ =>
+                //{
+                //    var result =
+                //        from d in ViewModel.StationData
+                //        group d by d.DateTime.Date
+                //        into g
+                //        orderby g.Key
+                //        select g;
+                //    var cws = new CollectionViewSource { Source = result, IsSourceGrouped = true };
+                //    return cws.View;
+                //}).BindTo(this, v => v.StationData.ItemsSource).DisposeWith(cleanup);
 
                 //this.Bind(ViewModel, vm => vm.StartDate, v => v.StartDate.Date).DisposeWith(cleanup);
                 //this.Bind(ViewModel, vm => vm.EndDate, v => v.EndDate.Date).DisposeWith(cleanup);
@@ -94,12 +95,11 @@ namespace ThaiDust
                 this.BindCommand(ViewModel, vm => vm.SaveToExcelCommand, v => v.ExportButton, vm=>vm.StationData).DisposeWith(cleanup);
 
                // this.OneWayBind(ViewModel, vm => vm.StationData, v => v.Chart.DataContext).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm => vm.Days, v => v.Days.Text).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm => vm.Min, v => v.Min.Text).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm => vm.Max, v => v.Max.Text).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm => vm.Average, v => v.Average.Text).DisposeWith(cleanup);
+                //this.OneWayBind(ViewModel, vm => vm.Days, v => v.Days.Text).DisposeWith(cleanup);
+                //this.OneWayBind(ViewModel, vm => vm.Min, v => v.Min.Text).DisposeWith(cleanup);
+                //this.OneWayBind(ViewModel, vm => vm.Max, v => v.Max.Text).DisposeWith(cleanup);
+                //this.OneWayBind(ViewModel, vm => vm.Average, v => v.Average.Text).DisposeWith(cleanup);
 
-                Axis.LabelFormatter = new DateLabelFormatter();
             });
         }
 
@@ -110,8 +110,6 @@ namespace ThaiDust
 
         private void SetAxis(DateTime minimum, DateTime maximum)
         {
-            Axis.Minimum = minimum;
-            Axis.Maximum = maximum;
             
         }
 

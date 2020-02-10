@@ -29,9 +29,9 @@ namespace ThaiDust.Core.Service
             return Observable.FromAsync(cts =>
             {
                 return _dustContext.Stations.FirstOrDefaultAsync(s => s.Code == stationCode, cts);
-            }).Do(station =>
+            }).Do(async station =>
             {
-                _dustContext.Entry(station).Collection(c=>c.Records).Load();
+                if(station!=null) await _dustContext.Entry(station).Collection(c=>c.Records).LoadAsync();
             });
             //if (station != null)
             //    _dustContext.Entry(station).Collection(s => s.Records).Load();

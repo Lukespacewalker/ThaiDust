@@ -9,6 +9,7 @@
     xmlns:converters="using:ThaiDust.Converters"
     xmlns:model="using:ThaiDust.Core.Model"
     xmlns:persistent="using:ThaiDust.Core.Model.Persistent"
+    xmlns:charts="using:Syncfusion.UI.Xaml.Charts"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationBackground}">
     <Page.Resources>
@@ -119,7 +120,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -137,6 +138,7 @@
                                 <Setter Property="BorderBrush" Value="#40FFFFFF"/>
                                 <Setter Property="BorderThickness" Value="2"/>
                                 <Setter Property="Padding" Value="12"/>
+                                <Setter Property="MinWidth" Value="100"/>
                                 <Setter Property="Margin" Value="0,0,12,0"/>
                             </Style>
                             <Style TargetType="TextBlock">
@@ -172,7 +174,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock>O3</TextBlock>
                             <TextBlock Grid.Row="1" x:Name="O3" FontSize="35"/>
-                            <TextBlock Grid.Row="2">ppm</TextBlock>
+                            <TextBlock Grid.Row="2">ppb</TextBlock>
                         </Grid>
                         <Grid>
                             <Grid.RowDefinitions>
@@ -182,7 +184,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock>SO2</TextBlock>
                             <TextBlock Grid.Row="1" x:Name="SO2" FontSize="35"/>
-                            <TextBlock Grid.Row="2">ppm</TextBlock>
+                            <TextBlock Grid.Row="2">ppb</TextBlock>
                         </Grid>
                         <Grid>
                             <Grid.RowDefinitions>
@@ -192,7 +194,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock>NO2</TextBlock>
                             <TextBlock Grid.Row="1" x:Name="NO2" FontSize="35"/>
-                            <TextBlock Grid.Row="2">ppm</TextBlock>
+                            <TextBlock Grid.Row="2">ppb</TextBlock>
                         </Grid>
                         <Grid>
                             <Grid.RowDefinitions>
@@ -222,15 +224,37 @@
                         <TimePicker Grid.Column="1" Grid.Row="1"  x:Name="StartTime" Header=" " ClockIdentifier="24HourClock" />
                         <CalendarDatePicker Grid.Column="2" Grid.Row="1" x:Name="EndDate" Header="To" HorizontalAlignment="Stretch"/>
                         <TimePicker Grid.Column="3" Grid.Row="1" x:Name="EndTime"  Header=" " ClockIdentifier="24HourClock" />
-                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="4">
+                        <!--<StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="4">
                             <ToggleButton x:Name="TogglePM25">PM2.5</ToggleButton>
                             <ToggleButton x:Name="TogglePM10">PM10</ToggleButton>
                             <ToggleButton x:Name="ToggleO3">O3</ToggleButton>
                             <ToggleButton x:Name="ToggleSO2">SO2</ToggleButton>
                             <ToggleButton x:Name="ToggleNO2">NO2</ToggleButton>
                             <ToggleButton x:Name="ToggleCO">CO</ToggleButton>
-                        </StackPanel>
+                        </StackPanel>-->
                     </Grid>
+                    <charts:SfChart  Grid.Row="3" Grid.ColumnSpan="2">
+                        <charts:SfChart.Behaviors>
+                            <charts:ChartZoomPanBehavior EnableMouseWheelZooming="True" EnablePinchZooming="True" ZoomRelativeToCursor="True" EnableSelectionZooming="True" >
+                            </charts:ChartZoomPanBehavior>
+                        </charts:SfChart.Behaviors>
+                        <charts:SfChart.Legend>
+                            <charts:ChartLegend ToggleSeriesVisibility="True" />
+                        </charts:SfChart.Legend>
+                        <charts:SfChart.PrimaryAxis>
+                            <charts:DateTimeAxis Header="Date" />
+                        </charts:SfChart.PrimaryAxis>
+                        <charts:SfChart.SecondaryAxis>
+                            <charts:NumericalAxis Header="Value"/>
+                        </charts:SfChart.SecondaryAxis>
+                        <charts:FastLineBitmapSeries  Label="PM25" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM25),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                        <charts:FastLineBitmapSeries  Label="PM10" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM10),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                        <charts:FastLineBitmapSeries  Label="SO2" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.SO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                        <charts:FastLineBitmapSeries  Label="CO" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.CO),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                        <charts:FastLineBitmapSeries  Label="NO2" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.NO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                        <charts:FastLineBitmapSeries  Label="O3" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.O3),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                    </charts:SfChart>
+
                     <ListView Grid.Row="4" x:Name="StationData">
                         <ListView.GroupStyle>
                             <GroupStyle>
@@ -280,88 +304,6 @@
                         <TextBlock x:Name="Max" Grid.Row="3" Grid.Column="1"></TextBlock>
                         <TextBlock x:Name="Average" Grid.Row="4" Grid.Column="1"></TextBlock>
                     </Grid>
-                    <chart:RadCartesianChart x:Name="Chart" Grid.Row="3" Grid.ColumnSpan="2">
-                        <chart:RadCartesianChart.Grid>
-                            <chart:CartesianChartGrid MajorLinesVisibility="XY">
-                                <chart:CartesianChartGrid.MajorYLineStyle>
-                                    <Style TargetType="Line">
-                                        <Setter Property="Stroke" Value="#46FFFFFF"/>
-                                    </Style>
-                                </chart:CartesianChartGrid.MajorYLineStyle>
-                                <chart:CartesianChartGrid.MajorXLineStyle>
-                                    <Style TargetType="Line">
-                                        <Setter Property="Stroke" Value="#46FFFFFF"/>
-                                    </Style>
-                                </chart:CartesianChartGrid.MajorXLineStyle>
-                            </chart:CartesianChartGrid>
-                        </chart:RadCartesianChart.Grid>
-                        <chart:RadCartesianChart.HorizontalAxis>
-                            <chart:DateTimeContinuousAxis x:Name="Axis"  PlotMode="OnTicks" LabelFitMode="Rotate">
-                                <chart:DateTimeContinuousAxis.LineStyle>
-                                    <Style TargetType="Line">
-                                        <Setter Property="Stroke" Value="#46FFFFFF"/>
-                                    </Style>
-                                </chart:DateTimeContinuousAxis.LineStyle>
-                            </chart:DateTimeContinuousAxis>
-                        </chart:RadCartesianChart.HorizontalAxis>
-                        <chart:RadCartesianChart.VerticalAxis>
-                            <chart:LinearAxis TickThickness="1">
-                                <chart:LinearAxis.LineStyle>
-                                    <Style TargetType="Line">
-                                        <Setter Property="Stroke" Value="#46FFFFFF"/>
-                                    </Style>
-                                </chart:LinearAxis.LineStyle>
-                            </chart:LinearAxis>
-                        </chart:RadCartesianChart.VerticalAxis>
-                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM25),Mode=OneWay}">
-                            <chart:AreaSeries.CategoryBinding>
-                                <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
-                            </chart:AreaSeries.CategoryBinding>
-                            <chart:AreaSeries.ValueBinding>
-                                <chart:PropertyNameDataPointBinding PropertyName="Value"/>
-                            </chart:AreaSeries.ValueBinding>
-                        </chart:AreaSeries>
-                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM10),Mode=OneWay}">
-                            <chart:AreaSeries.CategoryBinding>
-                                <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
-                            </chart:AreaSeries.CategoryBinding>
-                            <chart:AreaSeries.ValueBinding>
-                                <chart:PropertyNameDataPointBinding PropertyName="Value"/>
-                            </chart:AreaSeries.ValueBinding>
-                        </chart:AreaSeries>
-                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.O3),Mode=OneWay}">
-                            <chart:AreaSeries.CategoryBinding>
-                                <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
-                            </chart:AreaSeries.CategoryBinding>
-                            <chart:AreaSeries.ValueBinding>
-                                <chart:PropertyNameDataPointBinding PropertyName="Value"/>
-                            </chart:AreaSeries.ValueBinding>
-                        </chart:AreaSeries>
-                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.NO2),Mode=OneWay}">
-                            <chart:AreaSeries.CategoryBinding>
-                                <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
-                            </chart:AreaSeries.CategoryBinding>
-                            <chart:AreaSeries.ValueBinding>
-                                <chart:PropertyNameDataPointBinding PropertyName="Value"/>
-                            </chart:AreaSeries.ValueBinding>
-                        </chart:AreaSeries>
-                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.SO2),Mode=OneWay}">
-                            <chart:AreaSeries.CategoryBinding>
-                                <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
-                            </chart:AreaSeries.CategoryBinding>
-                            <chart:AreaSeries.ValueBinding>
-                                <chart:PropertyNameDataPointBinding PropertyName="Value"/>
-                            </chart:AreaSeries.ValueBinding>
-                        </chart:AreaSeries>
-                        <chart:AreaSeries ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.CO),Mode=OneWay}">
-                            <chart:AreaSeries.CategoryBinding>
-                                <chart:PropertyNameDataPointBinding PropertyName="DateTime"/>
-                            </chart:AreaSeries.CategoryBinding>
-                            <chart:AreaSeries.ValueBinding>
-                                <chart:PropertyNameDataPointBinding PropertyName="Value"/>
-                            </chart:AreaSeries.ValueBinding>
-                        </chart:AreaSeries>
-                    </chart:RadCartesianChart>
                 </Grid>
                 <!--</Grid>
                 </ScrollViewer>-->

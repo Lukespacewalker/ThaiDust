@@ -70,12 +70,12 @@ namespace ThaiDust.Core.ViewModel
 
                     // var startDate = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day, StartTime.Value.Hours, StartTime.Value.Minutes, StartTime.Value.Seconds);
                     //var endDate = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day, EndTime.Value.Hours, EndTime.Value.Minutes, EndTime.Value.Seconds);
-                    return s;
-                }, canLoadDataCommand).DisposeWith(cleanup);
+                    return Observable.Start(() => s, RxApp.TaskpoolScheduler).Switch(); ;
+                }, canLoadDataCommand, RxApp.TaskpoolScheduler).DisposeWith(cleanup);
 
                 LoadDataCommand.ThrownExceptions.Subscribe(ShowError);
 
-                LoadDataCommand.Subscribe(records =>
+                LoadDataCommand.ObserveOn(RxApp.MainThreadScheduler).Subscribe(records =>
                 {
                     if (records.Length > 0)
                     {
@@ -111,7 +111,7 @@ namespace ThaiDust.Core.ViewModel
                     //Max = records.Where(p => p.Value != null).Max(p => p.Value).Value;
                     //Average = Math.Round(records.Where(p => p.Value != null).Average(p => p.Value).Value, 2);
 
-                    _values.AddRange(records);
+                    _values.Edit(e=>e.AddRange(records));
                 });
 
                 var canSaveToExcelCommand = StationData.ObserveCollectionChanges().Select(_ => StationData.Count > 0);

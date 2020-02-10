@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Splat;
 using ThaiDust.Core.Model.Persistent;
 using ThaiDust.Core.Service;
+using ThaiDust.Core.ViewModel;
 
 namespace ThaiDust.Core
 {
@@ -32,6 +33,8 @@ namespace ThaiDust.Core
             Locator.CurrentMutable.RegisterLazySingleton<ThaiPollutionControlDataApi>(()=>new ThaiPollutionControlDataApi(new HttpClient()));
             Locator.CurrentMutable.RegisterLazySingleton<DustDataService>(()=>new DustDataService(Locator.Current.GetService<DustContext>()));
             Locator.CurrentMutable.RegisterLazySingleton<DustService>(()=>new DustService());
+            // RegisterViewModel
+            Locator.CurrentMutable.RegisterLazySingleton<StationManagerViewModel>(() => new StationManagerViewModel());
         }
     }
 }
