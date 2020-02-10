@@ -35,8 +35,7 @@ namespace ThaiDust.Core.Model.Persistent
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Record>()
-                .HasKey(o => new { o.DateTime, o.Type });
-            //modelBuilder.Entity<Station>().HasMany<Record>().WithOne().OnDelete(DeleteBehavior.Cascade);
+                .HasKey(o => new { o.DateTime, o.Type, o.StationCode });
         }
     }
 }

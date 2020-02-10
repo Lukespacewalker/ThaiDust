@@ -39,8 +39,7 @@ namespace ThaiDust.Core.Service
 
             var dto = new GetDataDto { StationId = stationCode, ParamValue = param, StartDate = startDate, EndDate = endDate };
             var payload = dto.GenerateFormUrlEncodedContent();
-            return Observable.FromAsync(cts => _client.PostAsync(new Uri("http://aqmthai.com/includes/getMultiManReport.php"),
-                    payload, cts))
+            return Observable.FromAsync(cts => _client.PostAsync(new Uri("http://aqmthai.com/includes/getMultiManReport.php"), payload, cts))
                 .Select(async r => await r.Content.ReadAsStringAsync())
                 .Switch().Select(XmlParser.ParseData).Select(records =>
                 {

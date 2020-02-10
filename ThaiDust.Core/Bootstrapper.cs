@@ -19,6 +19,7 @@ namespace ThaiDust.Core
                 var dustContext = new DustContext(databasePath);
                 //dustContext.Database.EnsureDeleted();
                 dustContext.Database.Migrate();
+                dustContext.ChangeTracker.AutoDetectChangesEnabled = false;
                 return dustContext;
             });
         }

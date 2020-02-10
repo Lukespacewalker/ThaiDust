@@ -25,12 +25,12 @@ namespace ThaiDust.Core.Migrations
                 {
                     DateTime = table.Column<DateTime>(nullable: false),
                     Type = table.Column<int>(nullable: false),
-                    Value = table.Column<double>(nullable: true),
-                    StationCode = table.Column<string>(nullable: false)
+                    StationCode = table.Column<string>(nullable: false),
+                    Value = table.Column<double>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Records", x => new { x.DateTime, x.Type });
+                    table.PrimaryKey("PK_Records", x => new { x.DateTime, x.Type, x.StationCode });
                     table.ForeignKey(
                         name: "FK_Records_Stations_StationCode",
                         column: x => x.StationCode,

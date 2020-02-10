@@ -9,7 +9,7 @@ using ThaiDust.Core.Model.Persistent;
 namespace ThaiDust.Core.Migrations
 {
     [DbContext(typeof(DustContext))]
-    [Migration("20200207092619_Initial")]
+    [Migration("20200210094107_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,13 +27,12 @@ namespace ThaiDust.Core.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StationCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<double?>("Value")
                         .HasColumnType("REAL");
 
-                    b.HasKey("DateTime", "Type");
+                    b.HasKey("DateTime", "Type", "StationCode");
 
                     b.HasIndex("StationCode");
 

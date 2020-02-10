@@ -207,7 +207,7 @@
                             <TextBlock Grid.Row="2">ppm</TextBlock>
                         </Grid>
                     </VariableSizedWrapGrid>
-                    <Grid Grid.Row="2" Margin="0,6">
+                    <Grid Visibility="Collapsed" Grid.Row="2" Margin="0,6">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -224,14 +224,6 @@
                         <TimePicker Grid.Column="1" Grid.Row="1"  x:Name="StartTime" Header=" " ClockIdentifier="24HourClock" />
                         <CalendarDatePicker Grid.Column="2" Grid.Row="1" x:Name="EndDate" Header="To" HorizontalAlignment="Stretch"/>
                         <TimePicker Grid.Column="3" Grid.Row="1" x:Name="EndTime"  Header=" " ClockIdentifier="24HourClock" />
-                        <!--<StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="4">
-                            <ToggleButton x:Name="TogglePM25">PM2.5</ToggleButton>
-                            <ToggleButton x:Name="TogglePM10">PM10</ToggleButton>
-                            <ToggleButton x:Name="ToggleO3">O3</ToggleButton>
-                            <ToggleButton x:Name="ToggleSO2">SO2</ToggleButton>
-                            <ToggleButton x:Name="ToggleNO2">NO2</ToggleButton>
-                            <ToggleButton x:Name="ToggleCO">CO</ToggleButton>
-                        </StackPanel>-->
                     </Grid>
                     <charts:SfChart  Grid.Row="3" Grid.ColumnSpan="2">
                         <charts:SfChart.Behaviors>
@@ -282,7 +274,7 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <Grid Grid.Row="4" Grid.Column="1" ColumnSpacing="16" RowSpacing="16">
+                    <Grid Visibility="Collapsed" Grid.Row="4" Grid.Column="1" ColumnSpacing="16" RowSpacing="16">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>

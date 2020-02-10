@@ -29,10 +29,11 @@ namespace ThaiDust.Core.Service
             return Observable.FromAsync(cts =>
             {
                 return _dustContext.Stations.FirstOrDefaultAsync(s => s.Code == stationCode, cts);
-            }).Do(async station =>
+            }).Select(async station =>
             {
                 if(station!=null) await _dustContext.Entry(station).Collection(c=>c.Records).LoadAsync();
-            });
+                return station;
+            }).Switch();
             //if (station != null)
             //    _dustContext.Entry(station).Collection(s => s.Records).Load();
         }
@@ -88,6 +89,7 @@ namespace ThaiDust.Core.Service
 
         public Task<int> CommitAsync()
         {
+            _dustContext.ChangeTracker.DetectChanges();
             return _dustContext.SaveChangesAsync();
         }
 

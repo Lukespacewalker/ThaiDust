@@ -52,33 +52,33 @@ namespace ThaiDust.Core.Service
         {
             // Initial data
             IObservable<Record[]> initialDataObservable = _dataService.GetStationAsync(stationCode)
-                .Select(station =>
-                {
-                    return station.Records.OrderBy(r => r.DateTime).ToArray();
-                }).Replay().RefCount();
+                .Select(station => station.Records.OrderBy(r => r.DateTime).ToArray()).PublishLast().RefCount();
 
             IObservable<Record[]> subsequentDataObservable = initialDataObservable.Select(initialRecords =>
             {
                 var initialDate = new DateTime(2019, 10, 1, 0, 0, 0);
-                return parameters.Select(parameter =>
+                IObservable<Record[]> parametersObservable = parameters.Select(parameter =>
                 {
                     var lastRecord = initialRecords.LastOrDefault(s => s.Type == parameter);
                     if (lastRecord != null) return (parameter, lastRecord.DateTime.AddHours(1));
                     return (parameter, initialDate);
-                }).ToObservable().Select(p =>
+                }).ToObservable().SelectMany(p =>
                 {
                     var (parameter, startDate) = p;
                     return _api.GetStationData(startDate, DateTime.Now, stationCode, parameter);
-                }).Merge(1);
-            }).Switch();
-                /*.Select(async records =>
-            {
+                });
+                return parametersObservable;
+            }).Switch().Select(records =>
+           {
                 // Save data to database
-                var databaseStation = await _dataService.GetStationAsync(stationCode);
-                databaseStation?.Records.Add(records);
-                await _dataService.CommitAsync();
-                return records;
-            });*/
+                return Observable.FromAsync(async () =>
+               {
+                   var databaseStation = await _dataService.GetStationAsync(stationCode);
+                   databaseStation?.Records.Add(records);
+                   await _dataService.CommitAsync();
+                   return records;
+               });
+           }).Merge(1);
 
             return initialDataObservable.Merge(subsequentDataObservable);
 

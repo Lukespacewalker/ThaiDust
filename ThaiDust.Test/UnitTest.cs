@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,11 +21,11 @@ namespace ThaiDust.Test
         }
 
         [TestMethod]
-        public void LoadEmptyData()
+        public async Task LoadEmptyData()
         {
             using var dustContext = SetUpDatabase();
             var dustService = new DustDataService(dustContext);
-            Station stationWithData = dustService.GetStationAsync("10E");
+            Station stationWithData = await dustService.GetStationAsync("10E");
             stationWithData.Should().BeNull();
         }
 

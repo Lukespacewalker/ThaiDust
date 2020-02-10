@@ -25,13 +25,12 @@ namespace ThaiDust.Core.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StationCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<double?>("Value")
                         .HasColumnType("REAL");
 
-                    b.HasKey("DateTime", "Type");
+                    b.HasKey("DateTime", "Type", "StationCode");
 
                     b.HasIndex("StationCode");
 

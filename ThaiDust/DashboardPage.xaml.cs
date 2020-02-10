@@ -51,13 +51,12 @@ namespace ThaiDust
 
         public DashboardPage()
         {
-            
+
             this.InitializeComponent();
+
 
             this.WhenActivated(cleanup =>
             {
-                ViewModel.SetAxisAction = SetAxis;
-
                 this.OneWayBind(ViewModel, vm => vm.ManagedStations, v => v.Stations.ItemsSource).DisposeWith(cleanup);
                 this.Bind(ViewModel, vm => vm.SelectedStation, v => v.Stations.SelectedItem).DisposeWith(cleanup);
                 //this.OneWayBind(ViewModel, vm => vm.StationParams, v => v.Parameters.ItemsSource).DisposeWith(cleanup);
@@ -82,25 +81,34 @@ namespace ThaiDust
 
                 //this.BindCommand(ViewModel, vm => vm.LoadDataCommand, v => v.LoadDataButton).DisposeWith(cleanup);
 
-                this.OneWayBind(ViewModel, vm=>vm.SelectedStation.Code,v=>v.StaionCode.Text).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm=>vm.SelectedStation.Name,v=>v.StaionCode.Text).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm=>vm.Info.CurrentDateTime,v=>v.Date.Text).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm=>vm.Info.PM25,v=>v.PM25.Text).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm=>vm.Info.PM10,v=>v.PM10.Text).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm=>vm.Info.SO2,v=>v.SO2.Text).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm=>vm.Info.O3,v=>v.O3.Text).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm=>vm.Info.NO2,v=>v.NO2.Text).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm=>vm.Info.CO,v=>v.CO.Text).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.SelectedStation.Code, v => v.StaionCode.Text).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.SelectedStation.Name, v => v.StaionCode.Text).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.PM25.Text, Selector(RecordType.PM25)).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.PM10.Text, Selector(RecordType.PM10)).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.SO2.Text, Selector(RecordType.SO2)).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.O3.Text, Selector(RecordType.O3)).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.NO2.Text, Selector(RecordType.NO2)).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.CO.Text, Selector(RecordType.CO)).DisposeWith(cleanup);
 
-                this.BindCommand(ViewModel, vm => vm.SaveToExcelCommand, v => v.ExportButton, vm=>vm.StationData).DisposeWith(cleanup);
+                this.BindCommand(ViewModel, vm => vm.SaveToExcelCommand, v => v.ExportButton, vm => vm.StationData).DisposeWith(cleanup);
 
-               // this.OneWayBind(ViewModel, vm => vm.StationData, v => v.Chart.DataContext).DisposeWith(cleanup);
+                // this.OneWayBind(ViewModel, vm => vm.StationData, v => v.Chart.DataContext).DisposeWith(cleanup);
                 //this.OneWayBind(ViewModel, vm => vm.Days, v => v.Days.Text).DisposeWith(cleanup);
                 //this.OneWayBind(ViewModel, vm => vm.Min, v => v.Min.Text).DisposeWith(cleanup);
                 //this.OneWayBind(ViewModel, vm => vm.Max, v => v.Max.Text).DisposeWith(cleanup);
                 //this.OneWayBind(ViewModel, vm => vm.Average, v => v.Average.Text).DisposeWith(cleanup);
 
             });
+        }
+
+        private Func< IEnumerable<Record>,string> Selector(RecordType type)
+        {
+            return (IEnumerable<Record> arg) =>
+            {
+                if (arg == null || !arg.Any()) return "--";
+                var val = arg.FirstOrDefault(r => r?.Type == type);
+                return (val != null) ? (val.Value.HasValue ? val.Value.ToString() : "--") : "--";
+            };
         }
 
         public IEnumerable<Record> GetData(ObservableCollectionExtended<Record> source, RecordType recordType)
@@ -110,7 +118,7 @@ namespace ThaiDust
 
         private void SetAxis(DateTime minimum, DateTime maximum)
         {
-            
+
         }
 
     }
