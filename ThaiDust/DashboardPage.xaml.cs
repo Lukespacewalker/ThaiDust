@@ -59,10 +59,7 @@ namespace ThaiDust
             {
                 this.OneWayBind(ViewModel, vm => vm.ManagedStations, v => v.Stations.ItemsSource).DisposeWith(cleanup);
                 this.Bind(ViewModel, vm => vm.SelectedStation, v => v.Stations.SelectedItem).DisposeWith(cleanup);
-                //this.OneWayBind(ViewModel, vm => vm.StationParams, v => v.Parameters.ItemsSource).DisposeWith(cleanup);
-
                 //ViewModel.StationData.ObserveCollectionChanges().Select(_ =>
-                //{
                 //    var result =
                 //        from d in ViewModel.StationData
                 //        group d by d.DateTime.Date
@@ -71,24 +68,22 @@ namespace ThaiDust
                 //        select g;
                 //    var cws = new CollectionViewSource { Source = result, IsSourceGrouped = true };
                 //    return cws.View;
-                //}).BindTo(this, v => v.StationData.ItemsSource).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.SelectedStation.Code, v => v.StationCode.Text).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.SelectedStation.Name, v => v.StationName.Text).DisposeWith(cleanup);
 
-                //this.Bind(ViewModel, vm => vm.StartDate, v => v.StartDate.Date).DisposeWith(cleanup);
-                //this.Bind(ViewModel, vm => vm.EndDate, v => v.EndDate.Date).DisposeWith(cleanup);
-
-                //this.Bind(ViewModel, vm => vm.StartTime, v => v.StartTime.Time).DisposeWith(cleanup);
-                //this.Bind(ViewModel, vm => vm.EndTime, v => v.EndTime.Time).DisposeWith(cleanup);
-
-                //this.BindCommand(ViewModel, vm => vm.LoadDataCommand, v => v.LoadDataButton).DisposeWith(cleanup);
-
-                this.OneWayBind(ViewModel, vm => vm.SelectedStation.Code, v => v.StaionCode.Text).DisposeWith(cleanup);
-                this.OneWayBind(ViewModel, vm => vm.SelectedStation.Name, v => v.StaionCode.Text).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.PM25.Text, Selector(RecordType.PM25)).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.PM10.Text, Selector(RecordType.PM10)).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.SO2.Text, Selector(RecordType.SO2)).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.O3.Text, Selector(RecordType.O3)).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.NO2.Text, Selector(RecordType.NO2)).DisposeWith(cleanup);
                 this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.CO.Text, Selector(RecordType.CO)).DisposeWith(cleanup);
+
+                this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.PM25Date.Text, DateSelector(RecordType.PM25)).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.PM10Date.Text, DateSelector(RecordType.PM10)).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.SO2Date.Text, DateSelector(RecordType.SO2)).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.O3Date.Text, DateSelector(RecordType.O3)).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.NO2Date.Text, DateSelector(RecordType.NO2)).DisposeWith(cleanup);
+                this.OneWayBind(ViewModel, vm => vm.LastRecords, v => v.CODate.Text, DateSelector(RecordType.CO)).DisposeWith(cleanup);
 
                 this.BindCommand(ViewModel, vm => vm.SaveToExcelCommand, v => v.ExportButton, vm => vm.StationData).DisposeWith(cleanup);
             }); 
@@ -103,17 +98,26 @@ namespace ThaiDust
                 return (val != null) ? (val.Value.HasValue ? val.Value.ToString() : "--") : "--";
             };
         }
+        private Func<IEnumerable<Record>, string> DateSelector(RecordType type)
+        {
+            return (IEnumerable<Record> arg) =>
+            {
+                if (arg == null || !arg.Any()) return "--";
+                var val = arg.FirstOrDefault(r => r?.Type == type);
+                return (val != null) ? (val.DateTime.Date == DateTime.Today ? val.DateTime.ToString("hh:mm:ss") : val.DateTime.ToString("yyyy MMMM dd hh:mm:ss")) : "--" ;
+            };
+        }
+
 
         public IEnumerable<Record> GetData(ObservableCollectionExtended<Record> source, RecordType recordType)
         {
             return source.Where(r => r.Type == recordType);
         }
 
-        private void SetAxis(DateTime minimum, DateTime maximum)
+        private void Hamburger_OnClick(object sender, RoutedEventArgs e)
         {
-
+            DashboardSplitView.IsPaneOpen = !DashboardSplitView.IsPaneOpen;
         }
-
     }
 
     public class DateLabelFormatter : IContentFormatter

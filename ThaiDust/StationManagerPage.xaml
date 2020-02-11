@@ -6,17 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:persistent="using:ThaiDust.Core.Model.Persistent"
+    xmlns:helper="using:ThaiDust.Helper"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <DataTemplate x:Key="StationGridViewTemplate" x:DataType="persistent:Station">
-            <Grid Padding="12,8">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="2"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <Grid Padding="12,8" helper:Grid.Rows="A,A,2,A">
                 <TextBlock Text="{x:Bind Code}" HorizontalAlignment="Center" FontSize="20"/>
                 <Border Grid.Row="1" MinHeight="40">
                     <TextBlock Text="{x:Bind Name}" TextWrapping="WrapWholeWords" VerticalAlignment="Center" TextAlignment="Center"/>
@@ -29,17 +24,7 @@
             </Grid>
         </DataTemplate>
     </Page.Resources>
-    <Grid ColumnSpacing="12">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid ColumnSpacing="12" helper:Grid.Rows="A,A,*" helper:Grid.Columns="300,A,*">
         <CommandBar Grid.Row="0" Grid.ColumnSpan="3" DefaultLabelPosition="Right" Background="{ThemeResource NavigationViewTopPaneBackground}">
             <CommandBar.Content>
                 <StackPanel Margin="12,6,0,0" Orientation="Horizontal">

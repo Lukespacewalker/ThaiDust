@@ -3,133 +3,47 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:ThaiDust"
-    xmlns:chart="using:Telerik.UI.Xaml.Controls.Chart"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:ThaiDust.Converters"
     xmlns:model="using:ThaiDust.Core.Model"
     xmlns:persistent="using:ThaiDust.Core.Model.Persistent"
     xmlns:charts="using:Syncfusion.UI.Xaml.Charts"
+    xmlns:helper="using:ThaiDust.Helper"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationBackground}">
     <Page.Resources>
         <converters:DateTimeConverter x:Key="DateTimeConverter"/>
     </Page.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <CommandBar  DefaultLabelPosition="Right" Background="{ThemeResource NavigationViewTopPaneBackground}">
-            <CommandBar.Content>
-                <StackPanel Margin="12,6,0,0" Orientation="Horizontal">
-                    <SymbolIcon Symbol="PreviewLink" />
-                    <TextBlock VerticalAlignment="Center" Margin="12,0,0,0" Style="{StaticResource SubtitleTextBlockStyle}">Dashboard</TextBlock>
-                </StackPanel>
-            </CommandBar.Content>
-            <AppBarButton x:Name="ExportButton" Icon="Save" Label="Export to Excel"/>
-        </CommandBar>
-        <SplitView Grid.Row="1" OpenPaneLength="300" IsPaneOpen="True"
-                   Canvas.ZIndex="0" DisplayMode="Inline"
-                   CompactPaneLength="30">
+    <Grid helper:Grid.Rows="*">
+        <SplitView x:Name="DashboardSplitView" Grid.Row="1" OpenPaneLength="300" IsPaneOpen="True"
+                   Canvas.ZIndex="0" DisplayMode="CompactInline"
+                   CompactPaneLength="52">
             <SplitView.Pane>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Margin="0,12" Orientation="Horizontal" Grid.Row="0">
-                        <Button>
+                <Grid helper:Grid.Rows="A,*">
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <Button Padding="15,10" Click="Hamburger_OnClick">
                             <SymbolIcon Symbol="List"></SymbolIcon>
                         </Button>
-                        <TextBlock Margin="12,0,0,0" Style="{StaticResource SubtitleTextBlockStyle}">Stations</TextBlock>
+                        <TextBlock Margin="12,10,0,0" Style="{StaticResource SubtitleTextBlockStyle}">Dashboard</TextBlock>
                     </StackPanel>
-                    <ListView Grid.Row="1" x:Name="Stations" Grid.ColumnSpan="2" ItemTemplate="{StaticResource StationListViewTemplate}">
-                        <!--<ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>-->
-                    </ListView>
-                    <!--<Grid Visibility="Collapsed" Grid.Row="2" Grid.ColumnSpan="2" ColumnSpacing="12">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                    </Grid>
-                    <GridView Visibility="Collapsed" Grid.Row="3" x:Name="Parameters">
-                        <GridView.Header>
-                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">พารามิเตอร์</TextBlock>
-                        </GridView.Header>
-                        <GridView.ItemTemplate>
-                            <DataTemplate x:DataType="model:StationParam">
-                                <TextBlock Text="{x:Bind Name}"/>
-                            </DataTemplate>
-                        </GridView.ItemTemplate>
-                    </GridView-->
-
-                    <!--<CommandBar Grid.Row="4" DefaultLabelPosition="Right" Margin="-16" Grid.ColumnSpan="2">
-                        <AppBarButton x:Name="LoadDataButton" Icon="Find" Label="ค้นหาข้อมูล"/>
-                    </CommandBar>-->
+                    <ListView Grid.Row="1" x:Name="Stations" Grid.ColumnSpan="2" ItemTemplate="{StaticResource StationListViewTemplate}"/>
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>
-                <!--<ScrollViewer>
-                    <Grid>-->
-                <!--<Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <ListView>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock>สถานทีตรวจวัด XXX</TextBlock>
-                                <TextBlock Grid.Row="0">ค่าล่าสุด XXX</TextBlock>
-                                <GridView Grid.Row="1">
-                                    <Border>
-
-                                    </Border>
-                                </GridView>
-                                <TextBlock Grid.Row="0">ประวัติย้อนหลัง</TextBlock>
-                                <ListView Grid.Row="2">
-
-                                </ListView>
-                            </Grid>
-
-                        </ListView>-->
-                <Grid Grid.Row="1" Padding="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Margin="0,0,0,12" Style="{StaticResource SubtitleTextBlockStyle}">
-                        <Run x:Name="StaionCode"/>
-                        <Run x:Name="StaionName"/>
+                <Grid Grid.Row="1" Padding="12" helper:Grid.Rows="A,A,A,2*,*" helper:Grid.Columns="*,A">
+                    <CommandBar Grid.Row="0" DefaultLabelPosition="Right" Background="{ThemeResource NavigationViewTopPaneBackground}">
+                        <CommandBar.Content>
+                            <StackPanel Margin="16,6,0,0" Orientation="Horizontal">
+                                <SymbolIcon Symbol="PreviewLink" />
+                                <TextBlock VerticalAlignment="Center" Margin="16,0,0,0" Style="{StaticResource SubtitleTextBlockStyle}">Dashboard</TextBlock>
+                            </StackPanel>
+                        </CommandBar.Content>
+                        <AppBarButton x:Name="ExportButton" Icon="Save" Label="Export to Excel"/>
+                    </CommandBar>
+                    <TextBlock Grid.Row="0" Margin="0,0,0,12" Style="{StaticResource SubtitleTextBlockStyle}">
+                        <Run x:Name="StationCode"/>
+                        <Run x:Name="StationName"/>
                         <Run x:Name="Date"/>
                     </TextBlock>
                     <VariableSizedWrapGrid Grid.Row="1" Orientation="Horizontal" Margin="0,6">
@@ -146,79 +60,44 @@
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
                             </Style>
                         </VariableSizedWrapGrid.Resources>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                        <Grid helper:Grid.Rows="A,A,A,A">
                             <TextBlock >PM2.5</TextBlock>
-                            <TextBlock Grid.Row="1" x:Name="PM25" FontSize="35"/>
-                            <TextBlock Grid.Row="2">ug/m3</TextBlock>
+                            <TextBlock Grid.Row="1" x:Name="PM25Date"/>
+                            <TextBlock Grid.Row="2" x:Name="PM25" FontSize="35"/>
+                            <TextBlock Grid.Row="3">ug/m3</TextBlock>
                         </Grid>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                        <Grid helper:Grid.Rows="A,A,A,A">
                             <TextBlock>PM10</TextBlock>
-                            <TextBlock Grid.Row="1" x:Name="PM10" FontSize="35"/>
-                            <TextBlock Grid.Row="2">ug/m3</TextBlock>
+                            <TextBlock Grid.Row="1"  x:Name="PM10Date"/>
+                            <TextBlock Grid.Row="2" x:Name="PM10" FontSize="35"/>
+                            <TextBlock Grid.Row="3">ug/m3</TextBlock>
                         </Grid>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                        <Grid helper:Grid.Rows="A,A,A,A">
                             <TextBlock>O3</TextBlock>
-                            <TextBlock Grid.Row="1" x:Name="O3" FontSize="35"/>
-                            <TextBlock Grid.Row="2">ppb</TextBlock>
+                            <TextBlock Grid.Row="1"  x:Name="O3Date"/>
+                            <TextBlock Grid.Row="2" x:Name="O3" FontSize="35"/>
+                            <TextBlock Grid.Row="3">ppb</TextBlock>
                         </Grid>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                        <Grid helper:Grid.Rows="A,A,A,A">
                             <TextBlock>SO2</TextBlock>
-                            <TextBlock Grid.Row="1" x:Name="SO2" FontSize="35"/>
-                            <TextBlock Grid.Row="2">ppb</TextBlock>
+                            <TextBlock Grid.Row="1"  x:Name="SO2Date"/>
+                            <TextBlock Grid.Row="2" x:Name="SO2" FontSize="35"/>
+                            <TextBlock Grid.Row="3">ppb</TextBlock>
                         </Grid>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                        <Grid helper:Grid.Rows="A,A,A,A">
                             <TextBlock>NO2</TextBlock>
-                            <TextBlock Grid.Row="1" x:Name="NO2" FontSize="35"/>
-                            <TextBlock Grid.Row="2">ppb</TextBlock>
+                            <TextBlock Grid.Row="1"  x:Name="NO2Date"/>
+                            <TextBlock Grid.Row="2" x:Name="NO2" FontSize="35"/>
+                            <TextBlock Grid.Row="3">ppb</TextBlock>
                         </Grid>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                        <Grid helper:Grid.Rows="A,A,A,A">
                             <TextBlock>CO</TextBlock>
-                            <TextBlock Grid.Row="1" x:Name="CO" FontSize="35"/>
-                            <TextBlock Grid.Row="2">ppm</TextBlock>
+                            <TextBlock Grid.Row="1"  x:Name="CODate"/>
+                            <TextBlock Grid.Row="2" x:Name="CO" FontSize="35"/>
+                            <TextBlock Grid.Row="3">ppm</TextBlock>
                         </Grid>
                     </VariableSizedWrapGrid>
-                    <Grid Visibility="Collapsed" Grid.Row="2" Margin="0,6">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                    <Grid Visibility="Collapsed" Grid.Row="2" Margin="0,6" helper:Grid.Rows="A,A,A" helper:Grid.Columns="*,*,*,*">
                         <TextBlock Margin="0,0,0,12" Style="{StaticResource SubtitleTextBlockStyle}" Grid.ColumnSpan="4">Trend</TextBlock>
                         <CalendarDatePicker Grid.Row="1" x:Name="StartDate" Header="From" HorizontalAlignment="Stretch"/>
                         <TimePicker Grid.Column="1" Grid.Row="1"  x:Name="StartTime" Header=" " ClockIdentifier="24HourClock" />
@@ -227,7 +106,7 @@
                     </Grid>
                     <charts:SfChart  Grid.Row="3" Grid.ColumnSpan="2">
                         <charts:SfChart.Behaviors>
-                            <charts:ChartZoomPanBehavior EnableMouseWheelZooming="True" EnablePinchZooming="True" ZoomRelativeToCursor="True" EnableSelectionZooming="True" >
+                            <charts:ChartZoomPanBehavior  EnableZoomingToolBar="True" EnableMouseWheelZooming="True" EnablePinchZooming="True" ZoomRelativeToCursor="True">
                             </charts:ChartZoomPanBehavior>
                         </charts:SfChart.Behaviors>
                         <charts:SfChart.Legend>
@@ -239,12 +118,12 @@
                         <charts:SfChart.SecondaryAxis>
                             <charts:NumericalAxis Header="Value"/>
                         </charts:SfChart.SecondaryAxis>
-                        <charts:FastLineBitmapSeries  Label="PM25" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM25),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
-                        <charts:FastLineBitmapSeries  Label="PM10" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM10),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
-                        <charts:FastLineBitmapSeries  Label="SO2" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.SO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
-                        <charts:FastLineBitmapSeries  Label="CO" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.CO),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
-                        <charts:FastLineBitmapSeries  Label="NO2" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.NO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
-                        <charts:FastLineBitmapSeries  Label="O3" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.O3),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                        <charts:FastLineBitmapSeries EnableAntiAliasing="True" ShowTooltip="True" Label="PM25" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM25),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                        <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="PM10" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM10),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                        <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="SO2" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.SO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                        <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="CO" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.CO),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                        <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="NO2" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.NO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                        <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="O3" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.O3),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
                     </charts:SfChart>
 
                     <ListView Grid.Row="4" x:Name="StationData">

@@ -12,7 +12,9 @@
    
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
-    <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}"/>
+    <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
     <StaticResource x:Key="ApplicationBackground" ResourceKey="RegionBrush"/>
 
     <Style x:Key="SubtitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">
