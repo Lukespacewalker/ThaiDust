@@ -104,14 +104,19 @@ namespace ThaiDust
             {
                 if (arg == null || !arg.Any()) return "--";
                 var val = arg.FirstOrDefault(r => r?.Type == type);
-                return (val != null) ? (val.DateTime.Date == DateTime.Today ? val.DateTime.ToString("hh:mm:ss") : val.DateTime.ToString("yyyy MMMM dd hh:mm:ss")) : "--" ;
+                return (val != null) ? (val.DateTime.Date == DateTime.Today ? val.DateTime.ToString("HH:mm") : val.DateTime.ToString("yyyy MMMM dd HH:mm")) : "--" ;
             };
         }
-
 
         public IEnumerable<Record> GetData(ObservableCollectionExtended<Record> source, RecordType recordType)
         {
             return source.Where(r => r.Type == recordType);
+        }
+
+        public IEnumerable<Record> GetTodayData(ObservableCollectionExtended<Record> source, RecordType recordType)
+        {
+            var b = source.Where(r => r.Type == recordType && r.DateTime.Date == DateTime.Today);
+            return b;
         }
 
         private void Hamburger_OnClick(object sender, RoutedEventArgs e)
@@ -129,7 +134,6 @@ namespace ThaiDust
             return ((DateTime)content).ToString("dd/MM/yyyy");
         }
     }
-
 
     public static class TimePickerHelper
     {
