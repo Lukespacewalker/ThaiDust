@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
     <Style x:Key="NavigationBackButtonNormalStyle" TargetType="Button">
         <Setter Property="Background" Value="{ThemeResource NavigationViewBackButtonBackground}"/>
         <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
@@ -466,7 +467,8 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <StackPanel x:Name="TopNavArea" Background="{ThemeResource NavigationViewTopPaneBackground}" HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Top" XYFocusKeyboardNavigation="Enabled" Canvas.ZIndex="1">
-                                <Grid x:Name="TopNavTopPadding" Height="{Binding TemplateSettings.TopPadding, RelativeSource={RelativeSource Mode=TemplatedParent}}" Visibility="{Binding TemplateSettings.TopPaneVisibility, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
+                                <!--<Grid x:Name="TopNavTopPadding" Height="{Binding TemplateSettings.TopPadding, RelativeSource={RelativeSource Mode=TemplatedParent}}" Visibility="{Binding TemplateSettings.TopPaneVisibility, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>-->
+                                <Grid Height="16"></Grid>
                                 <Grid x:Name="TopNavGrid" Height="{ThemeResource NavigationViewTopPaneHeight}" Visibility="{Binding TemplateSettings.TopPaneVisibility, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition x:Name="BackButtonPlaceholderOnTopNav" Width="{ThemeResource NavigationBackButtonWidth}"/>

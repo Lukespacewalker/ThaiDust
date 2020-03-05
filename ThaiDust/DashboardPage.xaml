@@ -16,23 +16,99 @@
         <converters:DateTimeConverter x:Key="DateTimeConverter"/>
     </Page.Resources>
     <Grid helper:Grid.Rows="*">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainGrid.(helper:Grid.Rows)" Value="A,A,A,A,A,A"/>
+                        <Setter Target="MainGrid.(helper:Grid.Columns)" Value="*"/>
+
+                        <Setter Target="PM25Grid.(Grid.Column)" Value="0"/>
+                        <Setter Target="PM25Grid.(Grid.Row)" Value="0"/>
+                        <Setter Target="PM10Grid.(Grid.Column)" Value="0"/>
+                        <Setter Target="PM10Grid.(Grid.Row)" Value="1"/>
+                        <Setter Target="O3Grid.(Grid.Column)" Value="0"/>
+                        <Setter Target="O3Grid.(Grid.Row)" Value="2"/>
+
+                        <Setter Target="SO2Grid.(Grid.Column)" Value="0"/>
+                        <Setter Target="SO2Grid.(Grid.Row)" Value="3"/>
+                        <Setter Target="NO2Grid.(Grid.Column)" Value="0"/>
+                        <Setter Target="NO2Grid.(Grid.Row)" Value="4"/>
+                        <Setter Target="COGrid.(Grid.Column)" Value="0"/>
+                        <Setter Target="COGrid.(Grid.Row)" Value="5"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="701"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="DashboardSplitView.IsPaneOpen" Value="False"/>
+                        <Setter Target="MainGrid.(helper:Grid.Rows)" Value="A,A,A"/>
+                        <Setter Target="MainGrid.(helper:Grid.Columns)" Value="*,*"/>
+
+                        <Setter Target="PM25Grid.(Grid.Column)" Value="0"/>
+                        <Setter Target="PM25Grid.(Grid.Row)" Value="0"/>
+                        <Setter Target="PM10Grid.(Grid.Column)" Value="1"/>
+                        <Setter Target="PM10Grid.(Grid.Row)" Value="0"/>
+
+                        <Setter Target="O3Grid.(Grid.Column)" Value="0"/>
+                        <Setter Target="O3Grid.(Grid.Row)" Value="1"/>
+                        <Setter Target="SO2Grid.(Grid.Column)" Value="1"/>
+                        <Setter Target="SO2Grid.(Grid.Row)" Value="1"/>
+
+                        <Setter Target="NO2Grid.(Grid.Column)" Value="0"/>
+                        <Setter Target="NO2Grid.(Grid.Row)" Value="2"/>
+                        <Setter Target="COGrid.(Grid.Column)" Value="1"/>
+                        <Setter Target="COGrid.(Grid.Row)" Value="2"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1008"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainGrid.(helper:Grid.Rows)" Value="A,A"/>
+                        <Setter Target="MainGrid.(helper:Grid.Columns)" Value="*,*,*"/>
+
+                        <Setter Target="PM25Grid.(Grid.Column)" Value="0"/>
+                        <Setter Target="PM25Grid.(Grid.Row)" Value="0"/>
+                        <Setter Target="PM10Grid.(Grid.Column)" Value="1"/>
+                        <Setter Target="PM10Grid.(Grid.Row)" Value="0"/>
+                        <Setter Target="O3Grid.(Grid.Column)" Value="2"/>
+                        <Setter Target="O3Grid.(Grid.Row)" Value="0"/>
+
+                        <Setter Target="SO2Grid.(Grid.Column)" Value="0"/>
+                        <Setter Target="SO2Grid.(Grid.Row)" Value="1"/>
+                        <Setter Target="NO2Grid.(Grid.Column)" Value="1"/>
+                        <Setter Target="NO2Grid.(Grid.Row)" Value="1"/>
+                        <Setter Target="COGrid.(Grid.Column)" Value="2"/>
+                        <Setter Target="COGrid.(Grid.Row)" Value="1"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
         <SplitView x:Name="DashboardSplitView" Grid.Row="1" OpenPaneLength="300" IsPaneOpen="True"
                    Canvas.ZIndex="0" DisplayMode="CompactInline"
                    CompactPaneLength="52">
             <SplitView.Pane>
-                <Grid helper:Grid.Rows="A,*">
-                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <Grid helper:Grid.Rows="A,*" Background="{ThemeResource HamburgerRegionAcrylicBrush}">
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{ThemeResource CommandRegionAcrylicBrush}">
                         <Button Padding="15,9" Click="Hamburger_OnClick">
                             <SymbolIcon Symbol="List"></SymbolIcon>
                         </Button>
-                        <TextBlock Margin="12,8,0,0" Style="{StaticResource SubtitleTextBlockStyle}">Dashboard</TextBlock>
+                        <TextBlock Margin="12,8,0,0" Style="{StaticResource SubtitleTextBlockStyle}">Monitoring</TextBlock>
                     </StackPanel>
                     <ListView Grid.Row="1" x:Name="Stations" Grid.ColumnSpan="2" ItemTemplate="{StaticResource StationListViewTemplate}"/>
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>
-                <Grid helper:Grid.Rows="A,*">
-                    <CommandBar Grid.Row="0" DefaultLabelPosition="Right" Background="{ThemeResource NavigationViewTopPaneBackground}">
+                <Grid helper:Grid.Rows="*">
+                    <CommandBar Canvas.ZIndex="1" DefaultLabelPosition="Right" Background="{ThemeResource CommandRegionAcrylicBrush}">
                         <CommandBar.Content>
                             <TextBlock Margin="12,8,0,0" Style="{StaticResource SubtitleTextBlockStyle}">
                                 <Run x:Name="StationCode"/>
@@ -42,25 +118,28 @@
                         </CommandBar.Content>
                         <AppBarButton x:Name="ExportButton" Icon="Save" Label="Export to Excel"/>
                     </CommandBar>
-                    <ScrollViewer Grid.Row="1">
-                        <Grid helper:Grid.Rows="A,A">
-                            <Grid Grid.Row="0" Margin="0,6" helper:Grid.Rows="A,A" helper:Grid.Columns="*,*,*">
+                    <ScrollViewer Canvas.ZIndex="0" Background="{ThemeResource NavigationRegionAcrylicBrush}">
+                        <Grid helper:Grid.Rows="A,A" Margin="0,48,0,0" >
+                            <Grid x:Name="MainGrid" Grid.Row="0" ColumnSpacing="8" RowSpacing="8" Background="Transparent" Margin="8,0">
                                 <Grid.Resources>
                                     <Style TargetType="Grid">
                                         <Setter Property="BorderBrush" Value="#40FFFFFF"/>
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                        <Setter Property="Margin" Value="4"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Margin" Value="0"/>
+                                        <Setter Property="Background" Value="White"/>
+                                        <Setter Property="CornerRadius" Value="3"/>
                                     </Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="TextAlignment" Value="Center"/>
                                         <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundAccentBrush}"/>
                                     </Style>
                                     <Style TargetType="charts:SfChart">
                                         <Setter Property="Opacity" Value="0.6"/>
                                         <Setter Property="Margin" Value="4"/>
                                     </Style>
                                 </Grid.Resources>
-                                <Grid helper:Grid.Rows="A,A,A,*,A" Grid.Row="0" Grid.Column="0">
+                                <Grid x:Name="PM25Grid" helper:Grid.Rows="A,A,A,*,A">
                                     <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
                                         <charts:SfChart.PrimaryAxis>
                                             <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
@@ -74,8 +153,8 @@
                                             </charts:FastLineSeries.AdornmentsInfo>
                                         </charts:FastLineSeries>
                                     </charts:SfChart>
-                                    <Border Padding="4" Grid.Row="0" Background="{ThemeResource SystemControlForegroundAccentBrush}">
-                                        <TextBlock FontSize="24" Foreground="White">
+                                    <Border Padding="4" Grid.Row="0">
+                                        <TextBlock FontSize="24">
                                     <Run FontWeight="Bold">PM2.5</Run>
                                     <Run x:Name="PM25Date"></Run>
                                         </TextBlock>
@@ -83,7 +162,7 @@
                                     <TextBlock Grid.Row="2" x:Name="PM25" FontSize="35"/>
                                     <TextBlock Grid.Row="3">ug/m3</TextBlock>
                                 </Grid>
-                                <Grid helper:Grid.Rows="A,A,A,*,A" Grid.Row="0" Grid.Column="1">
+                                <Grid x:Name="PM10Grid" helper:Grid.Rows="A,A,A,*,A">
                                     <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
                                         <charts:SfChart.PrimaryAxis>
                                             <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
@@ -97,8 +176,8 @@
                                             </charts:FastLineSeries.AdornmentsInfo>
                                         </charts:FastLineSeries>
                                     </charts:SfChart>
-                                    <Border Padding="4" Grid.Row="0" Background="{ThemeResource SystemControlForegroundAccentBrush}">
-                                        <TextBlock FontSize="24" Foreground="White">
+                                    <Border Padding="4" Grid.Row="0">
+                                        <TextBlock FontSize="24">
                                     <Run FontWeight="Bold">PM10</Run>
                                     <Run x:Name="PM10Date"></Run>
                                         </TextBlock>
@@ -106,7 +185,7 @@
                                     <TextBlock Grid.Row="2" x:Name="PM10" FontSize="35"/>
                                     <TextBlock Grid.Row="3">ug/m3</TextBlock>
                                 </Grid>
-                                <Grid helper:Grid.Rows="A,A,A,*,A" Grid.Row="0" Grid.Column="2">
+                                <Grid x:Name="O3Grid" helper:Grid.Rows="A,A,A,*,A">
                                     <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
                                         <charts:SfChart.PrimaryAxis>
                                             <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
@@ -120,8 +199,8 @@
                                             </charts:FastLineSeries.AdornmentsInfo>
                                         </charts:FastLineSeries>
                                     </charts:SfChart>
-                                    <Border Padding="4" Grid.Row="0" Background="{ThemeResource SystemControlForegroundAccentBrush}">
-                                        <TextBlock FontSize="24" Foreground="White">
+                                    <Border Padding="4" Grid.Row="0">
+                                        <TextBlock FontSize="24">
                                     <Run FontWeight="Bold">O3</Run>
                                     <Run x:Name="O3Date"></Run>
                                         </TextBlock>
@@ -129,7 +208,7 @@
                                     <TextBlock Grid.Row="2" x:Name="O3" FontSize="35"/>
                                     <TextBlock Grid.Row="3">ppb</TextBlock>
                                 </Grid>
-                                <Grid helper:Grid.Rows="A,A,A,*,A" Grid.Row="1" Grid.Column="0">
+                                <Grid x:Name="SO2Grid" helper:Grid.Rows="A,A,A,*,A">
                                     <charts:SfChart Grid.Row="1"  Grid.RowSpan="4">
                                         <charts:SfChart.PrimaryAxis>
                                             <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
@@ -143,8 +222,8 @@
                                             </charts:FastLineSeries.AdornmentsInfo>
                                         </charts:FastLineSeries>
                                     </charts:SfChart>
-                                    <Border Padding="4" Grid.Row="0" Background="{ThemeResource SystemControlForegroundAccentBrush}">
-                                        <TextBlock FontSize="24" Foreground="White">
+                                    <Border Padding="4" Grid.Row="0">
+                                        <TextBlock FontSize="24">
                                     <Run FontWeight="Bold">SO2</Run>
                                     <Run x:Name="SO2Date"></Run>
                                         </TextBlock>
@@ -152,7 +231,7 @@
                                     <TextBlock Grid.Row="2" x:Name="SO2" FontSize="35"/>
                                     <TextBlock Grid.Row="3">ppb</TextBlock>
                                 </Grid>
-                                <Grid helper:Grid.Rows="A,A,A,*,A" Grid.Row="1" Grid.Column="1">
+                                <Grid x:Name="NO2Grid" helper:Grid.Rows="A,A,A,*,A">
                                     <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
                                         <charts:SfChart.PrimaryAxis>
                                             <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
@@ -166,8 +245,8 @@
                                             </charts:FastLineSeries.AdornmentsInfo>
                                         </charts:FastLineSeries>
                                     </charts:SfChart>
-                                    <Border Padding="4" Grid.Row="0" Background="{ThemeResource SystemControlForegroundAccentBrush}">
-                                        <TextBlock FontSize="24" Foreground="White">
+                                    <Border Padding="4" Grid.Row="0">
+                                        <TextBlock FontSize="24">
                                     <Run FontWeight="Bold">NO2</Run>
                                     <Run x:Name="NO2Date"></Run>
                                         </TextBlock>
@@ -175,7 +254,7 @@
                                     <TextBlock Grid.Row="2" x:Name="NO2" FontSize="35"/>
                                     <TextBlock Grid.Row="3">ppb</TextBlock>
                                 </Grid>
-                                <Grid helper:Grid.Rows="A,A,A,*,A" Grid.Row="1" Grid.Column="2">
+                                <Grid x:Name="COGrid" helper:Grid.Rows="A,A,A,*,A">
                                     <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
                                         <charts:SfChart.PrimaryAxis>
                                             <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
@@ -189,8 +268,8 @@
                                             </charts:FastLineSeries.AdornmentsInfo>
                                         </charts:FastLineSeries>
                                     </charts:SfChart>
-                                    <Border Padding="4" Grid.Row="0" Background="{ThemeResource SystemControlForegroundAccentBrush}">
-                                        <TextBlock FontSize="24" Foreground="White">
+                                    <Border Padding="4" Grid.Row="0">
+                                        <TextBlock FontSize="24">
                                     <Run FontWeight="Bold">CO</Run>
                                     <Run x:Name="CODate"></Run>
                                         </TextBlock>

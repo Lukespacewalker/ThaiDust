@@ -27,6 +27,7 @@ using ThaiDust.Core.Dto;
 using ThaiDust.Core.Model.Persistent;
 using ThaiDust.Core.ViewModel;
 using ThaiDust.ViewModels;
+using Grid = ThaiDust.Helper.Grid;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 

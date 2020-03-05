@@ -6,18 +6,28 @@
     </ResourceDictionary.MergedDictionaries>
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Dark">
-            <StaticResource x:Key="ApplicationPageBackgroundThemeBrush" ResourceKey="RegionBrush"/>
+            <AcrylicBrush x:Key="NavigationRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{StaticResource RegionColor}" FallbackColor="{StaticResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.8"/>
+            <AcrylicBrush x:Key="HamburgerRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{StaticResource RegionColor}" FallbackColor="{StaticResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.7"/>
+            <AcrylicBrush x:Key="CommandRegionAcrylicBrush" BackgroundSource="Backdrop" TintColor="{StaticResource RegionColor}" FallbackColor="{StaticResource RegionColor}" TintOpacity="0.6" TintLuminosityOpacity="0.8"/>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
-   
+            <AcrylicBrush x:Key="NavigationRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{StaticResource RegionColor}" FallbackColor="{StaticResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.8"/>
+            <AcrylicBrush x:Key="HamburgerRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{StaticResource RegionColor}" FallbackColor="{StaticResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.7"/>
+            <AcrylicBrush x:Key="CommandRegionAcrylicBrush" BackgroundSource="Backdrop" TintColor="{StaticResource RegionColor}" FallbackColor="{StaticResource RegionColor}" TintOpacity="0.6" TintLuminosityOpacity="0.8"/>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
+
     <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}">
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="CornerRadius" Value="2"/>
     </Style>
+    <!-- Overriding System Control Color -->
     <StaticResource x:Key="ApplicationBackground" ResourceKey="RegionBrush"/>
+    <StaticResource x:Key="NavigationPaneBackground" ResourceKey="NavigationRegionAcrylicBrush"/>
+    <StaticResource x:Key="NavigationViewTopPaneBackground" ResourceKey="NavigationRegionAcrylicBrush"/>
 
     <Style x:Key="SubtitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">
+        <Setter Property="FontFamily" Value="Convection"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Margin" Value="12"/>
     </Style>

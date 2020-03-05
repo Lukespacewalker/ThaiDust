@@ -25,7 +25,7 @@
         </DataTemplate>
     </Page.Resources>
     <Grid ColumnSpacing="12" helper:Grid.Rows="A,A,*" helper:Grid.Columns="300,A,*">
-        <CommandBar Grid.Row="0" Grid.ColumnSpan="3" DefaultLabelPosition="Right" Background="{ThemeResource NavigationViewTopPaneBackground}">
+        <CommandBar Grid.Row="0" Grid.ColumnSpan="3" DefaultLabelPosition="Right" Background="{ThemeResource CommandRegionAcrylicBrush}">
             <CommandBar.Content>
                 <StackPanel Margin="12,6,0,0" Orientation="Horizontal">
                     <SymbolIcon Symbol="World" />
@@ -34,8 +34,10 @@
             </CommandBar.Content>
             <AppBarButton x:Name="SaveButton" Icon="Save" Label="Save"/>
         </CommandBar>
-        <ListView Grid.Row="2" Grid.Column="0" x:Name="AvailableStations" SelectionMode="Multiple" ItemTemplate="{StaticResource StationListViewTemplate}"/>
-        <TextBlock Grid.Row="1" Style="{StaticResource SubtitleTextBlockStyle}">Available stations</TextBlock>
+        <ListView Grid.Row="2" Background="{ThemeResource HamburgerRegionAcrylicBrush}"  Grid.Column="0" x:Name="AvailableStations" SelectionMode="Multiple" ItemTemplate="{StaticResource StationListViewTemplate}"/>
+        <Border Grid.Row="1" Background="{ThemeResource HamburgerRegionAcrylicBrush}">
+        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">Available stations</TextBlock>
+        </Border>
         <TextBlock Margin="0,12,12,12" Grid.Row="1" Grid.Column="2" Style="{StaticResource SubtitleTextBlockStyle}">Managed stations</TextBlock>
         <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
             <Button x:Name="AddButton" Background="Transparent">

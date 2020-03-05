@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid>
-        <Grid x:Name="AppTitleBar" Background="Transparent" Canvas.ZIndex="1" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+        <Grid x:Name="AppTitleBar" Height="16" Background="Transparent" Canvas.ZIndex="1" VerticalAlignment="Top" HorizontalAlignment="Stretch">
             <!-- Width of the padding columns is set in LayoutMetricsChanged handler. -->
             <!-- Using padding columns instead of Margin ensures that the background
          paints the area under the caption control buttons (for transparent buttons). -->
@@ -18,15 +18,15 @@
                 <ColumnDefinition/>
                 <ColumnDefinition x:Name="RightPaddingColumn" Width="0"/>
             </Grid.ColumnDefinitions>
-            <Image Source="Assets/Square44x44Logo.png" 
+            <!--<Image Source="Assets/Square44x44Logo.png" 
                    Grid.Column="1" HorizontalAlignment="Left" 
-                   Width="20" Height="20" Margin="10,8"/>
-            <TextBlock Text="Thailand Dust Monitor" 
+                   Width="20" Height="20" Margin="10,8"/>-->
+            <!--<TextBlock Text="Thailand Dust Monitor" 
                        Grid.Column="1" 
                        Style="{StaticResource CaptionTextBlockStyle}" 
-                       Margin="44,8,0,0"/>
+                       Margin="44,8,0,0"/>-->
         </Grid>
-        <NavigationView Style="{StaticResource NavigationViewNoHeaderStyle}" PaneDisplayMode="Top" x:Name="RootNavigationView" PaneTitle="Dust Monitor" IsBackButtonVisible="Collapsed" IsSettingsVisible="False">
+        <NavigationView Canvas.ZIndex="0" Style="{StaticResource NavigationViewNoHeaderStyle}" PaneDisplayMode="Top" x:Name="RootNavigationView" PaneTitle="Dust Monitor" IsBackButtonVisible="Collapsed" IsSettingsVisible="False">
             <NavigationView.MenuItems>
                 <NavigationViewItem Tag="Dashboard" Icon="PreviewLink" Content="Dashboard"/>
                 <NavigationViewItem Tag="Stations" Icon="World" Content="Stations"/>
