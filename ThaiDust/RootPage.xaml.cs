@@ -50,6 +50,8 @@ namespace ThaiDust
             this.InitializeComponent();
             CustomTitlebar();
 
+            Theme.IsOn = App.Current.RequestedTheme == ApplicationTheme.Dark;
+
 
             this.OneWayBind(ViewModel, vm => vm.Router, v => v.RoutedViewHost.Router);
             ViewModel.Router.CurrentViewModel.Where(vm => vm is IViewModelInfo).Select(vm => (vm as IViewModelInfo).Title)
@@ -92,5 +94,9 @@ namespace ThaiDust
             AppTitleBar.Height = sender.Height;
         }
 
+        private void Theme_OnToggled(object sender, RoutedEventArgs e)
+        {
+            this.RequestedTheme = Theme.IsOn ? ElementTheme.Dark : ElementTheme.Light;
+        }
     }
 }

@@ -27,6 +27,17 @@
                        Margin="44,8,0,0"/>-->
         </Grid>
         <NavigationView Canvas.ZIndex="0" Style="{StaticResource NavigationViewNoHeaderStyle}" PaneDisplayMode="Top" x:Name="RootNavigationView" PaneTitle="Dust Monitor" IsBackButtonVisible="Collapsed" IsSettingsVisible="False">
+            <NavigationView.PaneHeader>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Assets/Square44x44Logo.png" VerticalAlignment="Center"
+                           Width="20" Height="20" Margin="10,0"/>
+                    <TextBlock Text="Pollution Monitor" 
+                               Style="{StaticResource CaptionTextBlockStyle}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </NavigationView.PaneHeader>
+            <NavigationView.PaneFooter>
+                <ToggleSwitch x:Name="Theme" Toggled="Theme_OnToggled" OnContent="Dark" OffContent="Light"/>
+            </NavigationView.PaneFooter>
             <NavigationView.MenuItems>
                 <NavigationViewItem Tag="Dashboard" Icon="PreviewLink" Content="Dashboard"/>
                 <NavigationViewItem Tag="Stations" Icon="World" Content="Stations"/>
