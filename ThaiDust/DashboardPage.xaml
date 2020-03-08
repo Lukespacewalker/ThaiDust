@@ -11,7 +11,7 @@
     xmlns:charts="using:Syncfusion.UI.Xaml.Charts"
     xmlns:helper="using:ThaiDust.Helper"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationBackground}">
+    Background="{ThemeResource NavigationRegionAcrylicBrush}">
     <Page.Resources>
         <converters:DateTimeConverter x:Key="DateTimeConverter"/>
     </Page.Resources>
@@ -97,9 +97,9 @@
                    CompactPaneLength="52">
             <SplitView.Pane>
                 <Grid helper:Grid.Rows="A,*" Background="{ThemeResource HamburgerRegionAcrylicBrush}">
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{ThemeResource CommandRegionAcrylicBrush}">
-                        <Button Padding="15,9" Click="Hamburger_OnClick">
-                            <SymbolIcon Symbol="List"></SymbolIcon>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <Button Padding="15,9" Background="Transparent" Click="Hamburger_OnClick">
+                            <SymbolIcon Symbol="GlobalNavigationButton"></SymbolIcon>
                         </Button>
                         <TextBlock Margin="12,8,0,0" Style="{StaticResource SubtitleTextBlockStyle}">Monitoring</TextBlock>
                     </StackPanel>
@@ -107,7 +107,7 @@
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>
-                <Grid helper:Grid.Rows="*">
+                <Grid helper:Grid.Rows="*" CornerRadius="3,0,0,0">
                     <CommandBar Canvas.ZIndex="1" DefaultLabelPosition="Right" Background="{ThemeResource CommandRegionAcrylicBrush}">
                         <CommandBar.Content>
                             <TextBlock Margin="12,8,0,0" Style="{StaticResource SubtitleTextBlockStyle}">
@@ -118,195 +118,202 @@
                         </CommandBar.Content>
                         <AppBarButton x:Name="ExportButton" Icon="Save" Label="Export to Excel"/>
                     </CommandBar>
-                    <ScrollViewer Canvas.ZIndex="0" Background="{ThemeResource NavigationRegionAcrylicBrush}">
-                        <Grid helper:Grid.Rows="A,A" Margin="0,48,0,0" >
-                            <Grid x:Name="MainGrid" Grid.Row="0" ColumnSpacing="8" RowSpacing="8" Background="Transparent" Margin="8,0">
-                                <Grid.Resources>
-                                    <Style TargetType="Grid">
-                                        <Setter Property="BorderBrush" Value="#40FFFFFF"/>
-                                        <Setter Property="BorderThickness" Value="0"/>
-                                        <Setter Property="Margin" Value="0"/>
-                                        <Setter Property="Background" Value="{ThemeResource RegionBrush}"/>
-                                        <Setter Property="CornerRadius" Value="3"/>
-                                    </Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="TextAlignment" Value="Center"/>
-                                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                                        <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundAccentBrush}"/>
-                                    </Style>
-                                    <Style TargetType="charts:SfChart">
-                                        <Setter Property="Opacity" Value="0.6"/>
-                                        <Setter Property="Margin" Value="4"/>
-                                    </Style>
-                                </Grid.Resources>
-                                <Grid x:Name="PM25Grid" helper:Grid.Rows="A,A,A,*,A">
-                                    <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
-                                        <charts:SfChart.PrimaryAxis>
-                                            <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
-                                        </charts:SfChart.PrimaryAxis>
-                                        <charts:SfChart.SecondaryAxis>
-                                            <charts:NumericalAxis/>
-                                        </charts:SfChart.SecondaryAxis>
-                                        <charts:FastLineSeries ShowTooltip="True" ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.PM25),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value">
-                                            <charts:FastLineSeries.AdornmentsInfo>
-                                                <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
-                                            </charts:FastLineSeries.AdornmentsInfo>
-                                        </charts:FastLineSeries>
-                                    </charts:SfChart>
-                                    <Border Padding="4" Grid.Row="0">
-                                        <TextBlock FontSize="24">
+                    <ScrollViewer Canvas.ZIndex="0" Background="{ThemeResource RegionAcrylicBrush}">
+                        <StackPanel>
+                            <Grid helper:Grid.Rows="A,A" Margin="0,48,0,0" >
+                                <Grid x:Name="MainGrid" Grid.Row="0" ColumnSpacing="8" RowSpacing="8" Background="Transparent" Margin="8,0">
+                                    <Grid.Resources>
+                                        <Style TargetType="Grid">
+                                            <Setter Property="BorderBrush" Value="#40FFFFFF"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                            <Setter Property="Margin" Value="0"/>
+                                            <Setter Property="Background" Value="{ThemeResource RegionBrush}"/>
+                                        </Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="TextAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                                        </Style>
+                                        <Style TargetType="charts:SfChart">
+                                            <Setter Property="Opacity" Value="0.6"/>
+                                            <Setter Property="Margin" Value="4"/>
+                                        </Style>
+                                    </Grid.Resources>
+                                    <Grid x:Name="PM25Grid" helper:Grid.Rows="A,A,A,*,A">
+                                        <charts:SfChart x:Name="PM25Chart" Grid.Row="1" Grid.RowSpan="4">
+                                            <charts:SfChart.PrimaryAxis>
+                                                <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H " Minimum="{x:Bind Today}" Maximum="{x:Bind Tomorrow}"/>
+                                            </charts:SfChart.PrimaryAxis>
+                                            <charts:SfChart.SecondaryAxis>
+                                                <charts:NumericalAxis/>
+                                            </charts:SfChart.SecondaryAxis>
+                                            <charts:LineSeries ShowTooltip="True" ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.PM25),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value">
+                                                <charts:LineSeries.AdornmentsInfo>
+                                                    <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
+                                                </charts:LineSeries.AdornmentsInfo>
+                                            </charts:LineSeries>
+                                            <charts:SfChart.Annotations>
+                                                <charts:HorizontalLineAnnotation  Y1="25" X1="{x:Bind Today}" X2="{x:Bind Tomorrow}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                                                              Stroke="OrangeRed"  ShowAxisLabel="True" ShowLine="True" Text="WHO"
+                                                                              StrokeThickness="1" Fill="OrangeRed" />
+                                                <charts:HorizontalLineAnnotation  Y1="50" ShowAxisLabel="True" X1="{x:Bind Today}" X2="{x:Bind Tomorrow}" Text="Thai"
+                                                                              Stroke="OrangeRed" StrokeThickness="1" Fill="OrangeRed"/>
+                                            </charts:SfChart.Annotations>
+                                        </charts:SfChart>
+                                        <Border Padding="4" Grid.Row="0">
+                                            <TextBlock FontSize="24">
                                     <Run FontWeight="Bold">PM2.5</Run>
                                     <Run x:Name="PM25Date"></Run>
-                                        </TextBlock>
-                                    </Border>
-                                    <TextBlock Grid.Row="2" x:Name="PM25" FontSize="35"/>
-                                    <TextBlock Grid.Row="3">ug/m3</TextBlock>
-                                </Grid>
-                                <Grid x:Name="PM10Grid" helper:Grid.Rows="A,A,A,*,A">
-                                    <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
-                                        <charts:SfChart.PrimaryAxis>
-                                            <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
-                                        </charts:SfChart.PrimaryAxis>
-                                        <charts:SfChart.SecondaryAxis>
-                                            <charts:NumericalAxis/>
-                                        </charts:SfChart.SecondaryAxis>
-                                        <charts:FastLineSeries ShowTooltip="True" ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.PM10),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value" >
-                                            <charts:FastLineSeries.AdornmentsInfo>
-                                                <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
-                                            </charts:FastLineSeries.AdornmentsInfo>
-                                        </charts:FastLineSeries>
-                                    </charts:SfChart>
-                                    <Border Padding="4" Grid.Row="0">
-                                        <TextBlock FontSize="24">
+                                            </TextBlock>
+                                        </Border>
+                                        <TextBlock Grid.Row="2" x:Name="PM25" FontSize="35"/>
+                                        <TextBlock Grid.Row="3">ug/m3</TextBlock>
+                                    </Grid>
+                                    <Grid x:Name="PM10Grid" helper:Grid.Rows="A,A,A,*,A">
+                                        <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
+                                            <charts:SfChart.PrimaryAxis>
+                                                <charts:DateTimeAxis LabelFormat="H "/>
+                                            </charts:SfChart.PrimaryAxis>
+                                            <charts:SfChart.SecondaryAxis>
+                                                <charts:NumericalAxis/>
+                                            </charts:SfChart.SecondaryAxis>
+                                            <charts:FastLineSeries ShowTooltip="True" ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.PM10),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value" >
+                                                <charts:FastLineSeries.AdornmentsInfo>
+                                                    <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
+                                                </charts:FastLineSeries.AdornmentsInfo>
+                                            </charts:FastLineSeries>
+                                        </charts:SfChart>
+                                        <Border Padding="4" Grid.Row="0">
+                                            <TextBlock FontSize="24">
                                     <Run FontWeight="Bold">PM10</Run>
                                     <Run x:Name="PM10Date"></Run>
-                                        </TextBlock>
-                                    </Border>
-                                    <TextBlock Grid.Row="2" x:Name="PM10" FontSize="35"/>
-                                    <TextBlock Grid.Row="3">ug/m3</TextBlock>
-                                </Grid>
-                                <Grid x:Name="O3Grid" helper:Grid.Rows="A,A,A,*,A">
-                                    <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
-                                        <charts:SfChart.PrimaryAxis>
-                                            <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
-                                        </charts:SfChart.PrimaryAxis>
-                                        <charts:SfChart.SecondaryAxis>
-                                            <charts:NumericalAxis/>
-                                        </charts:SfChart.SecondaryAxis>
-                                        <charts:FastLineSeries ShowTooltip="True"  ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.O3),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value" >
-                                            <charts:FastLineSeries.AdornmentsInfo>
-                                                <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
-                                            </charts:FastLineSeries.AdornmentsInfo>
-                                        </charts:FastLineSeries>
-                                    </charts:SfChart>
-                                    <Border Padding="4" Grid.Row="0">
-                                        <TextBlock FontSize="24">
+                                            </TextBlock>
+                                        </Border>
+                                        <TextBlock Grid.Row="2" x:Name="PM10" FontSize="35"/>
+                                        <TextBlock Grid.Row="3">ug/m3</TextBlock>
+                                    </Grid>
+                                    <Grid x:Name="O3Grid" helper:Grid.Rows="A,A,A,*,A">
+                                        <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
+                                            <charts:SfChart.PrimaryAxis>
+                                                <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
+                                            </charts:SfChart.PrimaryAxis>
+                                            <charts:SfChart.SecondaryAxis>
+                                                <charts:NumericalAxis/>
+                                            </charts:SfChart.SecondaryAxis>
+                                            <charts:FastLineSeries ShowTooltip="True"  ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.O3),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value" >
+                                                <charts:FastLineSeries.AdornmentsInfo>
+                                                    <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
+                                                </charts:FastLineSeries.AdornmentsInfo>
+                                            </charts:FastLineSeries>
+                                        </charts:SfChart>
+                                        <Border Padding="4" Grid.Row="0">
+                                            <TextBlock FontSize="24">
                                     <Run FontWeight="Bold">O3</Run>
                                     <Run x:Name="O3Date"></Run>
-                                        </TextBlock>
-                                    </Border>
-                                    <TextBlock Grid.Row="2" x:Name="O3" FontSize="35"/>
-                                    <TextBlock Grid.Row="3">ppb</TextBlock>
-                                </Grid>
-                                <Grid x:Name="SO2Grid" helper:Grid.Rows="A,A,A,*,A">
-                                    <charts:SfChart Grid.Row="1"  Grid.RowSpan="4">
-                                        <charts:SfChart.PrimaryAxis>
-                                            <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
-                                        </charts:SfChart.PrimaryAxis>
-                                        <charts:SfChart.SecondaryAxis>
-                                            <charts:NumericalAxis/>
-                                        </charts:SfChart.SecondaryAxis>
-                                        <charts:FastLineSeries ShowTooltip="True"  ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.SO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value" >
-                                            <charts:FastLineSeries.AdornmentsInfo>
-                                                <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
-                                            </charts:FastLineSeries.AdornmentsInfo>
-                                        </charts:FastLineSeries>
-                                    </charts:SfChart>
-                                    <Border Padding="4" Grid.Row="0">
-                                        <TextBlock FontSize="24">
+                                            </TextBlock>
+                                        </Border>
+                                        <TextBlock Grid.Row="2" x:Name="O3" FontSize="35"/>
+                                        <TextBlock Grid.Row="3">ppb</TextBlock>
+                                    </Grid>
+                                    <Grid x:Name="SO2Grid" helper:Grid.Rows="A,A,A,*,A">
+                                        <charts:SfChart Grid.Row="1"  Grid.RowSpan="4">
+                                            <charts:SfChart.PrimaryAxis>
+                                                <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
+                                            </charts:SfChart.PrimaryAxis>
+                                            <charts:SfChart.SecondaryAxis>
+                                                <charts:NumericalAxis/>
+                                            </charts:SfChart.SecondaryAxis>
+                                            <charts:FastLineSeries ShowTooltip="True"  ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.SO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value" >
+                                                <charts:FastLineSeries.AdornmentsInfo>
+                                                    <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
+                                                </charts:FastLineSeries.AdornmentsInfo>
+                                            </charts:FastLineSeries>
+                                        </charts:SfChart>
+                                        <Border Padding="4" Grid.Row="0">
+                                            <TextBlock FontSize="24">
                                     <Run FontWeight="Bold">SO2</Run>
                                     <Run x:Name="SO2Date"></Run>
-                                        </TextBlock>
-                                    </Border>
-                                    <TextBlock Grid.Row="2" x:Name="SO2" FontSize="35"/>
-                                    <TextBlock Grid.Row="3">ppb</TextBlock>
-                                </Grid>
-                                <Grid x:Name="NO2Grid" helper:Grid.Rows="A,A,A,*,A">
-                                    <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
-                                        <charts:SfChart.PrimaryAxis>
-                                            <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
-                                        </charts:SfChart.PrimaryAxis>
-                                        <charts:SfChart.SecondaryAxis>
-                                            <charts:NumericalAxis/>
-                                        </charts:SfChart.SecondaryAxis>
-                                        <charts:FastLineSeries ShowTooltip="True"  ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.NO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value" >
-                                            <charts:FastLineSeries.AdornmentsInfo>
-                                                <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
-                                            </charts:FastLineSeries.AdornmentsInfo>
-                                        </charts:FastLineSeries>
-                                    </charts:SfChart>
-                                    <Border Padding="4" Grid.Row="0">
-                                        <TextBlock FontSize="24">
+                                            </TextBlock>
+                                        </Border>
+                                        <TextBlock Grid.Row="2" x:Name="SO2" FontSize="35"/>
+                                        <TextBlock Grid.Row="3">ppb</TextBlock>
+                                    </Grid>
+                                    <Grid x:Name="NO2Grid" helper:Grid.Rows="A,A,A,*,A">
+                                        <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
+                                            <charts:SfChart.PrimaryAxis>
+                                                <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
+                                            </charts:SfChart.PrimaryAxis>
+                                            <charts:SfChart.SecondaryAxis>
+                                                <charts:NumericalAxis/>
+                                            </charts:SfChart.SecondaryAxis>
+                                            <charts:FastLineSeries ShowTooltip="True"  ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.NO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value" >
+                                                <charts:FastLineSeries.AdornmentsInfo>
+                                                    <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
+                                                </charts:FastLineSeries.AdornmentsInfo>
+                                            </charts:FastLineSeries>
+                                        </charts:SfChart>
+                                        <Border Padding="4" Grid.Row="0">
+                                            <TextBlock FontSize="24">
                                     <Run FontWeight="Bold">NO2</Run>
                                     <Run x:Name="NO2Date"></Run>
-                                        </TextBlock>
-                                    </Border>
-                                    <TextBlock Grid.Row="2" x:Name="NO2" FontSize="35"/>
-                                    <TextBlock Grid.Row="3">ppb</TextBlock>
-                                </Grid>
-                                <Grid x:Name="COGrid" helper:Grid.Rows="A,A,A,*,A">
-                                    <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
-                                        <charts:SfChart.PrimaryAxis>
-                                            <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
-                                        </charts:SfChart.PrimaryAxis>
-                                        <charts:SfChart.SecondaryAxis>
-                                            <charts:NumericalAxis/>
-                                        </charts:SfChart.SecondaryAxis>
-                                        <charts:FastLineSeries ShowTooltip="True"  ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.CO),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value" >
-                                            <charts:FastLineSeries.AdornmentsInfo>
-                                                <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
-                                            </charts:FastLineSeries.AdornmentsInfo>
-                                        </charts:FastLineSeries>
-                                    </charts:SfChart>
-                                    <Border Padding="4" Grid.Row="0">
-                                        <TextBlock FontSize="24">
+                                            </TextBlock>
+                                        </Border>
+                                        <TextBlock Grid.Row="2" x:Name="NO2" FontSize="35"/>
+                                        <TextBlock Grid.Row="3">ppb</TextBlock>
+                                    </Grid>
+                                    <Grid x:Name="COGrid" helper:Grid.Rows="A,A,A,*,A">
+                                        <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
+                                            <charts:SfChart.PrimaryAxis>
+                                                <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
+                                            </charts:SfChart.PrimaryAxis>
+                                            <charts:SfChart.SecondaryAxis>
+                                                <charts:NumericalAxis/>
+                                            </charts:SfChart.SecondaryAxis>
+                                            <charts:FastLineSeries ShowTooltip="True"  ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.CO),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value" >
+                                                <charts:FastLineSeries.AdornmentsInfo>
+                                                    <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
+                                                </charts:FastLineSeries.AdornmentsInfo>
+                                            </charts:FastLineSeries>
+                                        </charts:SfChart>
+                                        <Border Padding="4" Grid.Row="0">
+                                            <TextBlock FontSize="24">
                                     <Run FontWeight="Bold">CO</Run>
                                     <Run x:Name="CODate"></Run>
-                                        </TextBlock>
-                                    </Border>
-                                    <TextBlock Grid.Row="2" x:Name="CO" FontSize="35"/>
-                                    <TextBlock Grid.Row="3">ppm</TextBlock>
+                                            </TextBlock>
+                                        </Border>
+                                        <TextBlock Grid.Row="2" x:Name="CO" FontSize="35"/>
+                                        <TextBlock Grid.Row="3">ppm</TextBlock>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                            <!--<Grid Visibility="Collapsed" Grid.Row="2" Margin="0,6" helper:Grid.Rows="A,A,A" helper:Grid.Columns="*,*,*,*">
+                                <!--<Grid Visibility="Collapsed" Grid.Row="2" Margin="0,6" helper:Grid.Rows="A,A,A" helper:Grid.Columns="*,*,*,*">
                                 <TextBlock Margin="0,0,0,12" Style="{StaticResource SubtitleTextBlockStyle}" Grid.ColumnSpan="4">Trend</TextBlock>
                                 <CalendarDatePicker Grid.Row="1" x:Name="StartDate" Header="From" HorizontalAlignment="Stretch"/>
                                 <TimePicker Grid.Column="1" Grid.Row="1"  x:Name="StartTime" Header=" " ClockIdentifier="24HourClock" />
                                 <CalendarDatePicker Grid.Column="2" Grid.Row="1" x:Name="EndDate" Header="To" HorizontalAlignment="Stretch"/>
                                 <TimePicker Grid.Column="3" Grid.Row="1" x:Name="EndTime"  Header=" " ClockIdentifier="24HourClock" />
                             </Grid>-->
-                            <charts:SfChart Grid.Row="1" Grid.ColumnSpan="2">
-                                <charts:SfChart.Behaviors>
-                                    <charts:ChartZoomPanBehavior  EnableZoomingToolBar="True" EnableMouseWheelZooming="True" EnablePinchZooming="True" ZoomRelativeToCursor="True">
-                                    </charts:ChartZoomPanBehavior>
-                                </charts:SfChart.Behaviors>
-                                <charts:SfChart.Legend>
-                                    <charts:ChartLegend ToggleSeriesVisibility="True" />
-                                </charts:SfChart.Legend>
-                                <charts:SfChart.PrimaryAxis>
-                                    <charts:DateTimeAxis Header="Date" />
-                                </charts:SfChart.PrimaryAxis>
-                                <charts:SfChart.SecondaryAxis>
-                                    <charts:NumericalAxis Header="Value"/>
-                                </charts:SfChart.SecondaryAxis>
-                                <charts:FastLineBitmapSeries EnableAntiAliasing="True" ShowTooltip="True" Label="PM25" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM25),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
-                                <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="PM10" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM10),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
-                                <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="SO2" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.SO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
-                                <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="CO" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.CO),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
-                                <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="NO2" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.NO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
-                                <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="O3" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.O3),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
-                            </charts:SfChart>
-                            <!--<ListView Grid.Row="4" x:Name="StationData">
+                                <charts:SfChart Grid.Row="1" Grid.ColumnSpan="2">
+                                    <charts:SfChart.Behaviors>
+                                        <charts:ChartZoomPanBehavior  EnableZoomingToolBar="True" EnableMouseWheelZooming="True" EnablePinchZooming="True" ZoomRelativeToCursor="True">
+                                        </charts:ChartZoomPanBehavior>
+                                    </charts:SfChart.Behaviors>
+                                    <charts:SfChart.Legend>
+                                        <charts:ChartLegend ToggleSeriesVisibility="True" />
+                                    </charts:SfChart.Legend>
+                                    <charts:SfChart.PrimaryAxis>
+                                        <charts:DateTimeAxis Header="Date" />
+                                    </charts:SfChart.PrimaryAxis>
+                                    <charts:SfChart.SecondaryAxis>
+                                        <charts:NumericalAxis Header="Value"/>
+                                    </charts:SfChart.SecondaryAxis>
+                                    <charts:FastLineBitmapSeries EnableAntiAliasing="True" ShowTooltip="True" Label="PM25" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM25),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                                    <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="PM10" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.PM10),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                                    <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="SO2" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.SO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                                    <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="CO" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.CO),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                                    <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="NO2" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.NO2),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                                    <charts:FastLineBitmapSeries EnableAntiAliasing="True"  ShowTooltip="True" Label="O3" ItemsSource="{x:Bind GetData(ViewModel.StationData, persistent:RecordType.O3),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value"     />
+                                </charts:SfChart>
+                                <!--<ListView Grid.Row="4" x:Name="StationData">
                                 <ListView.GroupStyle>
                                     <GroupStyle>
                                         <GroupStyle.HeaderTemplate>
@@ -333,7 +340,8 @@
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>-->
-                        </Grid>
+                            </Grid>
+                        </StackPanel>
                     </ScrollViewer>
                 </Grid>
             </SplitView.Content>

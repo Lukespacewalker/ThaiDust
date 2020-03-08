@@ -7,13 +7,15 @@
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Dark">
             <AcrylicBrush x:Key="NavigationRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.8"/>
-            <AcrylicBrush x:Key="HamburgerRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.7"/>
+            <AcrylicBrush x:Key="HamburgerRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.8"/>
             <AcrylicBrush x:Key="CommandRegionAcrylicBrush" BackgroundSource="Backdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.6" TintLuminosityOpacity="0.8"/>
+            <AcrylicBrush x:Key="RegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.9" TintTransitionDuration="2"/>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <AcrylicBrush x:Key="NavigationRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.8"/>
-            <AcrylicBrush x:Key="HamburgerRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.7"/>
+            <AcrylicBrush x:Key="HamburgerRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.8"/>
             <AcrylicBrush x:Key="CommandRegionAcrylicBrush" BackgroundSource="Backdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.6" TintLuminosityOpacity="0.8"/>
+            <AcrylicBrush x:Key="RegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.9" TintTransitionDuration="2"/>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 

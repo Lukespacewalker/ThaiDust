@@ -21,6 +21,7 @@ using Windows.UI.Xaml.Navigation;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DynamicData.Binding;
 using ReactiveUI;
+using Syncfusion.UI.Xaml.Charts;
 using Telerik.Charting;
 using Telerik.UI.Xaml.Controls.Chart;
 using ThaiDust.Core.Dto;
@@ -50,11 +51,16 @@ namespace ThaiDust
             set => ViewModel = (DashboardViewModel)value;
         }
 
+        private string Today { get; } = DateTime.Today.ToString();
+        private string Tomorrow { get; } = DateTime.Today.AddDays(1).ToString();
+
         public DashboardPage()
         {
 
             this.InitializeComponent();
 
+            PM25Chart.Annotations.Add(new HorizontalLineAnnotation
+                {Y1 = 0.5, CoordinateUnit = CoordinateUnit.Axis, ShowAxisLabel = true});
 
             this.WhenActivated(cleanup =>
             {
