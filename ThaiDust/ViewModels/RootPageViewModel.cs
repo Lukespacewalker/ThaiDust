@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reactive;
-using System.Text;
 using ReactiveUI;
 using Splat;
-using ThaiDust.ViewModels;
+using ThaiDust.Core.ViewModel;
 
-namespace ThaiDust.Core.ViewModel
+namespace ThaiDust.ViewModels
 {
     public class RootPageViewModel : ReactiveObject, IScreen
     {
         public RoutingState Router { get; }
 
         public ReactiveCommand<string, IRoutableViewModel> NavigateCommand { get; }
-
 
         public RootPageViewModel()
         {

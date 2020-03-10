@@ -26,7 +26,7 @@ namespace ThaiDust.Core.ViewModel
         private SourceList<Record> _values = new SourceList<Record>();
         #endregion
 
-        public string Title { get; } = "Dustboard";
+        public string Title { get; } = "Dashboard";
         public IList<Station> ManagedStations => _dustService.ManagedStations;
         [Reactive] public Station SelectedStation { get; set; }
         //[Reactive] public DashboardInfo Info { get; set; }

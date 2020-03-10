@@ -13,6 +13,7 @@ using ThaiDust.Core.Helper;
 using ThaiDust.Core.ViewModel;
 using ThaiDust.Helper;
 using ThaiDust.ViewModels;
+using ThaiDust.Views;
 
 namespace ThaiDust
 {

@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using ThaiDust.Core;
+using ThaiDust.Views;
 
 namespace ThaiDust
 {

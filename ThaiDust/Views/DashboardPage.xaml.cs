@@ -1,38 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text.RegularExpressions;
-using Windows.ApplicationModel.Core;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using DocumentFormat.OpenXml.Wordprocessing;
 using DynamicData.Binding;
 using ReactiveUI;
-using Syncfusion.UI.Xaml.Charts;
 using Telerik.Charting;
 using Telerik.UI.Xaml.Controls.Chart;
-using ThaiDust.Core.Dto;
 using ThaiDust.Core.Model.Persistent;
-using ThaiDust.Core.ViewModel;
 using ThaiDust.ViewModels;
-using Grid = ThaiDust.Helper.Grid;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace ThaiDust
+namespace ThaiDust.Views
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -50,18 +33,10 @@ namespace ThaiDust
             get => ViewModel;
             set => ViewModel = (DashboardViewModel)value;
         }
-
-        private string Today { get; } = DateTime.Today.ToString();
-        private string Tomorrow { get; } = DateTime.Today.AddDays(1).ToString();
-
         public DashboardPage()
         {
 
             this.InitializeComponent();
-
-            PM25Chart.Annotations.Add(new HorizontalLineAnnotation
-                {Y1 = 0.5, CoordinateUnit = CoordinateUnit.Axis, ShowAxisLabel = true});
-
             this.WhenActivated(cleanup =>
             {
                 this.OneWayBind(ViewModel, vm => vm.ManagedStations, v => v.Stations.ItemsSource).DisposeWith(cleanup);

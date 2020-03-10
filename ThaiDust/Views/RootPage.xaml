@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="ThaiDust.RootPage"
+    x:Class="ThaiDust.Views.RootPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:ThaiDust"
@@ -30,7 +30,7 @@
             <NavigationView.PaneHeader>
                 <StackPanel Orientation="Horizontal">
                     <Image Source="Assets/Square44x44Logo.png" VerticalAlignment="Center"
-                           Width="20" Height="20" Margin="10,0"/>
+                           Width="34" Height="34" Margin="10,00"/>
                     <TextBlock Text="Pollution Monitor" 
                                Style="{StaticResource CaptionTextBlockStyle}" VerticalAlignment="Center"/>
                 </StackPanel>

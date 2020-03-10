@@ -2,13 +2,14 @@
     x:Class="ThaiDust.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:ThaiDust">
+    xmlns:local="using:ThaiDust"
+    xmlns:styles="using:ThaiDust.Styles">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/Brush.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Styles/NavigationViewNoHeader.xaml"></ResourceDictionary>
-                <local:DataTemplate/>
+                <styles:DataTemplate/>
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontFamily" Value="XamlAutoFontFamily"/>
