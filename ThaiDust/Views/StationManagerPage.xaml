@@ -27,7 +27,7 @@
     <Grid ColumnSpacing="12" helper:Grid.Rows="A,A,*" helper:Grid.Columns="300,A,*" Background="{ThemeResource RegionAcrylicBrush}">
         <CommandBar Grid.Row="0" Grid.ColumnSpan="3" DefaultLabelPosition="Right" Background="{ThemeResource CommandRegionAcrylicBrush}">
             <CommandBar.Content>
-                <StackPanel Margin="12,6,0,0" Orientation="Horizontal">
+                <StackPanel Margin="12,8,0,0" Orientation="Horizontal">
                     <SymbolIcon Symbol="World" />
                     <TextBlock VerticalAlignment="Center" Margin="12,0,0,0" Style="{StaticResource SubtitleTextBlockStyle}">Stations</TextBlock>
                 </StackPanel>

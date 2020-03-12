@@ -28,7 +28,7 @@ namespace ThaiDust.ViewModels
                 case "Stations":
                     return Router.Navigate.Execute(Locator.Current.GetService<StationManagerViewModel>());
                 case "Setting":
-                    return Router.Navigate.Execute(Locator.Current.GetService<StationManagerViewModel>());
+                    return Router.Navigate.Execute(Locator.Current.GetService<SettingViewModel>());
                 default:
                     throw new ArgumentException("Navigation key is not existed", nameof(key));
             }

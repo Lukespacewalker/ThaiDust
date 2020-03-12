@@ -20,9 +20,7 @@ namespace ThaiDust.Core.Service
         private readonly ThaiPollutionControlDataApi _api;
 
         private readonly SourceList<Station> _managedStationsSource = new SourceList<Station>();
-
         public ObservableCollectionExtended<Station> ManagedStations { get; } = new ObservableCollectionExtended<Station>();
-
         public DustService(DustDataService dustDataService = null, ThaiPollutionControlDataApi thaiPollutionControlDataApi = null)
         {
             _dataService = dustDataService ?? Locator.Current.GetService<DustDataService>();

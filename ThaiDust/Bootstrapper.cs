@@ -9,6 +9,7 @@ using Windows.Storage;
 using Windows.Web.Http;
 using ReactiveUI;
 using Splat;
+using ThaiDust.Converters;
 using ThaiDust.Core.Helper;
 using ThaiDust.Core.ViewModel;
 using ThaiDust.Helper;
@@ -39,12 +40,16 @@ namespace ThaiDust
             // Register all view using Assembly scanning
             Locator.CurrentMutable.RegisterLazySingleton<IViewFor<DashboardViewModel>>(()=>new DashboardPage());
             Locator.CurrentMutable.RegisterLazySingleton<IViewFor<StationManagerViewModel>>(()=>new StationManagerPage());
+            Locator.CurrentMutable.RegisterLazySingleton<IViewFor<SettingViewModel>>(()=>new SettingPage());
             //Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetCallingAssembly());
+            // Register BindingConvertor
+            Locator.CurrentMutable.RegisterConstant(new EnumValueToRadioButtonIsCheckConverter(), typeof(IBindingTypeConverter));
             // Register Database
             Core.Bootstrapper.RegisterDatabase(dbpath);
             Core.Bootstrapper.RegisterCoreDependencies();
-            // ViewMolde
+            // ViewModel
             Locator.CurrentMutable.RegisterLazySingleton<DashboardViewModel>(() => new DashboardViewModel());
+            Locator.CurrentMutable.RegisterLazySingleton<SettingViewModel>(() => new SettingViewModel());
         }
     }
 }

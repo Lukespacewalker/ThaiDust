@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.2" />
     <PackageReference Include="ReactiveUI" Version="11.2.3" />
     <PackageReference Include="ReactiveUI.Fody" Version="11.2.3" />
+    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="17.4.0.55" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
   </ItemGroup>
 

@@ -468,7 +468,7 @@
                             </Grid.RowDefinitions>
                             <StackPanel x:Name="TopNavArea" Background="{ThemeResource NavigationViewTopPaneBackground}" HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Top" XYFocusKeyboardNavigation="Enabled" Canvas.ZIndex="1">
                                 <!--<Grid x:Name="TopNavTopPadding" Height="{Binding TemplateSettings.TopPadding, RelativeSource={RelativeSource Mode=TemplatedParent}}" Visibility="{Binding TemplateSettings.TopPaneVisibility, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>-->
-                                <Grid Height="16"></Grid>
+                                <Grid Height="32"></Grid>
                                 <Grid x:Name="TopNavGrid" Height="{ThemeResource NavigationViewTopPaneHeight}" Visibility="{Binding TemplateSettings.TopPaneVisibility, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition x:Name="BackButtonPlaceholderOnTopNav" Width="{ThemeResource NavigationBackButtonWidth}"/>

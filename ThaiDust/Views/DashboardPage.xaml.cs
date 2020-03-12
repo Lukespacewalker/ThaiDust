@@ -35,8 +35,8 @@ namespace ThaiDust.Views
         }
         public DashboardPage()
         {
-
             this.InitializeComponent();
+
             this.WhenActivated(cleanup =>
             {
                 this.OneWayBind(ViewModel, vm => vm.ManagedStations, v => v.Stations.ItemsSource).DisposeWith(cleanup);

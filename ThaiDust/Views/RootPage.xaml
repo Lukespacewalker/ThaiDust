@@ -9,35 +9,37 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid>
-        <Grid x:Name="AppTitleBar" Height="16" Background="Transparent" Canvas.ZIndex="1" VerticalAlignment="Top" HorizontalAlignment="Stretch">
-            <!-- Width of the padding columns is set in LayoutMetricsChanged handler. -->
-            <!-- Using padding columns instead of Margin ensures that the background
-         paints the area under the caption control buttons (for transparent buttons). -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0"/>
-                <ColumnDefinition/>
-                <ColumnDefinition x:Name="RightPaddingColumn" Width="0"/>
-            </Grid.ColumnDefinitions>
-            <!--<Image Source="Assets/Square44x44Logo.png" 
-                   Grid.Column="1" HorizontalAlignment="Left" 
-                   Width="20" Height="20" Margin="10,8"/>-->
-            <!--<TextBlock Text="Thailand Dust Monitor" 
-                       Grid.Column="1" 
-                       Style="{StaticResource CaptionTextBlockStyle}" 
-                       Margin="44,8,0,0"/>-->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AppNameCaption.Visibility" Value="Collapsed"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="701"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AppNameCaption.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid x:Name="AppTitleBar" Height="24" Background="Transparent" Canvas.ZIndex="1" VerticalAlignment="Top" HorizontalAlignment="Stretch">
         </Grid>
-        <NavigationView Canvas.ZIndex="0" Style="{StaticResource NavigationViewNoHeaderStyle}" PaneDisplayMode="Top" x:Name="RootNavigationView" PaneTitle="Dust Monitor" IsBackButtonVisible="Collapsed" IsSettingsVisible="False">
+        <NavigationView Canvas.ZIndex="0" Style="{StaticResource NavigationViewNoHeaderStyle}" PaneDisplayMode="Top" x:Name="RootNavigationView" PaneTitle="Dust Monitor" IsBackButtonVisible="Collapsed">
             <NavigationView.PaneHeader>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="Assets/Square44x44Logo.png" VerticalAlignment="Center"
-                           Width="34" Height="34" Margin="10,00"/>
-                    <TextBlock Text="Pollution Monitor" 
+                    <Image Source="../Assets/Square44x44Logo.png" VerticalAlignment="Center"
+                           Width="30" Height="30" Margin="12,00"/>
+                    <TextBlock x:Name="AppNameCaption" Text="Pollution Monitor" 
                                Style="{StaticResource CaptionTextBlockStyle}" VerticalAlignment="Center"/>
                 </StackPanel>
             </NavigationView.PaneHeader>
-            <NavigationView.PaneFooter>
-                <ToggleSwitch x:Name="Theme" Toggled="Theme_OnToggled" OnContent="Dark" OffContent="Light"/>
-            </NavigationView.PaneFooter>
             <NavigationView.MenuItems>
                 <NavigationViewItem Tag="Dashboard" Icon="PreviewLink" Content="Dashboard"/>
                 <NavigationViewItem Tag="Stations" Icon="World" Content="Stations"/>

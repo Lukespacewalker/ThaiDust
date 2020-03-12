@@ -3,9 +3,11 @@ using System.Linq;
 using System.Reactive.Linq;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using ReactiveUI;
 using ThaiDust.Core.ViewModel;
 using ThaiDust.ViewModels;
@@ -34,13 +36,16 @@ namespace ThaiDust.Views
 
         public RootPage()
         {
+            // Load Theme from setting
+            if (Windows.Storage.ApplicationData.Current.LocalSettings.Values.Keys.Any(s => s == "Theme"))
+            {
+                (Window.Current.Content as Frame).RequestedTheme =
+                    (ElementTheme)(int)Windows.Storage.ApplicationData.Current.LocalSettings.Values["Theme"];
+            }
             ViewModel = new RootPageViewModel();
 
             this.InitializeComponent();
             CustomTitlebar();
-
-            Theme.IsOn = App.Current.RequestedTheme == ApplicationTheme.Dark;
-
 
             this.OneWayBind(ViewModel, vm => vm.Router, v => v.RoutedViewHost.Router);
             ViewModel.Router.CurrentViewModel.Where(vm => vm is IViewModelInfo).Select(vm => (vm as IViewModelInfo).Title)
@@ -62,30 +67,41 @@ namespace ThaiDust.Views
 
             RootNavigationView.SelectedItem = RootNavigationView.MenuItems.First();
             ViewModel.NavigateCommand.Execute("Dashboard").Take(1).Subscribe();
+            this.ActualThemeChanged += RootPage_ActualThemeChanged;
+        }
+
+        private void RootPage_ActualThemeChanged(FrameworkElement sender, object args)
+        {
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            if (sender.ActualTheme == ElementTheme.Dark)
+            {
+                titleBar.ButtonForegroundColor = Colors.White;
+            }
+            else
+            {
+                titleBar.ButtonForegroundColor = Colors.Black;
+            }
         }
 
         private void CustomTitlebar()
         {
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.Transparent;
             titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
-            titleBar.ButtonForegroundColor = Windows.UI.Colors.Transparent;
             titleBar.ButtonBackgroundColor = Windows.UI.Colors.Transparent;
+            if (Application.Current.Resources.TryGetValue("TitlebarButtonForeground", out object value))
+            {
+                titleBar.ButtonForegroundColor = (Color)value;
+            }
             coreTitleBar.ExtendViewIntoTitleBar = true;
-            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
+            //coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
             // Set XAML element as a draggable region.
             Window.Current.SetTitleBar(AppTitleBar);
         }
 
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
         {
-            AppTitleBar.Height = sender.Height;
-        }
-
-        private void Theme_OnToggled(object sender, RoutedEventArgs e)
-        {
-            this.RequestedTheme = Theme.IsOn ? ElementTheme.Dark : ElementTheme.Light;
+            //AppTitleBar.Height = sender.Height;
         }
     }
 }

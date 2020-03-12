@@ -5,10 +5,22 @@
     xmlns:local="using:ThaiDust.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helper="using:ThaiDust.Helper"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-
+    <Grid helper:Grid.Rows="A,*" Background="{ThemeResource RegionAcrylicBrush}" >
+        <StackPanel Background="{ThemeResource CommandRegionAcrylicBrush}" Orientation="Horizontal" Padding="12,0">
+            <SymbolIcon Symbol="Setting"/>
+            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Margin="12,8">
+                Settings
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Padding="12">
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}">Theme</TextBlock>
+            <RadioButton Tag="Default" x:Name="DefaultButton">Default</RadioButton>
+            <RadioButton Tag="Light" x:Name="LightButton">Light</RadioButton>
+            <RadioButton Tag="Dark" x:Name="DarkButton">Dark</RadioButton>
+        </StackPanel>
     </Grid>
 </Page>

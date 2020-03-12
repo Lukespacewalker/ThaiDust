@@ -6,16 +6,18 @@
     </ResourceDictionary.MergedDictionaries>
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Dark">
-            <AcrylicBrush x:Key="NavigationRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.8"/>
+            <AcrylicBrush x:Key="NavigationRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.75"/>
             <AcrylicBrush x:Key="HamburgerRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.8"/>
             <AcrylicBrush x:Key="CommandRegionAcrylicBrush" BackgroundSource="Backdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.6" TintLuminosityOpacity="0.8"/>
-            <AcrylicBrush x:Key="RegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.9" TintTransitionDuration="2"/>
+            <AcrylicBrush x:Key="RegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.95" TintTransitionDuration="2"/>
+            <Color x:Key="TitlebarButtonForegroundColor">#FFFFFFFF</Color>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
-            <AcrylicBrush x:Key="NavigationRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.8"/>
+            <AcrylicBrush x:Key="NavigationRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.75"/>
             <AcrylicBrush x:Key="HamburgerRegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.8"/>
             <AcrylicBrush x:Key="CommandRegionAcrylicBrush" BackgroundSource="Backdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.6" TintLuminosityOpacity="0.8"/>
-            <AcrylicBrush x:Key="RegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.9" TintTransitionDuration="2"/>
+            <AcrylicBrush x:Key="RegionAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="{ThemeResource RegionColor}" FallbackColor="{ThemeResource RegionColor}" TintOpacity="0.8" TintLuminosityOpacity="0.95" TintTransitionDuration="2"/>
+            <Color x:Key="TitlebarButtonForegroundColor">#FF000000</Color>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
@@ -27,6 +29,7 @@
     <StaticResource x:Key="ApplicationBackground" ResourceKey="RegionBrush"/>
     <StaticResource x:Key="NavigationPaneBackground" ResourceKey="NavigationRegionAcrylicBrush"/>
     <StaticResource x:Key="NavigationViewTopPaneBackground" ResourceKey="NavigationRegionAcrylicBrush"/>
+    <StaticResource x:Key="TitlebarButtonForeground" ResourceKey="{ThemeResource TitlebarButtonForegroundColor}"/>
 
     <Style x:Key="SubtitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">
         <Setter Property="FontFamily" Value="Convection"/>

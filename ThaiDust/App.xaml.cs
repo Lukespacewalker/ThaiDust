@@ -30,6 +30,9 @@ namespace ThaiDust
         /// </summary>
         public App()
         {
+            // Register Syncfusion Components
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjIxNzkyQDMxMzcyZTM0MmUzMGxHVWIyU09TQmx4TnhlNVVSZHhrUEw3ci9wWlBQL2lSRk9SQ25lUW9nMUk9");
+
             this.InitializeComponent();
             Bootstrapper.RegisterDependencies();
             this.Suspending += OnSuspending;
