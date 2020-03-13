@@ -127,6 +127,9 @@
     <Compile Include="Helper\GridHelper.cs" />
     <Compile Include="Helper\LinqExtensions.cs" />
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Usercontrols\PollutionGraph.xaml.cs">
+      <DependentUpon>PollutionGraph.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\SettingViewModel.cs" />
     <Compile Include="Views\DashboardPage.xaml.cs">
       <DependentUpon>DashboardPage.xaml</DependentUpon>
@@ -210,6 +213,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Usercontrols\PollutionGraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DashboardPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

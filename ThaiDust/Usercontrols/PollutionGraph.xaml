@@ -1,0 +1,42 @@
+﻿<UserControl
+    x:Class="ThaiDust.Usercontrols.PollutionGraph"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ThaiDust.Usercontrols"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helper="using:ThaiDust.Helper"
+    xmlns:charts="using:Syncfusion.UI.Xaml.Charts"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <Grid  helper:Grid.Rows="A,*" helper:Grid.Columns="A,*,A">
+        <charts:SfChart Grid.Row="1" Grid.ColumnSpan="3">
+            <charts:SfChart.PrimaryAxis>
+                <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
+            </charts:SfChart.PrimaryAxis>
+            <charts:SfChart.SecondaryAxis>
+                <charts:NumericalAxis Minimum="0"/>
+            </charts:SfChart.SecondaryAxis>
+            <charts:FastLineSeries ShowTooltip="True" ItemsSource="{x:Bind GetTodayData(ViewModel.StationData, persistent:RecordType.PM25),Mode=OneWay}"  XBindingPath="DateTime"  YBindingPath="Value">
+                <charts:FastLineSeries.AdornmentsInfo>
+                    <charts:ChartAdornmentInfo SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"/>
+                </charts:FastLineSeries.AdornmentsInfo>
+            </charts:FastLineSeries>
+            <charts:SfChart.Annotations>
+                <charts:HorizontalLineAnnotation Y1="25" Stroke="OrangeRed" ShowAxisLabel="True" Text="WHO 24Hrs Limit"/>
+                <charts:HorizontalLineAnnotation Y1="50" Stroke="OrangeRed" ShowAxisLabel="True"  Text="Thai 24Hrs Limit"  />
+            </charts:SfChart.Annotations>
+        </charts:SfChart>
+        <TextBlock FontSize="24" Grid.Row="0" Grid.Column="0" Padding="12,0,0,0">
+                                                <Run FontWeight="Bold">PM2.5</Run>
+        </TextBlock>
+        <TextBlock FontSize="20" x:Name="PM25Date" Grid.Row="0" Grid.Column="1" Padding="12,0"/>
+        <TextBlock Grid.Row="0" Grid.Column="2" Padding="0,0,12,0">
+                                            <Run x:Name="PM25" FontSize="35"/>
+                                            <LineBreak/>
+                                            <Run>ug/m3</Run>
+        </TextBlock>
+    </Grid>
+</UserControl>

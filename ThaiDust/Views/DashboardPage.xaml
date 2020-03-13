@@ -121,14 +121,13 @@
                                 <Grid x:Name="MainGrid" Grid.Row="0" ColumnSpacing="8" RowSpacing="8" Background="Transparent" Margin="8,0">
                                     <Grid.Resources>
                                         <Style TargetType="Grid">
-                                            <Setter Property="BorderBrush" Value="#40FFFFFF"/>
-                                            <Setter Property="BorderThickness" Value="0"/>
                                             <Setter Property="Margin" Value="0"/>
                                             <Setter Property="Background" Value="{ThemeResource RegionBrush}"/>
                                         </Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="TextAlignment" Value="Center"/>
                                             <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
                                             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundAccentBrush}"/>
                                         </Style>
                                         <Style TargetType="charts:SfChart">
@@ -136,8 +135,8 @@
                                             <Setter Property="Margin" Value="4"/>
                                         </Style>
                                     </Grid.Resources>
-                                    <Grid x:Name="PM25Grid" helper:Grid.Rows="A,A,A,*,A">
-                                        <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
+                                    <Grid x:Name="PM25Grid" helper:Grid.Rows="A,*" helper:Grid.Columns="A,*,A">
+                                        <charts:SfChart Grid.Row="1" Grid.ColumnSpan="3">
                                             <charts:SfChart.PrimaryAxis>
                                                 <charts:DateTimeAxis IntervalType="Hours" Interval="1" LabelFormat="H "/>
                                             </charts:SfChart.PrimaryAxis>
@@ -154,16 +153,17 @@
                                                 <charts:HorizontalLineAnnotation Y1="50" Stroke="OrangeRed" ShowAxisLabel="True"  Text="Thai 24Hrs Limit"  />
                                             </charts:SfChart.Annotations>
                                         </charts:SfChart>
-                                        <Border Padding="4" Grid.Row="0">
-                                            <TextBlock FontSize="24">
+                                        <TextBlock FontSize="24" Grid.Row="0" Grid.Column="0" Padding="12,0,0,0">
                                                 <Run FontWeight="Bold">PM2.5</Run>
-                                                <Run x:Name="PM25Date"></Run>
-                                            </TextBlock>
-                                        </Border>
-                                        <TextBlock Grid.Row="2" x:Name="PM25" FontSize="35"/>
-                                        <TextBlock Grid.Row="3">ug/m3</TextBlock>
+                                        </TextBlock>
+                                        <TextBlock FontSize="20" x:Name="PM25Date" Grid.Row="0" Grid.Column="1" Padding="12,0"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="2" Padding="0,0,12,0">
+                                            <Run x:Name="PM25" FontSize="35"/>
+                                            <LineBreak/>
+                                            <Run>ug/m3</Run>
+                                        </TextBlock>
                                     </Grid>
-                                    <Grid x:Name="PM10Grid" helper:Grid.Rows="A,A,A,*,A">
+                                    <Grid x:Name="PM10Grid" helper:Grid.Rows="A,A,*">
                                         <charts:SfChart Grid.Row="1" Grid.RowSpan="4">
                                             <charts:SfChart.PrimaryAxis>
                                                 <charts:DateTimeAxis LabelFormat="H "/>
@@ -181,12 +181,10 @@
                                                 <charts:HorizontalLineAnnotation Y1="120" Stroke="OrangeRed" ShowAxisLabel="True"  Text="Thai 24Hrs Limit"  />
                                             </charts:SfChart.Annotations>
                                         </charts:SfChart>
-                                        <Border Padding="4" Grid.Row="0">
-                                            <TextBlock FontSize="24">
+                                        <TextBlock FontSize="24" Grid.Row="0">
                                                 <Run FontWeight="Bold">PM10</Run>
                                                 <Run x:Name="PM10Date"></Run>
-                                            </TextBlock>
-                                        </Border>
+                                        </TextBlock>
                                         <TextBlock Grid.Row="2" x:Name="PM10" FontSize="35"/>
                                         <TextBlock Grid.Row="3">ug/m3</TextBlock>
                                     </Grid>
